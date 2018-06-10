@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import DataTables from 'vue-data-tables'
@@ -27,6 +28,7 @@ const router = new VueRouter({
 })
 
 Vue.use(VueRouter)
+Vue.use(VueResource)
 Vue.use(ElementUI)
 Vue.use(DataTables)
 Vue.use(MaterialDashboard)

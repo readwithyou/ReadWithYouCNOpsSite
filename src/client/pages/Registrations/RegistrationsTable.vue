@@ -2,20 +2,14 @@
   <data-tables :data="regs" :show-action-bar="false" :custom-filters="customFilters">
 
     <el-row slot="custom-tool-bar" style="margin-bottom: 10px">
-      <el-col :span="5">
+      <el-col :span="10">
         <el-dropdown @command="handleClick">
-          <el-button type="primary">新增<i class="el-icon-plus el-icon--right"></i></el-button>
+          <el-button type="default">新增<i class="el-icon-plus el-icon--right"></i></el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="child">少儿</el-dropdown-item>
             <el-dropdown-item command="adult">成人</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-      </el-col>
-      <el-col :span="5">
-        <el-select v-model="customFilters[1].vals" multiple="multiple">
-          <el-option label="少儿" value="child"></el-option>
-          <el-option label="成人" value="adult"></el-option>
-        </el-select>
       </el-col>
       <el-col :span="5" :offset="9">
         <el-input v-model="customFilters[0].vals"></el-input>
@@ -40,6 +34,10 @@ var titles = [
   {
     prop: "type",
     label: "报名类型"
+  },
+  {
+    prop: "tag",
+    label: "报名来源"
   },
   {
     prop: "createTime",
@@ -86,15 +84,18 @@ export default {
   },
   methods: {
     handleClick(command) {
-      this.$message(`click drapdown button ${command}`);
+      this.$router.push({ path: "/registrations/new?type=" + command });
     },
     fetchData() {
-      fetch("/api/registrations")
-        .then(res => res.json())
-        .then(res => (this.regs = res))
-        .catch(res => {
+      var resource = this.$resource("/api/registrations");
+      resource.get().then(
+        response => {
+          this.regs = response.body;
+        },
+        response => {
           this.notifyFetchingError();
-        });
+        }
+      );
     },
     notifyFetchingError() {
       this.$notify({

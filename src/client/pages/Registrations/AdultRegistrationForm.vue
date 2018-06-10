@@ -151,7 +151,7 @@
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
-        <div class="md-layout-item md-size-100 text-right">
+        <div class="md-layout-item md-size-100 text-center">
             <md-button type="submit" class="md-primary" :disabled="sending">提交</md-button>
         </div>
     </md-card>
@@ -263,34 +263,17 @@ export default {
       }
     },
     saveEntry() {
-      if (this.tag) {
-        this.entry.tag = this.tag;
-      }
-      this.sending = true;
+        if (this.tag) {
+            this.entry.tag = this.tag;
+        }
+        this.sending = true;
 
-      fetch("/api/registrations", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        method: "POST",
-        body: JSON.stringify(this.entry)
-      })
-        .then(res => {
-          this.handleErrors(res);
-        })
-        .then(res => {
-          this.notifySubmitSuccess();
-        })
-        .catch(res => {
-          this.notifySubmitError();
+        var resource = this.$resource('/api/registrations');
+        resource.save(this.entry).then(response => {
+            this.notifySubmitSuccess();
+        }, response => {
+            this.notifySubmitError();
         });
-    },
-    handleErrors(response) {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response;
     },
     notifySubmitError() {
       this.sending = false;
