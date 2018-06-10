@@ -6,10 +6,11 @@ var dao = function () {
     AWS.config.region = awsRegion;
     var docClient = new AWS.DynamoDB.DocumentClient();
 
-    var save = function (item, callback) {
+    var create = function (item, callback) {
         var params = {
-            'TableName': ddbTable,
-            'Item': item
+            TableName: ddbTable,
+            Item: item,
+            ConditionExpression: 'attribute_not_exists(ID)',
         };
         docClient.put(params, callback);
     };
@@ -23,7 +24,7 @@ var dao = function () {
     };
 
     return {
-        save: save,
+        create: create,
         scan: scan
     };
 }();

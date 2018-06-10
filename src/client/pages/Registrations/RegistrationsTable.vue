@@ -3,7 +3,13 @@
 
     <el-row slot="custom-tool-bar" style="margin-bottom: 10px">
       <el-col :span="5">
-        <el-button type="primary" @command="handleClick">添加<i class="el-icon-plus el-icon--right"></i></el-button>
+        <el-dropdown @command="handleClick">
+          <el-button type="primary">新增<i class="el-icon-plus el-icon--right"></i></el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="child">少儿</el-dropdown-item>
+            <el-dropdown-item command="adult">成人</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-col>
       <el-col :span="5">
         <el-select v-model="customFilters[1].vals" multiple="multiple">
@@ -28,15 +34,15 @@ var titles = [
     label: "学号"
   },
   {
-    prop: "chineseName",
+    prop: "cnName",
     label: "姓名"
   },
   {
-    prop: "Type",
+    prop: "type",
     label: "报名类型"
   },
   {
-    prop: "CreateTime",
+    prop: "createTime",
     label: "报名时间"
   },
   {
@@ -44,15 +50,15 @@ var titles = [
     label: "状态"
   },
   {
-    prop: "CreateTime",
+    prop: "courseTime",
     label: "试课时间"
   },
   {
-    prop: "englishName",
+    prop: "teacher",
     label: "老师"
   },
   {
-    prop: "englishName",
+    prop: "email",
     label: "处理"
   }
 ];

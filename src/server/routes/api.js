@@ -13,4 +13,14 @@ router.get('/registrations', function (req, res, next) {
     });
 });
 
+router.post('/registrations', function (req, res, next) {
+    registrationService.create(req, res, function (err) {
+        var returnStatus = 200;
+        if (err) {
+            var returnStatus = 500;
+        }
+        res.status(returnStatus).end();
+    });
+});
+
 module.exports = router;

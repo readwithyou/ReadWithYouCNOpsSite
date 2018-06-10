@@ -1,7 +1,8 @@
 import DashboardLayout from 'pages/Layout/DashboardLayout.vue'
 
 import Dashboard from 'pages/Dashboard.vue'
-import TrailRegs from 'pages/TrailRegs.vue'
+import Registrations from 'pages/Registrations/Registrations.vue'
+import CreateRegistration from 'pages/Registrations/CreateRegistration.vue'
 import UserProfile from 'pages/UserProfile.vue'
 import TableList from 'pages/TableList.vue'
 import Typography from 'pages/Typography.vue'
@@ -21,9 +22,14 @@ const routes = [
         component: Dashboard
       },
       {
-        path: 'trail-regs',
+        path: 'registrations',
         name: '试课报名',
-        component: TrailRegs
+        component: Registrations
+      },
+      {
+        path: 'registrations/new',
+        name: '新增试课报名',
+        component: CreateRegistration
       },
       {
         path: 'user',
@@ -39,20 +45,6 @@ const routes = [
         path: 'typography',
         name: 'Typography',
         component: Typography
-      },
-      {
-        path: 'icons',
-        name: 'Icons',
-        component: Icons
-      },
-      {
-        path: 'maps',
-        name: 'Maps',
-        meta: {
-          hideFooter: true
-        },
-        component: Maps
-
       },
       {
         path: 'notifications',

@@ -1,62 +1,53 @@
-var shortid = require('shortid');
 var registrationDao = require('../dao/reg-dao');
 
 var service = function () {
-    var persist = function (req, res, type) {
-        var item = {
-            'ID': shortid.generate(),
-            'CreateTime': new Date().toISOString(),
-            'Type': type
-        };
-
-        var attributes = [
-            'chineseName',
-            'englishName',
-            'gender',
-            'age',
-            'parentsName',
-            'relationship',
-            'phone',
-            'wechat',
-            'email',
-            'question01',
-            'question02',
-            'question03',
-            'question04',
-            'question05',
-            'question06',
-            'question07',
-            'remarks',
-            'tag'
-        ];
-
-        attributes.forEach(function (attr) {
-            if (req.body[attr]) {
-                item[attr] = req.body[attr];
-            }
-        });
-
-        registrationDao.save(item, function (err, data) {
-            if (err) {
-                var returnStatus = 500;
-                if (err.code === 'ConditionalCheckFailedException') {
-                    returnStatus = 409;
-                }
-                res.status(returnStatus).end();
-                console.log('DDB Error: ' + err);
-            } else {
-                res.render('register-success');
-            }
-        });
-    };
-
     var getAll = function (callback) {
         registrationDao.scan(callback);
     };
 
+    var create = function (req, res, callback) {
+        var item = req.body;
+        item.ID = generateId();
+        item.createTime = new Date().toISOString();
+
+        registrationDao.create(item, function (err, data) {
+            if (err) {
+                console.log('DDB Error: ' + err);
+            }
+            callback(err);
+        });
+    };
+
+    var generateId = function () {
+        var date = new Date();
+        var id = date.getFullYear() + '';
+
+        id = (date.getMonth() < 10) ?
+            id + '0' + (date.getMonth() + 1) :
+            id + (date.getMonth() + 1);
+
+        id = (date.getDate() < 10) ?
+            id + '0' + date.getDate() :
+            id + date.getDate();
+
+        id = (date.getHours() < 10) ?
+            id + '0' + date.getHours() :
+            id + date.getHours();
+
+        id = (date.getMinutes() < 10) ?
+            id + '0' + date.getMinutes() :
+            id + date.getMinutes();
+
+        id = (date.getSeconds() < 10) ?
+            id + '0' + date.getSeconds() :
+            id + date.getSeconds();
+
+        return id;
+    }
+
     return {
-        persist: persist,
-        getAll: getAll
+        getAll: getAll,
+        create: create
     };
 }();
 

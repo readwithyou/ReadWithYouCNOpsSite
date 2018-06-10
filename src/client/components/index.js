@@ -7,7 +7,6 @@ import StatsCard from './Cards/StatsCard.vue'
 import NavTabsTable from './Tables/NavTabsTable.vue'
 import OrderedTable from './Tables/OrderedTable.vue'
 import SimpleTable from './Tables/SimpleTable.vue'
-import TrailRegTable from './Tables/TrailRegTable.vue'
 
 export {
   ChartCard,
@@ -15,6 +14,5 @@ export {
   StatsCard,
   NavTabsTable,
   OrderedTable,
-  SimpleTable,
-  TrailRegTable
+  SimpleTable
 }

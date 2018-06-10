@@ -50,7 +50,7 @@ export default{
     },
     activeColor: {
       type: String,
-      default: 'green',
+      default: 'purple',
       validator: (value) => {
         let acceptedValues = ['', 'purple', 'blue', 'green', 'orange', 'red']
         return acceptedValues.indexOf(value) !== -1

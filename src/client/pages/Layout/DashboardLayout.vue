@@ -8,7 +8,7 @@
         <md-icon>dashboard</md-icon>
         <p>主页</p>
       </sidebar-link>
-      <sidebar-link to="/trail-regs">
+      <sidebar-link to="/registrations">
         <md-icon>library_books</md-icon>
         <p>试课报名</p>
       </sidebar-link>
@@ -23,14 +23,6 @@
       <sidebar-link to="/typography">
         <md-icon>library_books</md-icon>
         <p>Typography</p>
-      </sidebar-link>
-      <sidebar-link to="/icons">
-        <md-icon>bubble_chart</md-icon>
-        <p>Icons</p>
-      </sidebar-link>
-      <sidebar-link to="/maps">
-        <md-icon>location_on</md-icon>
-        <p>Maps</p>
       </sidebar-link>
       <sidebar-link to="/notifications">
         <md-icon>notifications</md-icon>
