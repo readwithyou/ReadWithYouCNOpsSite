@@ -147,7 +147,7 @@
                 </div>
                 <div class="md-layout-item md-size-100">
                     <md-field :class="getValidationClass('enBookExample')">
-                        <label for="en-book-example">简述您的英文学习经历：</label>
+                        <label for="en-book-example">目前在读英文书目举例：</label>
                         <md-textarea id="en-book-example" name="en-book-example" v-model="entry.enBookExample" :disabled="sending" ></md-textarea>
                         <span class="md-error" v-if="!$v.entry.enBookExample.required">
                             此为必填项目。

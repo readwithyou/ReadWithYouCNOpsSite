@@ -3,18 +3,17 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <nav-tabs-card>
           <template slot="content">
-            <span class="md-nav-tabs-title">Tasks:</span>
-            <md-tabs md-sync-route class="md-primary" md-alignment="left">
+            <md-tabs md-sync-route class="md-info" md-alignment="fixed">
 
-              <md-tab id="tab-home" md-label="Bugs" md-icon="bug_report">
+              <md-tab id="tab-ballot" md-label="报名信息" md-icon="ballot">
+                <registration-detail-panel></registration-detail-panel>
+              </md-tab>
+
+              <md-tab id="tab-calendar" md-label="试课安排" md-icon="calendar_today">
                 <nav-tabs-table></nav-tabs-table>
               </md-tab>
 
-              <md-tab id="tab-pages" md-label="Website" md-icon="code">
-                <nav-tabs-table></nav-tabs-table>
-              </md-tab>
-
-              <md-tab id="tab-posts" md-label="server" md-icon="cloud">
+              <md-tab id="tab-result" md-label="试课结果" md-icon="check_circle_outline">
                 <nav-tabs-table></nav-tabs-table>
               </md-tab>
             </md-tabs>
@@ -25,11 +24,13 @@
 </template>
 <script>
 import { NavTabsCard, NavTabsTable } from "components";
+import { RegistrationDetailPanel } from "pages";
 
 export default {
   components: {
     NavTabsCard,
-    NavTabsTable
+    NavTabsTable,
+    RegistrationDetailPanel
   },
   data() {
     return {};
