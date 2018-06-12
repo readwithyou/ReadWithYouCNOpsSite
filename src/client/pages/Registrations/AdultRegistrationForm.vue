@@ -137,6 +137,10 @@
                         </span>
                     </md-field>
                 </div>
+                <div class="md-layout-item md-size-100">
+                    <vue-dropzone ref="bookImgs" id="bookImgs" :options="dropzoneOptions">
+                    </vue-dropzone>
+                </div>
             </div>
 
             <h4>其他备注</h4>
@@ -158,6 +162,8 @@
 </form>
 </template>
 <script>
+import vue2Dropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import { validationMixin } from "vuelidate";
 import {
   required,
@@ -169,6 +175,9 @@ import {
 export default {
   name: "edit-profile-form",
   mixins: [validationMixin],
+  components: {
+    vueDropzone: vue2Dropzone
+  },
   props: {
     dataBackgroundColor: {
       type: String,
@@ -182,6 +191,7 @@ export default {
   data: () => ({
     entry: {
       type: "adult",
+      status: 0,
       cnName: "21",
       enName: "21",
       gender: "M",
@@ -200,7 +210,17 @@ export default {
     },
     sending: false,
     entrySaved: false,
-    fullName: null
+    fullName: null,
+    dropzoneOptions: {
+      url: "https://httpbin.org/post",
+      thumbnailWidth: 150,
+      maxFilesize: 2,
+      dictCancelUpload: "取消",
+      dictCancelUploadConfirmation: "确认取消图片上传？",
+      dictRemoveFile: "删除",
+      dictDefaultMessage: "请拖拽或点击上传正在阅读图书内页照片。",
+      headers: { "My-Awesome-Header": "header value" }
+    }
   }),
   validations: {
     entry: {
@@ -263,17 +283,20 @@ export default {
       }
     },
     saveEntry() {
-        if (this.tag) {
-            this.entry.tag = this.tag;
-        }
-        this.sending = true;
+      if (this.tag) {
+        this.entry.tag = this.tag;
+      }
+      this.sending = true;
 
-        var resource = this.$resource('/api/registrations');
-        resource.save(this.entry).then(response => {
-            this.notifySubmitSuccess();
-        }, response => {
-            this.notifySubmitError();
-        });
+      var resource = this.$resource("/api/registrations");
+      resource.save(this.entry).then(
+        response => {
+          this.notifySubmitSuccess();
+        },
+        response => {
+          this.notifySubmitError();
+        }
+      );
     },
     notifySubmitError() {
       this.sending = false;

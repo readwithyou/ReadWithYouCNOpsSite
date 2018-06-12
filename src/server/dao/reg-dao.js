@@ -15,6 +15,17 @@ var dao = function () {
         docClient.put(params, callback);
     };
 
+    var get = function (id, callback) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                ID: id
+            }
+        };
+
+        docClient.get(params, callback);
+    };
+
     var scan = function (callback) {
         var params = {
             TableName: ddbTable
@@ -23,9 +34,21 @@ var dao = function () {
         docClient.scan(params, callback);
     };
 
+    var remove = function (id, callback) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                ID: id
+            }
+        };
+        docClient.delete(params, callback);
+    };
+
     return {
+        get: get,
         create: create,
-        scan: scan
+        scan: scan,
+        remove: remove
     };
 }();
 

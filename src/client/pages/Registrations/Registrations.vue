@@ -8,7 +8,7 @@
             <p class="category">此表格罗列所有已处理和未处理的试课报名</p>
           </md-card-header>
           <md-card-content>
-            <registrations-table table-header-color="green"></registrations-table>
+            <registrations-table table-header-color="purple"></registrations-table>
           </md-card-content>
         </md-card>
       </div>

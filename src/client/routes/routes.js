@@ -3,6 +3,7 @@ import DashboardLayout from 'pages/Layout/DashboardLayout.vue'
 import Dashboard from 'pages/Dashboard.vue'
 import Registrations from 'pages/Registrations/Registrations.vue'
 import CreateRegistration from 'pages/Registrations/CreateRegistration.vue'
+import Registration from 'pages/Registrations/Registration.vue'
 import UserProfile from 'pages/UserProfile.vue'
 import TableList from 'pages/TableList.vue'
 import Typography from 'pages/Typography.vue'
@@ -18,18 +19,23 @@ const routes = [
     children: [
       {
         path: 'dashboard',
-        name: '主页',
+        name: 'Home',
         component: Dashboard
       },
       {
         path: 'registrations',
-        name: '试课报名',
+        name: '试课报名列表页',
         component: Registrations
       },
       {
         path: 'registrations/new',
-        name: '新增试课报名',
+        name: '新的试课报名',
         component: CreateRegistration
+      },
+      {
+        path: 'registrations/:id',
+        name: '试课报名详情页',
+        component: Registration
       },
       {
         path: 'user',

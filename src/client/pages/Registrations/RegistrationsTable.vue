@@ -1,6 +1,14 @@
 <template>
-  <data-tables :data="regs" :show-action-bar="false" :custom-filters="customFilters">
 
+  <data-tables :data="regs" :show-action-bar="false" :custom-filters="customFilters" :table-props="tableProps">
+    <md-dialog-confirm
+      :md-active.sync="deleteDialogActive"
+      md-title="确认"
+      md-content="操作不能恢复，确定删除试课报名信息么？"
+      md-confirm-text="确认"
+      md-cancel-text="取消"
+      @md-cancel="onCancelDelete"
+      @md-confirm="onConfirmDelete" />
     <el-row slot="custom-tool-bar" style="margin-bottom: 10px">
       <el-col :span="10">
         <el-dropdown @command="handleClick">
@@ -16,7 +24,14 @@
       </el-col>
     </el-row>
 
-    <el-table-column v-for="title in titles" :prop="title.prop" :label="title.label" :key="title.prop" sortable="custom">
+    <el-table-column v-for="title in titles" :prop="title.prop" :formatter="title.formatter" :label="title.label" :key="title.prop" sortable="custom">
+    </el-table-column>
+    <el-table-column label="处理" min-width="100px">
+      <template scope="scope">
+        <el-button v-for="button in customButtonsForRow(scope.row)" :key="button.name" type="text" @click="button.handler">
+          {{ button.name }}
+        </el-button>
+      </template>
     </el-table-column>
   </data-tables>
 </template>
@@ -33,7 +48,15 @@ var titles = [
   },
   {
     prop: "type",
-    label: "报名类型"
+    label: "报名类型",
+    formatter: (row, column, cellValue, index) => {
+      if (cellValue === "adult") {
+        return "成人";
+      }
+      if (cellValue === "child") {
+        return "少儿";
+      }
+    }
   },
   {
     prop: "tag",
@@ -41,23 +64,42 @@ var titles = [
   },
   {
     prop: "createTime",
-    label: "报名时间"
+    label: "报名时间",
+    formatter: (row, column, cellValue, index) => {
+      if (cellValue) {
+        return new Date(cellValue).toLocaleString();
+      }
+      return "";
+    }
   },
   {
-    prop: "age",
-    label: "状态"
+    prop: "status",
+    label: "状态",
+    formatter: (row, column, cellValue, index) => {
+      if (cellValue === 0) {
+        return "未处理";
+      }
+      if (cellValue === 1) {
+        return "已预约";
+      }
+      if (cellValue === 2) {
+        return "已完成";
+      }
+    }
   },
   {
     prop: "courseTime",
-    label: "试课时间"
+    label: "试课时间",
+    formatter: (row, column, cellValue, index) => {
+      if (cellValue) {
+        return new Date(cellValue).toLocaleString();
+      }
+      return "";
+    }
   },
   {
     prop: "teacher",
     label: "老师"
-  },
-  {
-    prop: "email",
-    label: "处理"
   }
 ];
 
@@ -71,12 +113,24 @@ var customFilters = [
   }
 ];
 
+var tableProps = {
+  border: false,
+  stripe: true,
+  defaultSort: {
+    prop: "ID",
+    order: "descending"
+  }
+};
+
 export default {
   data() {
     return {
       titles,
       customFilters,
-      regs: []
+      tableProps,
+      regs: [],
+      deleteDialogActive: false,
+      entryToDelete: null
     };
   },
   created() {
@@ -104,6 +158,67 @@ export default {
         horizontalAlign: "center",
         verticalAlign: "top",
         type: "danger"
+      });
+    },
+    customButtonsForRow(row) {
+      if (row.status === 0) {
+        return [
+          {
+            name: "查看",
+            handler: _ => {
+              this.$router.push({ path: "/registrations/" + row.ID });
+            }
+          },
+          {
+            name: "删除",
+            handler: _ => {
+              this.entryToDelete = row;
+              this.deleteDialogActive = true;
+            }
+          }
+        ];
+      } else {
+        return [
+          {
+            name: "查看",
+            handler: _ => {
+              this.$router.push({ path: "/registrations/" + row.ID });
+            }
+          }
+        ];
+      }
+    },
+    onConfirmDelete() {
+      var resource = this.$resource("/api/registrations/" + this.entryToDelete.ID);
+      resource.delete().then(
+        response => {
+          this.notifyRemoveSuccess();
+          this.fetchData();
+        },
+        response => {
+          this.notifyRemoveError();
+        }
+      );
+    },
+    onCancelDelete() {
+      this.entryToDelete = null;
+    },
+    notifyRemoveError() {
+      this.$notify({
+        message: "试课报名删除失败，请稍后重试！",
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
+    },
+    notifyRemoveSuccess() {
+      this.$notify({
+        message: "试课报名删除成功！",
+        icon: "add_alert",
+        horizontalAlign: "right",
+        verticalAlign: "top",
+        type: "success"
       });
     }
   }
