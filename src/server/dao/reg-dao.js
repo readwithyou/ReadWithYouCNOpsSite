@@ -1,5 +1,5 @@
 var AWS = require('aws-sdk');
-var awsRegion = 'ap-northeast-2';
+var awsRegion = 'cn-north-1';
 var ddbTable = 'Students_Registration';
 
 var dao = function () {

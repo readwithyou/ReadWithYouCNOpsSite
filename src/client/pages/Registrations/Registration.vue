@@ -10,11 +10,11 @@
               </md-tab>
 
               <md-tab id="tab-calendar" md-label="试课安排" md-icon="calendar_today">
-                <nav-tabs-table></nav-tabs-table>
+                <course-arrangement-panel></course-arrangement-panel>
               </md-tab>
 
               <md-tab id="tab-result" md-label="试课结果" md-icon="check_circle_outline">
-                <nav-tabs-table></nav-tabs-table>
+                <course-result-panel></course-result-panel>
               </md-tab>
             </md-tabs>
           </template>
@@ -24,13 +24,15 @@
 </template>
 <script>
 import { NavTabsCard, NavTabsTable } from "components";
-import { RegistrationDetailPanel } from "pages";
+import { RegistrationDetailPanel, CourseArrangementPanel, CourseResultPanel } from "pages";
 
 export default {
   components: {
     NavTabsCard,
     NavTabsTable,
-    RegistrationDetailPanel
+    RegistrationDetailPanel,
+    CourseArrangementPanel,
+    CourseResultPanel
   },
   data() {
     return {};

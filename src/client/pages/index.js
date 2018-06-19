@@ -9,6 +9,8 @@ import EditProfileForm from '../pages/UserProfile/EditProfileForm.vue'
 import AdultRegistrationForm from '../pages/Registrations/AdultRegistrationForm.vue'
 import ChildRegistrationForm from '../pages/Registrations/ChildRegistrationForm.vue'
 import RegistrationDetailPanel from '../pages/Registrations/RegistrationDetailPanel.vue'
+import CourseArrangementPanel from '../pages/Registrations/CourseArrangementPanel.vue'
+import CourseResultPanel from '../pages/Registrations/CourseResultPanel.vue'
 
 export {
   UserCard,
@@ -16,5 +18,7 @@ export {
   EditProfileForm,
   AdultRegistrationForm,
   ChildRegistrationForm,
-  RegistrationDetailPanel
+  RegistrationDetailPanel,
+  CourseArrangementPanel,
+  CourseResultPanel
 }
