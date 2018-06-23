@@ -11,6 +11,9 @@ import App from './App.vue'
 // router setup
 import routes from './routes/routes'
 
+// vuex
+import store from './store'
+
 // Plugins
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
@@ -48,6 +51,7 @@ new Vue({
   el: '#app',
   render: h => h(App),
   router,
+  store,
   data: {
     Chartist: Chartist
   }

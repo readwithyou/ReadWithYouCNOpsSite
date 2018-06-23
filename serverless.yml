@@ -1,0 +1,23 @@
+service: read-with-you-ops
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  memorySize: 128
+  timeout: 10
+  stage: production
+  region: cn-north-1
+  endpointType: REGIONAL
+
+functions:
+  rwyweb:
+    handler: lambda.universal
+    events:
+      - http: ANY {proxy+}
+      - http: ANY /
+
+resources:
+  Resources:
+    RwywebLambdaPermissionApiGateway:
+      Properties:
+        Principal: apigateway.amazonaws.com

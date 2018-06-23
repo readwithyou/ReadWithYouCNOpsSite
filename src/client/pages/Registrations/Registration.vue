@@ -3,7 +3,7 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <nav-tabs-card>
           <template slot="content">
-            <md-tabs md-sync-route class="md-info" md-alignment="fixed">
+            <md-tabs md-sync-route class="md-primary" md-alignment="fixed">
 
               <md-tab id="tab-ballot" md-label="报名信息" md-icon="ballot">
                 <registration-detail-panel></registration-detail-panel>

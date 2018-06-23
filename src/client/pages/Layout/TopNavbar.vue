@@ -20,10 +20,10 @@
           <md-list>
             <md-list-item to="/">
               <i class="material-icons">dashboard</i>
-              <p class="hidden-lg hidden-md">Dashboard</p>
+              <p class="hidden-lg hidden-md">主页</p>
             </md-list-item>
 
-            <md-list-item to="/notifications" class="dropdown">
+            <!--md-list-item to="/notifications" class="dropdown">
               <drop-down>
                 <a slot="title" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="material-icons">notifications</i>
@@ -38,12 +38,20 @@
                   <li><a href="#">Another One</a></li>
                 </ul>
               </drop-down>
-            </md-list-item>
+            </md-list-item-->
 
-            <md-list-item to="/user">
-              <i class="material-icons">person</i>
-              <p class="hidden-lg hidden-md">Profile</p>
+            <md-list-item to="/" class="dropdown">
+              <drop-down>
+                <a slot="title" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="material-icons">person</i>
+                  <p class="hidden-lg hidden-md">Profile</p>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li><a href="#" @click="logout">登出</a></li>
+                </ul>
+              </drop-down>
             </md-list-item>
+            
           </md-list>
         </div>
       </div>
@@ -53,6 +61,7 @@
 </template>
 
 <script>
+import { AUTH_LOGOUT } from 'store/actions/auth'
 
 export default{
   data () {
@@ -73,6 +82,9 @@ export default{
   methods: {
     toggleSidebar () {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
+    },
+    logout: function () {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
     }
   }
 }

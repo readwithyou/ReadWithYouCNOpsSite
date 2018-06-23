@@ -2,9 +2,9 @@
   <div class="content">
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-size-100">
-        <adult-registration-form v-if="type=='adult'" data-background-color="blue" :tag="tag">
+        <adult-registration-form v-if="type=='adult'" data-background-color="purple" :tag="tag">
         </adult-registration-form>
-        <child-registration-form v-if="type=='child'" data-background-color="blue" :tag="tag">
+        <child-registration-form v-if="type=='child'" data-background-color="purple" :tag="tag">
         </child-registration-form>
       </div>
     </div>
