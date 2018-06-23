@@ -16,6 +16,12 @@ app.use(express.static('dist/assets'))
 app.use('/', require('./routes/index'));
 app.use('/api', require('./routes/api'));
 
+var AuthController = require('./controller/auth-controller');
+app.use('/api/auth', AuthController);
+
+var RegController = require('./controller/reg-controller');
+app.use('/api/registrations', RegController);
+
 const port = process.env.PORT || 8000;
 // Server
 /*
