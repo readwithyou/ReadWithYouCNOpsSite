@@ -9,7 +9,8 @@
     "server": "nodemon ./local.js",
     "client": "webpack-dev-server --mode development --open",
     "dev": "webpack --mode development --watch",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "deploy": "serverless deploy"
   },
   "license": "MIT",
   "dependencies": {
@@ -27,6 +28,7 @@
     "vue-auth": "^1.0.0-alpha.1",
     "vue-clickaway": "^2.2.2",
     "vue-data-tables": "^3.2.0",
+    "vue-filter": "^0.2.5",
     "vue-material": "^1.0.0-beta-10.2",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",

@@ -9,16 +9,17 @@ const state = { token: localStorage.getItem('user-token') || '', status: '', has
 const getters = {
   isAuthenticated: state => !!state.token,
   authStatus: state => state.status,
+  authToken: state => state.token,
 }
 
 const actions = {
   [AUTH_REQUEST]: ({commit, dispatch}, user) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_REQUEST)
-      apiCall({url: '/api/auth', data: user, method: 'POST'})
+      apiCall({url: '/api/auth/login', data: user, method: 'POST'})
       .then(resp => {
         localStorage.setItem('user-token', resp.token);
-        Vue.http.headers.common['Authorization'] = resp.token;
+        Vue.http.headers.common['x-access-token'] = resp.token;
         commit(AUTH_SUCCESS, resp)
         dispatch(USER_REQUEST)
         resolve(resp)
@@ -34,7 +35,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit(AUTH_LOGOUT)
       localStorage.removeItem('user-token')
-      Vue.http.headers.common['Authorization'] = null;
+      Vue.http.headers.common['x-access-token'] = null;
       resolve()
     })
   }

@@ -11,9 +11,9 @@ const getters = {
 }
 
 const actions = {
-  [USER_REQUEST]: ({commit, dispatch}) => {
+  [USER_REQUEST]: ({ commit, dispatch }) => {
     commit(USER_REQUEST)
-    apiCall({url: 'user/me'})
+    apiCall({ url: '/api/auth/me', data: null, method: 'GET' })
       .then(resp => {
         commit(USER_SUCCESS, resp)
       })

@@ -1,5 +1,5 @@
+import Vue from 'vue'
 import DashboardLayout from 'pages/Layout/DashboardLayout.vue'
-
 import Login from 'pages/Login/Login.vue'
 import Dashboard from 'pages/Dashboard.vue'
 import Registrations from 'pages/Registrations/Registrations.vue'
@@ -23,6 +23,7 @@ const ifNotAuthenticated = (to, from, next) => {
 
 const ifAuthenticated = (to, from, next) => {
   if (Store.getters.isAuthenticated) {
+    Vue.http.headers.common['x-access-token'] = Store.getters.authToken;
     next()
     return
   }
@@ -39,11 +40,11 @@ const routes = [
         path: '/login',
         name: '登录',
         component: Login,
-        //beforeEnter: ifNotAuthenticated,
+        beforeEnter: ifNotAuthenticated,
       },
       {
         path: 'dashboard',
-        name: 'Home',
+        name: '主页',
         component: Dashboard,
         beforeEnter: ifAuthenticated,
       },
@@ -51,16 +52,19 @@ const routes = [
         path: 'registrations',
         name: '试课报名列表页',
         component: Registrations,
+        beforeEnter: ifAuthenticated,
       },
       {
         path: 'registrations/new',
         name: '新的试课报名',
         component: CreateRegistration,
+        beforeEnter: ifAuthenticated,
       },
       {
         path: 'registrations/:id',
         name: '试课报名详情页',
         component: Registration,
+        beforeEnter: ifAuthenticated,
       },
       {
         path: 'user',

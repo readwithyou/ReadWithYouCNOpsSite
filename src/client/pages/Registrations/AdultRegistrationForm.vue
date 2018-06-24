@@ -73,10 +73,10 @@
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('ifReadEnBook')">
                         <label for="if-read-en-book">目前在读英文书吗？</label>
-                        <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBook" md-dense :disabled="sending">
+                        <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBookInStr" md-dense :disabled="sending">
                             <md-option>请选择...</md-option>
-                            <md-option :value="true">是</md-option>
-                            <md-option :value="false">否</md-option>
+                            <md-option value="true">是</md-option>
+                            <md-option value="false">否</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifReadEnBook.required">
                             此为必填项目。
@@ -147,8 +147,17 @@
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <md-field>
-                        <label>备注（选填）</label>
-                        <md-textarea v-model="entry.remarks"></md-textarea>
+                        <label for="remarks">备注（选填）</label>
+                        <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="entry.remarks" :disabled="sending" />                      
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-size-100">
+                    <md-field :class="getValidationClass('preTimeSlot')">
+                        <label for="pre-timeslot">期待试课时间</label>
+                        <md-input type="text" id="pre-timeslot" name="pre-timeslot" autocomplete="preTimeSlot" v-model="entry.preTimeSlot" :disabled="sending" />                      
+                        <span class="md-error" v-if="!$v.entry.preTimeSlot.required">
+                            此为必填项目。
+                        </span>
                     </md-field>
                 </div>
             </div>
@@ -192,21 +201,22 @@ export default {
     entry: {
       type: "adult",
       status: 0,
-      cnName: "21",
-      enName: "21",
-      gender: "M",
-      age: 12,
-      phone: "21",
-      email: "21@s.com",
+      cnName: null,
+      enName: null,
+      gender: null,
+      age: null,
+      phone: null,
+      email: null,
       wechat: null,
-      ifReadEnBook: true,
-      numBookBought: 21,
-      numBookRead: 21,
-      readingBlocker: "21",
-      exprience: "21",
-      expectation: "21",
-      favBooks: "21",
-      remarks: null
+      ifReadEnBookInStr: null,
+      ifReadEnBook: false,
+      numBookBought: null,
+      numBookRead: null,
+      readingBlocker: null,
+      exprience: null,
+      expectation: null,
+      favBooks: null,
+      preTimeSlot: null
     },
     sending: false,
     entrySaved: false,
@@ -222,6 +232,11 @@ export default {
       headers: { "My-Awesome-Header": "header value" }
     }
   }),
+  watch: {
+    entry: function(val) {
+      this.entry.ifReadEnBook = val.ifReadEnBookInStr === "true";
+    }
+  },
   validations: {
     entry: {
       cnName: {
@@ -261,6 +276,9 @@ export default {
         required
       },
       favBooks: {
+        required
+      },
+      preTimeSlot: {
         required
       }
     }

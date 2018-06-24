@@ -91,10 +91,10 @@
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('ifReadEnBook')">
                         <label for="if-read-en-book">孩子目前在读英文书吗？</label>
-                        <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBook" md-dense :disabled="sending">
+                        <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBookInStr" md-dense :disabled="sending">
                             <md-option>请选择...</md-option>
-                            <md-option :value="true">是</md-option>
-                            <md-option :value="false">否</md-option>
+                            <md-option value="true">是</md-option>
+                            <md-option value="false">否</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifReadEnBook.required">
                             此为必填项目。
@@ -113,10 +113,10 @@
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('ifReadForChild')">
                         <label for="if-read-for-child">您亲自给孩子读英文绘本吗？</label>
-                        <md-select name="if-read-for-child" id="if-read-for-child" v-model="entry.ifReadForChild" md-dense :disabled="sending">
+                        <md-select name="if-read-for-child" id="if-read-for-child" v-model="entry.ifReadForChildInStr" md-dense :disabled="sending">
                             <md-option>请选择...</md-option>
-                            <md-option :value="true">是</md-option>
-                            <md-option :value="false">否</md-option>
+                            <md-option value="true">是</md-option>
+                            <md-option value="false">否</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifReadForChild.required">
                             此为必填项目。
@@ -126,10 +126,10 @@
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('ifIntlEducation')">
                         <label for="if-intl-education">你是否为孩子规划国际教育路线？</label>
-                        <md-select name="if-intl-education" id="if-intl-education" v-model="entry.ifIntlEducation" md-dense :disabled="sending">
+                        <md-select name="if-intl-education" id="if-intl-education" v-model="entry.ifIntlEducationInStr" md-dense :disabled="sending">
                             <md-option>请选择...</md-option>
-                            <md-option :value="true">是</md-option>
-                            <md-option :value="false">否</md-option>
+                            <md-option value="true">是</md-option>
+                            <md-option value="false">否</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifIntlEducation.required">
                             此为必填项目。
@@ -173,8 +173,17 @@
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <md-field>
-                        <label>备注（选填）</label>
-                        <md-textarea v-model="entry.remarks"></md-textarea>
+                        <label for="remarks">备注（选填）</label>
+                        <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="entry.remarks" :disabled="sending" />  
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-size-100">
+                    <md-field :class="getValidationClass('preTimeSlot')">
+                        <label for="pre-timeslot">期待试课时间</label>
+                        <md-input type="text" id="pre-timeslot" name="pre-timeslot" autocomplete="preTimeSlot" v-model="entry.preTimeSlot" :disabled="sending" />                      
+                        <span class="md-error" v-if="!$v.entry.preTimeSlot.required">
+                            此为必填项目。
+                        </span>
                     </md-field>
                 </div>
             </div>
@@ -218,23 +227,27 @@ export default {
     entry: {
       type: "child",
       status: 0,
-      cnName: "21",
-      enName: "21",
-      gender: "M",
-      age: 21,
-      parentName: "21",
-      relationship: "21",
-      phone: "21",
-      email: "21@sina.com",
+      cnName: null,
+      enName: null,
+      gender: null,
+      age: null,
+      parentName: null,
+      relationship: null,
+      phone: null,
+      email: null,
       wechat: null,
-      ifReadEnBook: true,
-      numBookBought: 21,
-      ifReadForChild: true,
-      ifIntlEducation: true,
-      readingBlocker: "21",
-      enBookExample: "21",
-      expectation: "21",
-      remarks: null
+      ifReadEnBookInStr: null,
+      ifReadEnBook: false,
+      numBookBought: null,
+      ifReadForChildInStr: null,
+      ifReadForChild: false,
+      ifIntlEducationInStr: null,
+      ifIntlEducation: false,
+      readingBlocker: null,
+      enBookExample: null,
+      expectation: null,
+      remarks: null,
+      preTimeSlot: null
     },
     sending: false,
     entrySaved: false,
@@ -250,6 +263,13 @@ export default {
       headers: { "My-Awesome-Header": "header value" }
     }
   }),
+  watch: {
+    entry: function(val) {
+      this.entry.ifReadEnBook = val.ifReadEnBookInStr === "true";
+      this.entry.ifReadForChild = val.ifReadForChildInStr === "true";
+      this.entry.ifIntlEducation = val.ifIntlEducationInStr === "true";
+    }
+  },
   validations: {
     entry: {
       cnName: {
@@ -296,6 +316,9 @@ export default {
         required
       },
       expectation: {
+        required
+      },
+      preTimeSlot: {
         required
       }
     }

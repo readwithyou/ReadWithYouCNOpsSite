@@ -18,6 +18,12 @@
             </div>
             <div class="md-layout-item md-small-size-100 md-size-33">
                 <md-field>
+                    <label>报名时间</label>
+                    <md-input type="text" :value="registration.createTime | date('%c')" disabled />
+                </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100 md-size-33">
+                <md-field>
                     <label>报名类型</label>
                     <md-input type="text" v-if="registration.type==='child'" value="少儿" disabled />
                     <md-input type="text" v-else value="成人" disabled />
@@ -171,6 +177,12 @@
                 <md-field>
                     <label>备注</label>
                     <md-textarea v-model="registration.remarks" disabled></md-textarea>
+                </md-field>
+            </div>
+            <div class="md-layout-item md-small-size-100 md-size-100">
+                <md-field>
+                    <label>期待试课时间</label>
+                    <md-textarea v-model="registration.preTimeSlot" disabled></md-textarea>
                 </md-field>
             </div>
         </div>
