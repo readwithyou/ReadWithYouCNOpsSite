@@ -12,6 +12,10 @@
         <md-icon>library_books</md-icon>
         <p>试课报名</p>
       </sidebar-link>
+      <sidebar-link to="/teachers">
+        <md-icon>supervisor_account</md-icon>
+        <p>老师管理</p>
+      </sidebar-link>
       <!--sidebar-link to="/user">
         <md-icon>person</md-icon>
         <p>User Profile</p>

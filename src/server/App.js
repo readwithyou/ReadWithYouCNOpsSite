@@ -22,6 +22,9 @@ app.use('/api/auth', AuthController);
 var RegController = require('./controller/reg-controller');
 app.use('/api/registrations', RegController);
 
+var TeacherController = require('./controller/teacher-controller');
+app.use('/api/teachers', TeacherController);
+
 const port = process.env.PORT || 8000;
 // Server
 /*

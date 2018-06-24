@@ -264,10 +264,13 @@ export default {
     }
   }),
   watch: {
-    entry: function(val) {
-      this.entry.ifReadEnBook = val.ifReadEnBookInStr === "true";
-      this.entry.ifReadForChild = val.ifReadForChildInStr === "true";
-      this.entry.ifIntlEducation = val.ifIntlEducationInStr === "true";
+    entry: {
+      handler(val) {
+        this.entry.ifReadEnBook = val.ifReadEnBookInStr === "true";
+        this.entry.ifReadForChild = val.ifReadForChildInStr === "true";
+        this.entry.ifIntlEducation = val.ifIntlEducationInStr === "true";
+      },
+      deep: true
     }
   },
   validations: {

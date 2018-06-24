@@ -233,8 +233,11 @@ export default {
     }
   }),
   watch: {
-    entry: function(val) {
-      this.entry.ifReadEnBook = val.ifReadEnBookInStr === "true";
+    entry: {
+      handler(val) {
+        this.entry.ifReadEnBook = val.ifReadEnBookInStr === "true";
+      },
+      deep: true
     }
   },
   validations: {

@@ -2,7 +2,12 @@
   <md-toolbar md-elevation="0" class="md-transparent">
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
-        <h3 class="md-title">{{$route.name}}</h3>
+        <h3 class="md-title">
+          <md-avatar class="md-avatar-icon md-small" v-if="canGoBack()">
+            <i class="material-icons" @click="back">arrow_back</i>
+          </md-avatar>&nbsp;
+          {{$route.name}}
+        </h3>
       </div>
       <div class="md-toolbar-section-end">
         <md-button class="md-just-icon md-simple md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
@@ -61,33 +66,39 @@
 </template>
 
 <script>
-import { AUTH_LOGOUT } from 'store/actions/auth'
+import { AUTH_LOGOUT } from "store/actions/auth";
 
-export default{
-  data () {
+export default {
+  data() {
     return {
       selectedEmployee: null,
       employees: [
-        'Jim Halpert',
-        'Dwight Schrute',
-        'Michael Scott',
-        'Pam Beesly',
-        'Angela Martin',
-        'Kelly Kapoor',
-        'Ryan Howard',
-        'Kevin Malone'
+        "Jim Halpert",
+        "Dwight Schrute",
+        "Michael Scott",
+        "Pam Beesly",
+        "Angela Martin",
+        "Kelly Kapoor",
+        "Ryan Howard",
+        "Kevin Malone"
       ]
-    }
+    };
   },
   methods: {
-    toggleSidebar () {
-      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar)
+    toggleSidebar() {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
-    logout: function () {
-      this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push('/login'))
+    logout: function() {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push("/login"));
+    },
+    back: function() {
+      this.$router.go(-1);
+    },
+    canGoBack: function() {
+      return this.$route.path.toString().split("/").length > 2;
     }
   }
-}
+};
 </script>
 
 <style lang="css">
