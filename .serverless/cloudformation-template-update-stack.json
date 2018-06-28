@@ -92,7 +92,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/read-with-you-ops/production/1529832255030-2018-06-24T09:24:15.030Z/read-with-you-ops.zip"
+          "S3Key": "serverless/read-with-you-ops/production/1530177271157-2018-06-28T09:14:31.157Z/read-with-you-ops.zip"
         },
         "FunctionName": "read-with-you-ops-production-rwyweb",
         "Handler": "lambda.universal",
@@ -111,14 +111,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "RwywebLambdaVersionBWfLNgO2Sdg1sDv6rFtonabbBpmdJqVvDn9Zw": {
+    "RwywebLambdaVersionFmbhT2NQacyXElgqnqJgKohL1fzToLJKjPv7l74I": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RwywebLambdaFunction"
         },
-        "CodeSha256": "ZI+jArPGh8uay+zu4kD5R4pUKsgrky9tF+HhSn8npqw="
+        "CodeSha256": "UeHdF13NqXhkZTPG0/ePRyenI9DvZRJp/ZXx7wkWXDw="
       }
     },
     "ApiGatewayRestApi": {
@@ -236,7 +236,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1529832255504": {
+    "ApiGatewayDeployment1530177271886": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -296,7 +296,7 @@
     "RwywebLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RwywebLambdaVersionBWfLNgO2Sdg1sDv6rFtonabbBpmdJqVvDn9Zw"
+        "Ref": "RwywebLambdaVersionFmbhT2NQacyXElgqnqJgKohL1fzToLJKjPv7l74I"
       }
     },
     "ServiceEndpoint": {

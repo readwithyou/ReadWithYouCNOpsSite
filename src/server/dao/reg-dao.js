@@ -15,6 +15,33 @@ var dao = function () {
         docClient.put(params, callback);
     };
 
+    var update = function (id, item, callback) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                ID: id
+            },
+            UpdateExpression: 'SET #status =:status, #teacherId =:teacherId, #scheduledTime =:scheduledTime, #zoomLink =:zoomLink, #courseRemarks =:courseRemarks, #courseFiles =:courseFiles',
+            ExpressionAttributeNames: {
+                '#status': 'status',
+                '#teacherId': 'teacherId',
+                '#scheduledTime': 'scheduledTime',
+                '#zoomLink': 'zoomLink',
+                '#courseRemarks': 'courseRemarks',
+                '#courseFiles': 'courseFiles',
+            },
+            ExpressionAttributeValues: {
+                ':status': item.status,
+                ':teacherId': item.teacherId,
+                ':scheduledTime': item.scheduledTime,
+                ':zoomLink': item.zoomLink,
+                ':courseRemarks': item.courseRemarks,
+                ':courseFiles': item.courseFiles,
+            }
+        };
+        docClient.update(params, callback);
+    };
+
     var get = function (id, callback) {
         var params = {
             TableName: ddbTable,
@@ -47,6 +74,7 @@ var dao = function () {
     return {
         get: get,
         create: create,
+        update: update,
         scan: scan,
         remove: remove
     };

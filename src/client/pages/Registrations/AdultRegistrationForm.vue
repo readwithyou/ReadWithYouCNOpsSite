@@ -137,10 +137,6 @@
                         </span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-size-100">
-                    <vue-dropzone ref="bookImgs" id="bookImgs" :options="dropzoneOptions">
-                    </vue-dropzone>
-                </div>
             </div>
 
             <h4>其他备注</h4>
@@ -171,8 +167,6 @@
 </form>
 </template>
 <script>
-import vue2Dropzone from "vue2-dropzone";
-import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import { validationMixin } from "vuelidate";
 import {
   required,
@@ -184,9 +178,6 @@ import {
 export default {
   name: "edit-profile-form",
   mixins: [validationMixin],
-  components: {
-    vueDropzone: vue2Dropzone
-  },
   props: {
     dataBackgroundColor: {
       type: String,
@@ -220,17 +211,7 @@ export default {
     },
     sending: false,
     entrySaved: false,
-    fullName: null,
-    dropzoneOptions: {
-      url: "https://httpbin.org/post",
-      thumbnailWidth: 150,
-      maxFilesize: 2,
-      dictCancelUpload: "取消",
-      dictCancelUploadConfirmation: "确认取消图片上传？",
-      dictRemoveFile: "删除",
-      dictDefaultMessage: "请拖拽或点击上传正在阅读图书内页照片。",
-      headers: { "My-Awesome-Header": "header value" }
-    }
+    fullName: null
   }),
   watch: {
     entry: {
@@ -336,7 +317,7 @@ export default {
       this.$notify({
         message: "试课报名登记成功！",
         icon: "add_alert",
-        horizontalAlign: "right",
+        horizontalAlign: "center",
         verticalAlign: "top",
         type: "success"
       });

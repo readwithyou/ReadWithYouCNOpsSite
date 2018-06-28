@@ -192,7 +192,7 @@ export default {
       this.$notify({
         message: "老师信息登记成功！",
         icon: "add_alert",
-        horizontalAlign: "right",
+        horizontalAlign: "center",
         verticalAlign: "top",
         type: "success"
       });

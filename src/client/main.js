@@ -46,9 +46,20 @@ Vue.use(GlobalComponents)
 Vue.use(GlobalDirectives)
 Vue.use(Notifications)
 
+
+import { AUTH_LOGOUT } from "store/actions/auth";
+Vue.http.interceptors.push(function (request, next) {
+  // continue to next interceptor
+  next(function (response) {
+    if (response.status == 401 || response.status == 403) {
+      store.dispatch(AUTH_LOGOUT).then(() => this.$router.push("/login"));
+    }
+  });
+});
+
 // global library setup
 Object.defineProperty(Vue.prototype, '$Chartist', {
-  get () {
+  get() {
     return this.$root.Chartist
   }
 })

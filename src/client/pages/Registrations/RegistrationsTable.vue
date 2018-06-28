@@ -88,7 +88,7 @@ var titles = [
     }
   },
   {
-    prop: "courseTime",
+    prop: "scheduledTime",
     label: "试课时间",
     formatter: (row, column, cellValue, index) => {
       if (cellValue) {
@@ -128,6 +128,7 @@ export default {
       titles,
       customFilters,
       tableProps,
+      teachers: [],
       regs: [],
       deleteDialogActive: false,
       entryToDelete: null
@@ -140,16 +141,30 @@ export default {
     handleClick(command) {
       this.$router.push({ path: "/registrations/new?type=" + command });
     },
-    fetchData() {
+    fetchRegistrations() {
       var resource = this.$resource("/api/registrations");
       resource.get().then(
         response => {
           this.regs = response.body;
+          for (var i = 0; i < this.regs.length; i++) {
+            for (var j = 0; j < this.teachers.length; j++) {
+              if (this.teachers[j].ID === this.regs[i].teacherId) {
+                this.regs[i].teacher = this.teachers[j].name;
+              }
+            }
+          }
         },
         response => {
           this.notifyFetchingError();
         }
       );
+    },
+    fetchData() {
+      var resource = this.$resource("/api/teachers");
+      resource.get().then(response => {
+        this.teachers = response.body;
+        this.fetchRegistrations();
+      });
     },
     notifyFetchingError() {
       this.$notify({
@@ -189,7 +204,9 @@ export default {
       }
     },
     onConfirmDelete() {
-      var resource = this.$resource("/api/registrations/" + this.entryToDelete.ID);
+      var resource = this.$resource(
+        "/api/registrations/" + this.entryToDelete.ID
+      );
       resource.delete().then(
         response => {
           this.notifyRemoveSuccess();
@@ -216,7 +233,7 @@ export default {
       this.$notify({
         message: "试课报名删除成功！",
         icon: "add_alert",
-        horizontalAlign: "right",
+        horizontalAlign: "center",
         verticalAlign: "top",
         type: "success"
       });

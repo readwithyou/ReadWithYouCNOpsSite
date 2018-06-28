@@ -1,5 +1,17 @@
 service: read-with-you-ops
 
+package:
+  exclude:
+    - src/**
+    - webpack.config.js
+    - node_modules/babel-code-frame/**
+    - node_modules/babel-helper-vue-jsx-merge-props/**
+    - node_modules/babel-runtime/**
+    - node_modules/vue-loader/**
+    - node_modules/vue-style-loader/**
+    - node_modules/vue-template-compiler/**
+    - node_modules/vue-template-es2015-compiler/**
+ 
 provider:
   name: aws
   runtime: nodejs6.10
@@ -8,7 +20,7 @@ provider:
   stage: production
   region: cn-north-1
   endpointType: REGIONAL
-
+    
 functions:
   rwyweb:
     handler: lambda.universal
