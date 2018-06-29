@@ -11,6 +11,19 @@ package:
     - node_modules/vue-style-loader/**
     - node_modules/vue-template-compiler/**
     - node_modules/vue-template-es2015-compiler/**
+    - node_modules/vue/**
+    - node_modules/vue-auth/**
+    - node_modules/vue-clickaway/**
+    - node_modules/vue-data-tables/**
+    - node_modules/vue-data-filter/**
+    - node_modules/vue-data-material/**
+    - node_modules/vue-data-moment/**
+    - node_modules/vue-data-resource/**
+    - node_modules/vue2-datepicker/**
+    - node_modules/element-ui/**
+    - node_modules/chartist/**
+    - node_modules/dropzone/**
+    - node_modules/google-maps/**
  
 provider:
   name: aws
