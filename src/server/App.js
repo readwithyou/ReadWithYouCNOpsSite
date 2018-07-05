@@ -3,6 +3,7 @@ var partials = require('express-partials');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
+var maskResponse = require('./utils/mask-response');
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -12,6 +13,7 @@ app.use(partials());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('dist/assets'))
+app.use(maskResponse);
 
 app.use('/', require('./routes/index'));
 app.use('/api', require('./routes/api'));

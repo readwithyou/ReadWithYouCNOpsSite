@@ -23,29 +23,23 @@
             </md-autocomplete>
           </div>
           <md-list>
-            <md-list-item to="/">
-              <i class="material-icons">dashboard</i>
-              <p class="hidden-lg hidden-md">主页</p>
-            </md-list-item>
-
-            <!--md-list-item to="/notifications" class="dropdown">
+            <md-list-item :to="getCurrentUrl()" class="dropdown">
               <drop-down>
                 <a slot="title" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="material-icons">notifications</i>
-                  <span class="notification">5</span>
-                  <p class="hidden-lg hidden-md">Notifications</p>
+                  <i class="material-icons">language</i>
+                  <p class="hidden-lg hidden-md">Language</p>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
-                  <li><a href="#">Mike John responded to your email</a></li>
-                  <li><a href="#">You have 5 new tasks</a></li>
-                  <li><a href="#">You're now friend with Andrew</a></li>
-                  <li><a href="#">Another Notification</a></li>
-                  <li><a href="#">Another One</a></li>
+                  <li>
+                    <a :href="getCurrentUrl()" class="flag-img-link" @click="changeLang('CN')"><img :src="cnflag" class="flag-img" alt="">中文</a>
+                  </li>
+                  <li>
+                    <a :href="getCurrentUrl()" class="flag-img-link" @click="changeLang('EN')"><img :src="enflag" class="flag-img" alt="">English</a>
+                  </li>
                 </ul>
               </drop-down>
-            </md-list-item-->
-
-            <md-list-item to="/" class="dropdown">
+            </md-list-item>
+            <md-list-item :to="getCurrentUrl()" class="dropdown">
               <drop-down>
                 <a slot="title" class="dropdown-toggle" data-toggle="dropdown">
                   <i class="material-icons">person</i>
@@ -56,7 +50,6 @@
                 </ul>
               </drop-down>
             </md-list-item>
-            
           </md-list>
         </div>
       </div>
@@ -69,6 +62,16 @@
 import { AUTH_LOGOUT } from "store/actions/auth";
 
 export default {
+  props: {
+    cnflag: {
+      type: String,
+      default: require("assets/img/Flag_of_China.png")
+    },
+    enflag: {
+      type: String,
+      default: require("assets/img/Flag_of_USA.png")
+    }
+  },
   data() {
     return {
       selectedEmployee: null,
@@ -96,10 +99,20 @@ export default {
     },
     canGoBack: function() {
       return this.$route.path.toString().split("/").length > 2;
+    },
+    changeLang: function(locale) {
+      this.$i18n.locale = locale;
+      localStorage.setItem("rwy-locale", locale);
+    },
+    getCurrentUrl: function(){
+      return window.location.href.split("#")[1];
     }
   }
 };
 </script>
-
 <style lang="css">
+.flag-img {
+  width: 20px;
+  margin-right: 5px;
+}
 </style>

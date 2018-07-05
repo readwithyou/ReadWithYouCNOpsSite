@@ -75,7 +75,8 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
         <div class="md-layout-item md-size-100 text-center">
           <md-button type="submit" class="md-primary" :disabled="sending">保存</md-button>
-          <md-button @click="sendEmail" class="md-default" :disabled="sending">发送邮件</md-button>
+          <md-button @click="sendEmailToStudent" class="md-default" :disabled="sending">邮件学员</md-button>
+          <md-button @click="sendEmailToTeacher" class="md-default" :disabled="sending">邮件老师</md-button>
         </div>
     </form>
 </template>
@@ -254,12 +255,28 @@ export default {
         }
       );
     },
-    sendEmail() {
+    sendEmailToStudent() {
       this.sending = true;
       var registration = this.$route.params.id;
 
       var resource = this.$resource(
         "/api/registrations/" + registration + "/student-scheduling-mail"
+      );
+      resource.save().then(
+        response => {
+          this.notifyMailSuccess();
+        },
+        response => {
+          this.notifyMailError();
+        }
+      );
+    },
+    sendEmailToTeacher() {
+      this.sending = true;
+      var registration = this.$route.params.id;
+
+      var resource = this.$resource(
+        "/api/registrations/" + registration + "/teacher-scheduling-mail"
       );
       resource.save().then(
         response => {

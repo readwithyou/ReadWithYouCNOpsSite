@@ -6,16 +6,25 @@ var dao = function () {
     AWS.config.region = awsRegion;
     var docClient = new AWS.DynamoDB.DocumentClient();
 
-    var create = function (item, callback) {
+    var createAsync = function (item) {
         var params = {
             TableName: ddbTable,
             Item: item,
             ConditionExpression: 'attribute_not_exists(ID)',
         };
-        docClient.put(params, callback);
+
+        return new Promise(function (resolve, reject) {
+            docClient.put(params, function (err, data) {
+                if (err) {
+                    console.log('Create DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
     };
 
-    var update = function (id, item, callback) {
+    var updateAsync = function (id, item) {
         var params = {
             TableName: ddbTable,
             Key: {
@@ -39,10 +48,19 @@ var dao = function () {
                 ':courseFiles': item.courseFiles,
             }
         };
-        docClient.update(params, callback);
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
     };
 
-    var get = function (id, callback) {
+    var getAsync = function (id) {
         var params = {
             TableName: ddbTable,
             Key: {
@@ -50,33 +68,58 @@ var dao = function () {
             }
         };
 
-        docClient.get(params, callback);
+        return new Promise(function (resolve, reject) {
+            docClient.get(params, function (err, data) {
+                if (err) {
+                    console.log('Get DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
     };
 
-    var scan = function (callback) {
+    var scanAsync = function () {
         var params = {
             TableName: ddbTable
         };
 
-        docClient.scan(params, callback);
+        return new Promise(function (resolve, reject) {
+            docClient.scan(params, function (err, data) {
+                if (err) {
+                    console.log('Scan DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
     };
 
-    var remove = function (id, callback) {
+    var removeAsync = function (id) {
         var params = {
             TableName: ddbTable,
             Key: {
                 ID: id
             }
         };
-        docClient.delete(params, callback);
+
+        return new Promise(function (resolve, reject) {
+            docClient.delete(params, function (err, data) {
+                if (err) {
+                    console.log('Delete DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
     };
 
     return {
-        get: get,
-        create: create,
-        update: update,
-        scan: scan,
-        remove: remove
+        getAsync: getAsync,
+        createAsync: createAsync,
+        updateAsync: updateAsync,
+        scanAsync: scanAsync,
+        removeAsync: removeAsync
     };
 }();
 

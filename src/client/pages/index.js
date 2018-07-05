@@ -1,3 +1,7 @@
+// Login
+import SignInPanel from '../pages/Login/SignInPanel.vue'
+import SignOnPanel from '../pages/Login/SignOnPanel.vue'
+
 // User
 import UserCard from '../pages/UserProfile/UserCard.vue'
 import EditProfileForm from '../pages/UserProfile/EditProfileForm.vue'
@@ -16,6 +20,8 @@ import TeacherForm from '../pages/Teachers/TeacherForm.vue'
 import TeacherDetailPanel from '../pages/Teachers/TeacherDetailPanel.vue'
 
 export {
+  SignInPanel,
+  SignOnPanel,
   UserCard,
   RegistrationsTable,
   EditProfileForm,

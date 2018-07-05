@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import VueI18n from 'vue-i18n'
 import VueMoment from 'vue-moment'
 import moment from 'moment-timezone'
 import VueFilter from 'vue-filter';
@@ -33,6 +34,7 @@ const router = new VueRouter({
   linkExactActiveClass: 'nav-item active'
 })
 
+Vue.use(VueI18n);
 Vue.use(VueMoment, {
   moment,
 });
@@ -46,7 +48,7 @@ Vue.use(GlobalComponents)
 Vue.use(GlobalDirectives)
 Vue.use(Notifications)
 
-
+//set up auto logout if auth failed in backend
 import { AUTH_LOGOUT } from "store/actions/auth";
 Vue.http.interceptors.push(function (request, next) {
   // continue to next interceptor
@@ -64,10 +66,20 @@ Object.defineProperty(Vue.prototype, '$Chartist', {
   }
 })
 
+//set i18n
+const i18n = new VueI18n({
+  locale: localStorage.getItem('rwy-locale') || 'CN',
+  messages: {
+    'CN': require('./assets/lang/cn'),
+    'EN': require('./assets/lang/en')
+  },
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   render: h => h(App),
+  i18n,
   router,
   store,
   data: {

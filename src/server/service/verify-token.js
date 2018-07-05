@@ -15,6 +15,7 @@ function verifyToken(req, res, next) {
 
     // if everything is good, save to request for use in other routes
     req.username = decoded.id;
+    req.group = decoded.group;
     next();
   });
 

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-var verifyToken = require('./verify-token');
+var verifyToken = require('../service/verify-token');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -16,65 +16,60 @@ var bcrypt = require('bcryptjs');
 var config = require('../config'); // get config file
 
 router.post('/login', function (req, res) {
+    userDao.getAsync(req.body.username).then(
+        (user) => {
+            if (!user.Item) return res.status(404).send('No user found.');
+            if (user.Item.locked) return res.status(423).send('User is locked. Cannot Login.');
 
-  userDao.get(req.body.username, function (err, user) {
-    if (err) {
-      console.log('DDB Error: ' + err);
-      return res.status(500).send('Error on the server.');
-    }
-    if (!user.Item) return res.status(404).send('No user found.');
+            // check if the password is valid
+            var passwordIsValid = bcrypt.compareSync(req.body.password, user.Item.password);
+            if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
 
-    // check if the password is valid
-    var passwordIsValid = bcrypt.compareSync(req.body.password, user.Item.password);
-    if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+            // if user is found and password is valid
+            // create a token
+            var token = jwt.sign({ id: user.Item.username, group: user.Item.group }, config.secret, {
+                expiresIn: 86400// expires in 24 hours
+            });
 
-    // if user is found and password is valid
-    // create a token
-    var token = jwt.sign({ id: user.Item.username }, config.secret, {
-      expiresIn: 86400// expires in 24 hours
-    });
-
-    // return the information including token as JSON
-    res.status(200).send({ auth: true, token: token });
-  });
-
+            // return the information including token as JSON
+            return res.status(200).send({ auth: true, token: token });
+        },
+        (err) => res.status(500).send('Error on the server.')
+    );
 });
 
 router.get('/logout', function (req, res) {
-  res.status(200).send({ auth: false, token: null });
+    res.status(200).send({ auth: false, token: null });
 });
 
-router.post('/register', function (req, res) {
-  var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+router.post('/signon', function (req, res) {
+    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+    req.body.password = hashedPassword;
+    req.body.locked = true;
 
-  userDao.create({
-    username: req.body.username,
-    password: hashedPassword
-  },
-    function (err, user) {
-      if (err) {
-        console.log('DDB Error: ' + err);
-        return res.status(500).send("There was a problem registering the user`.");
-      }
-
-      // if user is registered without errors
-      // create a token
-      var token = jwt.sign({ id: user.username }, config.secret, {
-        expiresIn: 86400 // expires in 24 hours
-      });
-
-      res.status(200).send({ auth: true, token: token });
-    });
+    userDao.createAsync(req.body).then(
+        (data) => res.status(200).send(),
+        (err) => {
+            if (err.name === 'ConditionalCheckFailedException') {
+                console.log('Condition check failure: ' + err);
+                return res.status(409).send("Username already exist`.");
+            } else {
+                console.log('DDB Error: ' + err);
+                return res.status(500).send("There was a problem signon the user`.");
+            }
+        }
+    );
 });
 
 router.get('/me', verifyToken, function (req, res, next) {
-
-  userDao.get(req.username, function (err, user) {
-    if (err) return res.status(500).send("There was a problem finding the user.");
-    if (!user) return res.status(404).send("No user found.");
-    res.status(200).send(user);
-  });
-
+    userDao.getAsync(req.username).then(
+        (user) => {
+            if (!user) return res.status(404).send("No user found.");
+            user.password = '';
+            res.status(200).send(user);
+        },
+        (err) => res.status(500).send('Error on the server.')
+    );
 });
 
 module.exports = router;

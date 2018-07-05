@@ -6,30 +6,51 @@ var s3accessor = function () {
     AWS.config.region = awsRegion;
     var s3 = new AWS.S3();
 
-    var getPutSignedUrl = function (filePath, contentType, callback) {
+    var getPutSignedUrlAsync = function (filePath, expires, contentType) {
         var params = {
             Bucket: bucketName,
             Key: filePath,
-            Expires: 3600,
+            Expires: expires,
             ContentType: contentType
         }
-        //err, url
-        s3.getSignedUrl('putObject', params, callback)
+
+        return new Promise(function (resolve, reject) {
+            s3.getSignedUrl('putObject', params, function (err, url) {
+                if (err) {
+                    console.log('S3 getPutSignedUrlAsync Error: ' + err);
+                    reject(err);
+                }
+                resolve({
+                    url: url
+                });
+            });
+        });
     };
 
-    var getGetSignedUrl = function (filePath, callback) {
+    var getGetSignedUrlAsync = function (filePath, expires) {
         var params = {
             Bucket: bucketName,
             Key: filePath,
-            Expires: 3600,
+            Expires: expires,
         }
-        //err, url
-        s3.getSignedUrl('getObject', params, callback)
+
+        return new Promise(function (resolve, reject) {
+            s3.getSignedUrl('getObject', params, function (err, url) {
+                if (err) {
+                    console.log('S3 getGetSignedUrlAsync Error: ' + err);
+                    reject(err);
+                }
+                resolve({
+                    filePath: filePath,
+                    url: url
+                });
+            });
+        });
     };
 
     return {
-        getPutSignedUrl: getPutSignedUrl,
-        getGetSignedUrl: getGetSignedUrl,
+        getPutSignedUrlAsync: getPutSignedUrlAsync,
+        getGetSignedUrlAsync: getGetSignedUrlAsync,
     };
 }();
 

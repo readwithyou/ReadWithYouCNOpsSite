@@ -6,16 +6,25 @@ var dao = function () {
     AWS.config.region = awsRegion;
     var docClient = new AWS.DynamoDB.DocumentClient();
 
-    var create = function (item, callback) {
+    var createAsync = function (item) {
         var params = {
             TableName: ddbTable,
             Item: item,
             ConditionExpression: 'attribute_not_exists(username)',
         };
-        docClient.put(params, callback);
+
+        return new Promise(function (resolve, reject) {
+            docClient.put(params, function (err, data) {
+                if (err) {
+                    console.log('Put DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
     };
 
-    var get = function (username, callback) {
+    var getAsync = function (username, callback) {
         var params = {
             TableName: ddbTable,
             Key: {
@@ -23,12 +32,20 @@ var dao = function () {
             }
         };
 
-        docClient.get(params, callback);
+        return new Promise(function (resolve, reject) {
+            docClient.get(params, function (err, data) {
+                if (err) {
+                    console.log('Get DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
     };
 
     return {
-        create: create,
-        get: get
+        createAsync: createAsync,
+        getAsync: getAsync
     };
 }();
 

@@ -6,21 +6,21 @@
       <mobile-menu slot="content"></mobile-menu>
       <sidebar-link to="/dashboard">
         <md-icon>dashboard</md-icon>
-        <p>主页</p>
+        <p>{{ $t("message.home_page") }}</p>
       </sidebar-link>
       <sidebar-link to="/registrations">
         <md-icon>library_books</md-icon>
-        <p>试课报名</p>
+        <p>{{ $t("message.registrations") }}</p>
       </sidebar-link>
       <sidebar-link to="/teachers">
         <md-icon>supervisor_account</md-icon>
-        <p>老师管理</p>
+        <p>{{ $t("message.tearchers") }}</p>
       </sidebar-link>
-      <!--sidebar-link to="/user">
+      <sidebar-link to="/user">
         <md-icon>person</md-icon>
-        <p>User Profile</p>
+        <p>{{ $t("message.profile") }}</p>
       </sidebar-link>
-      <sidebar-link to="/table">
+      <!--sidebar-link to="/table">
         <md-icon>content_paste</md-icon>
         <p>Table list</p>
       </sidebar-link>

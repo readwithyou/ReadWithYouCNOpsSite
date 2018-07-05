@@ -1,5 +1,5 @@
 module.exports = {
-    'secret': 'superscrete',
-    'emailAccount': 'superscrete',
-    'emailKey': 'superscrete'
+    'secret': 'supersecrete',
+    'emailAccount': 'supersecrete',
+    'emailKey': 'supersecrete'
 };

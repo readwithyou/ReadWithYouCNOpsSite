@@ -2,8 +2,8 @@
 <form novalidate class="md-layout" @submit.prevent="validateEntry">
     <md-card>
         <md-card-header :data-background-color="dataBackgroundColor">
-            <h4 class="title">少儿英文陪读试课登记表</h4>
-            <p class="category">填写相应信息完成添加试课报名。</p>
+            <h4 class="title">{{ $t("message.child_registrations_card_title") }}</h4>
+            <p class="category">{{ $t("message.child_registrations_card_subtitle") }}</p>
         </md-card-header>
 
         <md-card-content>
@@ -11,174 +11,174 @@
             <div class="md-layout">
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('cnName')">
-                        <label for="cn-name">中文名</label>
+                        <label for="cn-name">{{ $t("message.cn_name") }}</label>
                         <md-input name="cn-name" id="cn-name" v-model="entry.cnName" :disabled="sending" type="text"></md-input>
                         <span class="md-error" v-if="!$v.entry.cnName.required">
-                            中文名为必填项目。
+                            {{ $t("message.cn_name_required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
-                        <label>英文名(选填)</label>
+                        <label>{{ $t("message.en_name") }}({{ $t("message.optional") }})</label>
                         <md-input v-model="entry.enName" type="text"></md-input>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('gender')">
-                        <label for="gender">性别</label>
+                        <label for="gender">{{ $t("message.gender") }}</label>
                         <md-select name="gender" id="gender" v-model="entry.gender" md-dense :disabled="sending">
-                            <md-option>请选择...</md-option>
-                            <md-option value="M">男</md-option>
-                            <md-option value="F">女</md-option>
+                            <md-option>{{ $t("message.select_hint") }}</md-option>
+                            <md-option value="M">{{ $t("message.male") }}</md-option>
+                            <md-option value="F">{{ $t("message.female") }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.gender.required">
-                            性别为必填项目。
+                            {{ $t("message.gender_required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('age')">
-                        <label for="age">年龄</label>
+                        <label for="age">{{ $t("message.age") }}</label>
                         <md-input type="number" id="age" name="age" autocomplete="age" v-model="entry.age" :disabled="sending" />
-                        <span class="md-error" v-if="!$v.entry.age.required">年龄为必填项目。</span>
-                        <span class="md-error" v-else-if="!$v.entry.age.maxlength">年龄是不是太大了？</span>
+                        <span class="md-error" v-if="!$v.entry.age.required">{{ $t("message.age_required_validation_error") }}</span>
+                        <span class="md-error" v-else-if="!$v.entry.age.maxlength">{{ $t("message.age_max_validation_error") }}</span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('parentName')">
-                        <label for="p-name">家长姓名</label>
+                        <label for="p-name">{{ $t("message.parent_name") }}</label>
                         <md-input name="p-name" id="p-name" v-model="entry.parentName" :disabled="sending" type="text"></md-input>
                         <span class="md-error" v-if="!$v.entry.parentName.required">
-                            家长姓名为必填项目。
+                            {{ $t("message.parent_name_required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('relationship')">
-                        <label for="relationship">与孩子关系</label>
+                        <label for="relationship">{{ $t("message.relation_to_child") }}</label>
                         <md-input name="relationship" id="relationship" v-model="entry.relationship" :disabled="sending" type="text"></md-input>
                         <span class="md-error" v-if="!$v.entry.relationship.required">
-                            与孩子关系为必填项目。
+                            {{ $t("message.relationship_required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('phone')">
-                        <label for="phone">电话</label>
+                        <label for="phone">{{ $t("message.phone") }}</label>
                         <md-input type="text" id="phone" name="phone" autocomplete="phone" v-model="entry.phone" :disabled="sending" />
-                        <span class="md-error" v-if="!$v.entry.phone.required">电话为必填项目。</span>
+                        <span class="md-error" v-if="!$v.entry.phone.required">{{ $t("message.phone_required_validation_error") }}</span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('email')">
-                        <label for="email">Email</label>
+                        <label for="email">{{ $t("message.email") }}</label>
                         <md-input type="email" name="email" id="email" autocomplete="email" v-model="entry.email" :disabled="sending" />
-                        <span class="md-error" v-if="!$v.entry.email.required">Email为必填项目。</span>
-                        <span class="md-error" v-else-if="!$v.entry.email.email">Email地址格式错误。</span>
+                        <span class="md-error" v-if="!$v.entry.email.required">{{ $t("message.email_required_validation_error") }}</span>
+                        <span class="md-error" v-else-if="!$v.entry.email.email">{{ $t("message.email_format_validation_error") }}</span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
-                        <label>微信(选填)</label>
+                        <label>{{ $t("message.wechat") }}({{ $t("message.optional") }})</label>
                         <md-input v-model="entry.wechat" type="text"></md-input>
                     </md-field>
                 </div>
             </div>
 
-            <h4>问卷调查</h4>
+            <h4>{{ $t("message.questionnaire") }}</h4>
             <div class="md-layout">
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('ifReadEnBook')">
-                        <label for="if-read-en-book">孩子目前在读英文书吗？</label>
+                        <label for="if-read-en-book">{{ $t("message.question_if_child_read_en_book") }}</label>
                         <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBookInStr" md-dense :disabled="sending">
-                            <md-option>请选择...</md-option>
-                            <md-option value="true">是</md-option>
-                            <md-option value="false">否</md-option>
+                            <md-option>{{ $t("message.select_hint") }}</md-option>
+                            <md-option value="true">{{ $t("message.yes") }}</md-option>
+                            <md-option value="false">{{ $t("message.no") }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifReadEnBook.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('numBookBought')">
-                        <label for="num-book-bought">每年购买英文书的数量：</label>
+                        <label for="num-book-bought">{{ $t("message.question_num_book_bought") }}</label>
                         <md-input type="number" id="num-book-bought" name="num-book-bought" autocomplete="numBookBought" v-model="entry.numBookBought" :disabled="sending" />
                         <span class="md-error" v-if="!$v.entry.numBookBought.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('ifReadForChild')">
-                        <label for="if-read-for-child">您亲自给孩子读英文绘本吗？</label>
+                        <label for="if-read-for-child">{{ $t("message.question_if_read_for_child") }}</label>
                         <md-select name="if-read-for-child" id="if-read-for-child" v-model="entry.ifReadForChildInStr" md-dense :disabled="sending">
-                            <md-option>请选择...</md-option>
-                            <md-option value="true">是</md-option>
-                            <md-option value="false">否</md-option>
+                            <md-option>{{ $t("message.select_hint") }}</md-option>
+                            <md-option value="true">{{ $t("message.yes") }}</md-option>
+                            <md-option value="false">{{ $t("message.no") }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifReadForChild.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('ifIntlEducation')">
-                        <label for="if-intl-education">你是否为孩子规划国际教育路线？</label>
+                        <label for="if-intl-education">{{ $t("message.question_if_intl_education") }}</label>
                         <md-select name="if-intl-education" id="if-intl-education" v-model="entry.ifIntlEducationInStr" md-dense :disabled="sending">
-                            <md-option>请选择...</md-option>
-                            <md-option value="true">是</md-option>
-                            <md-option value="false">否</md-option>
+                            <md-option>{{ $t("message.select_hint") }}</md-option>
+                            <md-option value="true">{{ $t("message.yes") }}</md-option>
+                            <md-option value="false">{{ $t("message.no") }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifIntlEducation.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                     <md-field :class="getValidationClass('readingBlocker')">
-                        <label for="reading-blocker">在为孩子读英文绘本时遇到哪些困难？</label>
+                        <label for="reading-blocker">{{ $t("message.question_child_reading_blocker") }}</label>
                         <md-textarea id="reading-blocker" name="reading-blocker" v-model="entry.readingBlocker" :disabled="sending" ></md-textarea>
                         <span class="md-error" v-if="!$v.entry.readingBlocker.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                     <md-field :class="getValidationClass('enBookExample')">
-                        <label for="en-book-example">目前在读英文书目举例：</label>
+                        <label for="en-book-example">{{ $t("message.question_child_reading_example") }}</label>
                         <md-textarea id="en-book-example" name="en-book-example" v-model="entry.enBookExample" :disabled="sending" ></md-textarea>
                         <span class="md-error" v-if="!$v.entry.enBookExample.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                     <md-field :class="getValidationClass('expectation')">
-                        <label for="expectation">您对陪你读书的陪读服务的期望是什么？</label>
+                        <label for="expectation">{{ $t("message.question_expectation") }}</label>
                         <md-textarea id="expectation" name="expectation" v-model="entry.expectation" :disabled="sending" ></md-textarea>
                         <span class="md-error" v-if="!$v.entry.expectation.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
             </div>
 
-            <h4>其他备注</h4>
+            <h4>{{ $t("message.remarks") }}</h4>
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <md-field>
-                        <label for="remarks">备注（选填）</label>
-                        <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="entry.remarks" :disabled="sending" />  
+                        <label for="remarks">{{ $t("message.remarks") }}({{ $t("message.optional") }})</label>
+                        <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="entry.remarks" :disabled="sending" />                      
                     </md-field>
                 </div>
                 <div class="md-layout-item md-size-100">
                     <md-field :class="getValidationClass('preTimeSlot')">
-                        <label for="pre-timeslot">期待试课时间</label>
+                        <label for="pre-timeslot">{{ $t("message.question_pre_timeslot") }}</label>
                         <md-input type="text" id="pre-timeslot" name="pre-timeslot" autocomplete="preTimeSlot" v-model="entry.preTimeSlot" :disabled="sending" />                      
                         <span class="md-error" v-if="!$v.entry.preTimeSlot.required">
-                            此为必填项目。
+                            {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>

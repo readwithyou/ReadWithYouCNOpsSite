@@ -4,8 +4,8 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <md-card>
           <md-card-header data-background-color="purple">
-            <h4 class="title">老师管理表格</h4>
-            <p class="category">此表格罗列所有老师信息</p>
+            <h4 class="title">{{ $t("message.teachers_card_title") }}</h4>
+            <p class="category">{{ $t("message.teachers_card_subtitle") }}</p>
           </md-card-header>
           <md-card-content>
             <teachers-table table-header-color="purple"></teachers-table>

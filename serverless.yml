@@ -4,26 +4,7 @@ package:
   exclude:
     - src/**
     - webpack.config.js
-    - node_modules/babel-code-frame/**
-    - node_modules/babel-helper-vue-jsx-merge-props/**
-    - node_modules/babel-runtime/**
-    - node_modules/vue-loader/**
-    - node_modules/vue-style-loader/**
-    - node_modules/vue-template-compiler/**
-    - node_modules/vue-template-es2015-compiler/**
-    - node_modules/vue/**
-    - node_modules/vue-auth/**
-    - node_modules/vue-clickaway/**
-    - node_modules/vue-data-tables/**
-    - node_modules/vue-data-filter/**
-    - node_modules/vue-data-material/**
-    - node_modules/vue-data-moment/**
-    - node_modules/vue-data-resource/**
-    - node_modules/vue2-datepicker/**
-    - node_modules/element-ui/**
-    - node_modules/chartist/**
-    - node_modules/dropzone/**
-    - node_modules/google-maps/**
+    - node_modules/.cache/**
  
 provider:
   name: aws

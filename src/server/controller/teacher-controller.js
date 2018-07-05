@@ -2,34 +2,25 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
-var verifyToken = require('./verify-token');
-var generatorId = require('./generate-id');
+var verifyToken = require('../service/verify-token');
+var generatorId = require('../service/generate-id');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
 var teacherDao = require('../dao/teacher-dao');
 
 router.get('/:id', verifyToken, function (req, res, next) {
-    teacherDao.get(req.params.id, function (err, data) {
-        if (err) {
-            console.log('DDB Error: ' + err);
-            var returnStatus = 500;
-            res.status(returnStatus).end();
-        } else {
-            res.json(data.Item);
-        }
-    });
+    teacherDao.getAsync(req.params.id).then(
+        (data) => res.json(data.Item),
+        (err) => res.status(500).end()
+    );
 });
 
 router.get('/', verifyToken, function (req, res, next) {
-    teacherDao.scan(function (err, data) {
-        if (err) {
-            var returnStatus = 500;
-            res.status(returnStatus).end();
-        } else {
-            res.json(data.Items);
-        }
-    });
+    teacherDao.scanAsync().then(
+        (data) => res.json(data.Items),
+        (err) => res.status(500).end()
+    );
 });
 
 router.post('/', verifyToken, function (req, res, next) {
@@ -37,25 +28,17 @@ router.post('/', verifyToken, function (req, res, next) {
     item.ID = generatorId();
     item.createTime = new Date().toISOString();
 
-    teacherDao.create(item, function (err, data) {
-        var returnStatus = 200;
-        if (err) {
-            console.log('DDB Error: ' + err);
-            var returnStatus = 500;
-        }
-        res.status(returnStatus).end();
-    });
+    teacherDao.createAsync(item).then(
+        (data) => res.status(200).end(),
+        (err) => res.status(500).end()
+    );
 });
 
 router.delete('/:id', verifyToken, function (req, res, next) {
-    teacherDao.remove(req.params.id, function (err, data) {
-        var returnStatus = 200;
-        if (err) {
-            console.log('DDB Error: ' + err);
-            var returnStatus = 500;
-        }
-        res.status(returnStatus).end();
-    });
+    teacherDao.removeAsync(req.params.id).then(
+        (data) => res.status(200).end(),
+        (err) => res.status(500).end()
+    );
 });
 
 module.exports = router;

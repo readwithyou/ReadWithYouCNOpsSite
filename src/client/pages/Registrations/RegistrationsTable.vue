@@ -12,10 +12,10 @@
     <el-row slot="custom-tool-bar" style="margin-bottom: 10px">
       <el-col :span="10">
         <el-dropdown @command="handleClick">
-          <el-button type="default">新增<i class="el-icon-plus el-icon--right"></i></el-button>
+          <el-button type="default">{{ $t("message.create") }}<i class="el-icon-plus el-icon--right"></i></el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="child">少儿</el-dropdown-item>
-            <el-dropdown-item command="adult">成人</el-dropdown-item>
+            <el-dropdown-item command="child">{{ $t("message.child") }}</el-dropdown-item>
+            <el-dropdown-item command="adult">{{ $t("message.adult") }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>

@@ -89,8 +89,9 @@ const routes = [
       },
       {
         path: 'user',
-        name: 'User Profile',
-        component: UserProfile
+        name: '个人资料',
+        component: UserProfile,
+        beforeEnter: ifAuthenticated,
       },
       {
         path: 'table',

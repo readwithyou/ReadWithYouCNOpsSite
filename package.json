@@ -34,6 +34,7 @@
     "vue-clickaway": "^2.2.2",
     "vue-data-tables": "^3.2.0",
     "vue-filter": "^0.2.5",
+    "vue-i18n": "^8.0.0",
     "vue-material": "^1.0.0-beta-10.2",
     "vue-moment": "^4.0.0",
     "vue-resource": "^1.5.1",
