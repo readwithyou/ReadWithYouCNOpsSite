@@ -16,6 +16,13 @@ router.get('/:id', verifyToken, function (req, res, next) {
     );
 });
 
+router.put('/:id', verifyToken, function (req, res, next) {
+    teacherDao.updateAsync(req.params.id, req.body).then(
+        (data) => res.json(data.Item),
+        (err) => res.status(500).end()
+    );
+});
+
 router.get('/', verifyToken, function (req, res, next) {
     teacherDao.scanAsync().then(
         (data) => res.json(data.Items),

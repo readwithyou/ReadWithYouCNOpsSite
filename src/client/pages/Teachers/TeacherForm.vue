@@ -22,7 +22,6 @@
                     <md-field :class="getValidationClass('gender')">
                         <label for="gender">性别</label>
                         <md-select name="gender" id="gender" v-model="entry.gender" md-dense :disabled="sending">
-                            <md-option>请选择...</md-option>
                             <md-option value="M">男</md-option>
                             <md-option value="F">女</md-option>
                         </md-select>
@@ -56,15 +55,14 @@
                     <md-field :class="getValidationClass('timezone')">
                         <label for="timezone">所在时区 {{ new Date().toLocaleString() | moment('timezone', entry.timezone, 'YYYY-MM-DD, h:mm:ss a')}}</label>
                         <md-select name="timezone" id="timezone" v-model="entry.timezone" md-dense :disabled="sending">
-                            <md-option>请选择...</md-option>
-                            <md-option value="Asia/Shanghai">Asia/Shanghai</md-option>
-                            <md-option value="Asia/Tokyo">Asia/Tokyo</md-option>
-                            <md-option value="America/Panama">America/Panama</md-option>
-                            <md-option value="America/Chicago">America/Chicago(CST)</md-option>
-                            <md-option value="America/New_York">America/New_York(EST)</md-option>
-                            <md-option value="America/Los_Angeles">America/Los_Angeles(PST)</md-option>
-                            <md-option value="America/Denver">America/Denver(MST observe DST)</md-option>
-                            <md-option value="America/Phoenix">America/Phoenix(MST not observe DST)</md-option>
+                            <md-option value="Asia/Shanghai">Shanghai</md-option>
+                            <md-option value="Asia/Tokyo">Tokyo</md-option>
+                            <md-option value="America/New_York">EST observe DST</md-option>
+                            <md-option value="America/Chicago">CST observe DST</md-option>
+                            <md-option value="America/Los_Angeles">PST observe DST</md-option>
+                            <md-option value="America/Denver">MST observe DST</md-option>
+                            <md-option value="America/Phoenix">MST not observe DST</md-option>
+                            <md-option value="America/Panama">Panama</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.timezone.required">
                             所在时区为必填项目。

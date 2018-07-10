@@ -16,8 +16,8 @@
             <md-field :class="getValidationClass('scheduledTime')">
                 <label for="scheduled-time">试课时间（请先选择日期和时间）</label>
                 <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
-                :value="entry.scheduledTime | moment('timezone', 'Asia/Shanghai', 'YYYY-MM-DD, h:mm:ss a')" disabled />
-                <span class="md-error" v-if="!$v.entry.scheduledTime.required">
+                :value="registration.scheduledTime | moment('timezone', 'Asia/Shanghai', 'YYYY-MM-DD, h:mm:ss a')" disabled />
+                <span class="md-error" v-if="!$v.registration.scheduledTime.required">
                     试课时间为必填项目。
                 </span>
             </md-field>
@@ -25,10 +25,10 @@
         <div class="md-layout-item md-small-size-100 md-size-50">
             <md-field :class="getValidationClass('teacherId')">
                 <label for="teacher">老师</label>
-                <md-select name="teacher" id="teacher" v-model="entry.teacherId" md-dense :disabled="sending" >
+                <md-select name="teacher" id="teacher" v-model="registration.teacherId" md-dense :disabled="sending" >
                     <md-option v-for="teacher in teachers" :key="teacher.ID" :value="teacher.ID">{{teacher.name}}</md-option>
                 </md-select>
-                <span class="md-error" v-if="!$v.entry.teacherId.required">
+                <span class="md-error" v-if="!$v.registration.teacherId.required">
                     老师为必填项目。
                 </span>
             </md-field>
@@ -37,14 +37,14 @@
             <md-field>
                 <label for="teacher-local-time">老师当地时间 {{teacherTimezone}}</label>
                 <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
-                :value="entry.scheduledTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD, h:mm:ss a')" disabled />
+                :value="registration.scheduledTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD, h:mm:ss a')" disabled />
             </md-field>
         </div>
         <div class="md-layout-item md-small-size-100 md-size-100">
             <md-field :class="getValidationClass('zoomLink')">
                 <label for="zoom-link">Zoom ID</label>
-                <md-input name="zoom-link" id="zoom-link" v-model="entry.zoomLink" :disabled="sending" type="text"></md-input>
-                <span class="md-error" v-if="!$v.entry.zoomLink.required">
+                <md-input name="zoom-link" id="zoom-link" v-model="registration.zoomLink" :disabled="sending" type="text"></md-input>
+                <span class="md-error" v-if="!$v.registration.zoomLink.required">
                     Zoom ID为必填项目。
                 </span>
             </md-field>
@@ -52,8 +52,8 @@
         <div class="md-layout-item md-size-100">
             <md-field :class="getValidationClass('courseRemarks')">
                 <label for="course-remarks">学生情况备注</label>
-                <md-textarea name="course-remarks" id="course-remarks" v-model="entry.courseRemarks" :disabled="sending"></md-textarea>
-                <span class="md-error" v-if="!$v.entry.courseRemarks.required">
+                <md-textarea name="course-remarks" id="course-remarks" v-model="registration.courseRemarks" :disabled="sending"></md-textarea>
+                <span class="md-error" v-if="!$v.registration.courseRemarks.required">
                     学生情况备注为必填项目。
                 </span>
             </md-field>
@@ -66,13 +66,13 @@
         </div>
         
         <div class="md-layout-item md-size-100">
-          <div v-for="courseFile in entry.courseFiles" :key="courseFile">
+          <div v-for="courseFile in registration.courseFiles" :key="courseFile">
             <span>{{courseFile}}</span>
             <a v-on:click="download(courseFile)" :value="courseFile" :disabled="sending">下载</a>
             <a v-on:click="remove(courseFile)" :value="courseFile" :disabled="sending">删除</a>
           </div>
         </div>
-        <md-progress-bar md-mode="indeterminate" v-if="sending" />
+        <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
         <div class="md-layout-item md-size-100 text-center">
           <md-button type="submit" class="md-primary" :disabled="sending">保存</md-button>
           <md-button @click="sendEmailToStudent" class="md-default" :disabled="sending">邮件学员</md-button>
@@ -98,15 +98,12 @@ export default {
   components: {
     Dropzone
   },
+  props: {
+    initialRegistration: Object
+  },
   data: () => ({
-    entry: {
-      teacherId: null,
-      scheduledTime: null,
-      zoomLink: null,
-      courseRemarks: null,
-      courseFiles: []
-    },
     teachers: [],
+    registration: {},
     teacherTimezone: null,
     dateSlot: null,
     timeSlot: null,
@@ -115,7 +112,6 @@ export default {
     uploadFilePrefix: new Date().getTime()
   }),
   created() {
-    this.fetchData();
     this.fetchTeachers();
   },
   watch: {
@@ -129,21 +125,24 @@ export default {
         this.formatScheduledTime();
       }
     },
-    entry: {
+    initialRegistration: function() {
+      this.registration = Object.assign({}, this.initialRegistration);
+      this.formatDateTimeSlot();
+    },
+    teachers: {
       handler(val) {
-        this.teacherTimezone = null;
-        for (var i = 0; i < this.teachers.length; i++) {
-          var teacher = this.teachers[i];
-          if (teacher.ID === this.entry.teacherId) {
-            this.teacherTimezone = teacher.timezone;
-          }
-        }
+        this.resetTeacherTimezone();
+      }
+    },
+    registration: {
+      handler(val) {
+        this.resetTeacherTimezone();
       },
       deep: true
     }
   },
   validations: {
-    entry: {
+    registration: {
       scheduledTime: {
         required
       },
@@ -160,7 +159,7 @@ export default {
   },
   methods: {
     getValidationClass(fieldName) {
-      const field = this.$v.entry[fieldName];
+      const field = this.$v.registration[fieldName];
 
       if (field) {
         return {
@@ -172,11 +171,19 @@ export default {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.saveEntry();
+        this.saveRegistration();
+      }
+    },
+    resetTeacherTimezone() {
+      for (var i = 0; i < this.teachers.length; i++) {
+        var teacher = this.teachers[i];
+        if (teacher.ID === this.registration.teacherId) {
+          this.teacherTimezone = teacher.timezone;
+        }
       }
     },
     formatScheduledTime() {
-      this.entry.scheduledTime = null;
+      this.registration.scheduledTime = null;
       if (this.dateSlot && this.timeSlot) {
         if (this.timeSlot.split(":").length == 2) {
           var hour = parseInt(this.timeSlot.split(":")[0]);
@@ -186,14 +193,14 @@ export default {
               new Date(this.dateSlot).getTime() +
               hour * 60 * 60000 +
               min * 60000;
-            this.entry.scheduledTime = timestamp;
+            this.registration.scheduledTime = timestamp;
           }
         }
       }
     },
     formatDateTimeSlot() {
-      if (this.entry.scheduledTime) {
-        var fetchedTime = new Date(this.entry.scheduledTime);
+      if (this.registration.scheduledTime) {
+        var fetchedTime = new Date(this.registration.scheduledTime);
         this.dateSlot = fetchedTime.toLocaleDateString();
 
         var hour =
@@ -207,27 +214,6 @@ export default {
         this.timeSlot = hour + ":" + min;
       }
     },
-    fetchData() {
-      var resource = this.$resource(
-        "/api/registrations/" + this.$route.params.id
-      );
-      resource.get().then(
-        response => {
-          this.entry.teacherId = response.body.teacherId;
-          this.entry.scheduledTime = response.body.scheduledTime;
-          this.entry.zoomLink = response.body.zoomLink;
-          this.entry.courseRemarks = response.body.courseRemarks;
-          this.entry.courseFiles = response.body.courseFiles
-            ? response.body.courseFiles
-            : [];
-          this.formatDateTimeSlot();
-          this.uploadFilePrefix += response.body.ID;
-        },
-        response => {
-          this.notifyFetchingError();
-        }
-      );
-    },
     fetchTeachers() {
       var resource = this.$resource("/api/teachers");
       resource.get().then(
@@ -239,16 +225,15 @@ export default {
         }
       );
     },
-    saveEntry() {
+    saveRegistration() {
       this.sending = true;
       var registration = this.$route.params.id;
 
-      var resource = this.$resource(
-        "/api/registrations/" + registration + "/schedule"
-      );
-      resource.save(this.entry).then(
+      var resource = this.$resource("/api/registrations/" + registration);
+      resource.update(this.registration).then(
         response => {
           this.notifySubmitSuccess();
+          this.$emit("update-registration", this.registration);
         },
         response => {
           this.notifySubmitError();
@@ -338,14 +323,12 @@ export default {
       });
     },
     onUploaded(filename) {
-      console.log(filename);
       var formatedFileName = this.uploadFilePrefix + filename;
-      console.log(formatedFileName);
-      this.entry.courseFiles.push(formatedFileName);
+      this.registration.courseFiles.push(formatedFileName);
     },
     onRemoved(filename) {
       var formatedFileName = this.uploadFilePrefix + filename;
-      this.remove(formatedFileName);
+      this.registration.courseFiles.remove(formatedFileName);
     },
     download(filename) {
       Vue.http
@@ -358,9 +341,9 @@ export default {
         });
     },
     remove(filename) {
-      for (var i = this.entry.courseFiles.length - 1; i >= 0; i--) {
-        if (this.entry.courseFiles[i] === filename) {
-          this.entry.courseFiles.splice(i, 1);
+      for (var i = this.registration.courseFiles.length - 1; i >= 0; i--) {
+        if (this.registration.courseFiles[i] === filename) {
+          this.registration.courseFiles.splice(i, 1);
         }
       }
     },
@@ -408,10 +391,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.md-progress-bar {
+.md-progress-spinner {
   position: absolute;
-  top: 100%;
-  right: 0;
-  left: 0;
+  left: 150%;
+  top: 280px;
+  margin-left: -50px;
+  margin-top: -50px;
 }
 </style>

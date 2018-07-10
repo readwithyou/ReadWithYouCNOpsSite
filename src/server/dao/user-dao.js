@@ -43,9 +43,53 @@ var dao = function () {
         });
     };
 
+    var scanAsync = function () {
+        var params = {
+            TableName: ddbTable
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.scan(params, function (err, data) {
+                if (err) {
+                    console.log('Scan DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
+    var updateLockAsync = function (username, locked) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                username: username
+            },
+            UpdateExpression: 'SET #locked =:locked',
+            ExpressionAttributeNames: {
+                '#locked': 'locked'
+            },
+            ExpressionAttributeValues: {
+                ':locked': locked
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         createAsync: createAsync,
-        getAsync: getAsync
+        getAsync: getAsync,
+        scanAsync: scanAsync,
+        updateLockAsync: updateLockAsync
     };
 }();
 

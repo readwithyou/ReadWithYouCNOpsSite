@@ -19,6 +19,9 @@ import TeachersTable from '../pages/Teachers/TeachersTable.vue'
 import TeacherForm from '../pages/Teachers/TeacherForm.vue'
 import TeacherDetailPanel from '../pages/Teachers/TeacherDetailPanel.vue'
 
+// User
+import UsersTable from '../pages/UserProfile/UsersTable.vue'
+
 export {
   SignInPanel,
   SignOnPanel,
@@ -32,5 +35,6 @@ export {
   CourseResultPanel,
   TeachersTable,
   TeacherForm,
-  TeacherDetailPanel
+  TeacherDetailPanel,
+  UsersTable
 }

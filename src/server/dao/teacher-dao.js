@@ -24,6 +24,23 @@ var dao = function () {
         });
     };
 
+    var updateAsync = function (id, item) {
+        var params = {
+            TableName: ddbTable,
+            Item: item,
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.put(params, function (err, data) {
+                if (err) {
+                    console.log('Put DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     var getAsync = function (id) {
         var params = {
             TableName: ddbTable,
@@ -82,7 +99,8 @@ var dao = function () {
         getAsync: getAsync,
         createAsync: createAsync,
         scanAsync: scanAsync,
-        removeAsync: removeAsync
+        removeAsync: removeAsync,
+        updateAsync: updateAsync
     };
 }();
 

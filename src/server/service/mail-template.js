@@ -1,4 +1,10 @@
 module.exports = {
+    newRegistrationMail: '<div style="font-family:Microsoft Yahei;">Hi, OPS Team！<br/><br/>' +
+        '系统收到了新的试课申请，学员姓名为%s。请及时登录OPS站点处理！<br/><br/>' +
+        '谢谢!<br/><br/>' +
+        '陪你读书工作室<br/>' +
+        '</div>',
+        
     childSchedulingEmail: '<div style="font-family:Microsoft Yahei;">%s 的家长，您好！<br/><br/>' +
         '陪你读书工作室很荣幸地能为%s的英语学习尽一份心力，培养英语阅读的好习惯，树立听说及英文使用的信心。<br/><br/>' +
         '试课时间我们安排在%s。请在预定上课时间前的10分钟点击以下链接进入教室:<br/><br/>' +
@@ -31,6 +37,20 @@ module.exports = {
         'The trial lesson is arranged at <b style="color:red;">%s</b>, room link is<br/><br/>' +
         '<h href="https://readwithyou.zoom.us/my/%s">https://readwithyou.zoom.us/my/%s</h><br/><br/>' +
         'Please login before 1-2min to wait the student for good experience. Thanks!<br/><br/>' +
+        'OPS team<br/>' +
+        '<img src="cid:unique@kreata.ee"/></div>',
+
+    studentReportEmail: '<div style="font-family:Microsoft Yahei;">%s，您好！<br/><br/>' +
+        '请于附件查收试课报告。<br/><br/>' +
+        '感谢您对工作室的信任。如您对试课有任何问题，请随时联系我们。<br/><br/>' +
+        '谢谢!<br/><br/>' +
+        '陪你读书工作室<br/>' +
+        '<img src="cid:unique@kreata.ee"/></div>',
+
+    teacherReportEmail: '<div style="font-family:Calibri (Body);">%s,<br/><br/>' +
+        'Please get the feedback about course report file for %s\'s trail lesson.<br/><br/>' +
+        '%s<br/><br/>' +
+        'Please help modify the report so we can forward to the student. Thanks!<br/><br/>' +
         'OPS team<br/>' +
         '<img src="cid:unique@kreata.ee"/></div>',
 

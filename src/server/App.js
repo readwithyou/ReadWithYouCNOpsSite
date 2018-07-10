@@ -21,6 +21,9 @@ app.use('/api', require('./routes/api'));
 var AuthController = require('./controller/auth-controller');
 app.use('/api/auth', AuthController);
 
+var UserController = require('./controller/user-controller');
+app.use('/api/users', UserController);
+
 var RegController = require('./controller/reg-controller');
 app.use('/api/registrations', RegController);
 

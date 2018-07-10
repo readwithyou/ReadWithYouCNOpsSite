@@ -35,7 +35,6 @@
                 <md-icon>group</md-icon>
                 <label for="s-group">{{ $t("message.group") }}</label>
                 <md-select name="group" id="group" v-model="entry.group" md-dense :disabled="sending">
-                    <md-option>{{ $t("message.select_hint") }}</md-option>
                     <md-option value="ops_admin">{{ $t("message.ops_admin") }}</md-option>
                     <md-option value="ops">{{ $t("message.ops") }}</md-option>
                     <md-option value="teacher_admin">{{ $t("message.teacher_admin") }}</md-option>

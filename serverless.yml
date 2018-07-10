@@ -2,7 +2,6 @@ service: read-with-you-ops
 
 package:
   exclude:
-    - src/**
     - webpack.config.js
     - node_modules/.cache/**
  
@@ -21,6 +20,17 @@ functions:
     events:
       - http: ANY {proxy+}
       - http: ANY /
+  ddbhandler:
+    handler: lambda.ddb_handler
+    events:
+      - stream: arn:aws-cn:dynamodb:cn-north-1:398835145439:table/Students_Registration/stream/2018-07-09T05:54:50.917
+  course_notification_handler:
+    handler: lambda.course_notification_handler
+    events:
+      - schedule:
+          name: course-notification-job
+          description: 'Job to detect and send course notification'
+          rate: rate(2 hours)
 
 resources:
   Resources:

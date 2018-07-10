@@ -24,35 +24,16 @@ var dao = function () {
         });
     };
 
-    var updateAsync = function (id, item) {
+    var updateAsync = function (item) {
         var params = {
             TableName: ddbTable,
-            Key: {
-                ID: id
-            },
-            UpdateExpression: 'SET #status =:status, #teacherId =:teacherId, #scheduledTime =:scheduledTime, #zoomLink =:zoomLink, #courseRemarks =:courseRemarks, #courseFiles =:courseFiles',
-            ExpressionAttributeNames: {
-                '#status': 'status',
-                '#teacherId': 'teacherId',
-                '#scheduledTime': 'scheduledTime',
-                '#zoomLink': 'zoomLink',
-                '#courseRemarks': 'courseRemarks',
-                '#courseFiles': 'courseFiles',
-            },
-            ExpressionAttributeValues: {
-                ':status': item.status,
-                ':teacherId': item.teacherId,
-                ':scheduledTime': item.scheduledTime,
-                ':zoomLink': item.zoomLink,
-                ':courseRemarks': item.courseRemarks,
-                ':courseFiles': item.courseFiles,
-            }
+            Item: item
         };
 
         return new Promise(function (resolve, reject) {
-            docClient.update(params, function (err, data) {
+            docClient.put(params, function (err, data) {
                 if (err) {
-                    console.log('Update DDB Error: ' + err);
+                    console.log('Create DDB Error: ' + err);
                     reject(err);
                 }
                 resolve(data);

@@ -28,7 +28,6 @@
                     <md-field :class="getValidationClass('gender')">
                         <label for="gender">{{ $t("message.gender") }}</label>
                         <md-select name="gender" id="gender" v-model="entry.gender" md-dense :disabled="sending">
-                            <md-option>{{ $t("message.select_hint") }}</md-option>
                             <md-option value="M">{{ $t("message.male") }}</md-option>
                             <md-option value="F">{{ $t("message.female") }}</md-option>
                         </md-select>
@@ -73,10 +72,9 @@
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('ifReadEnBook')">
                         <label for="if-read-en-book">{{ $t("message.question_if_read_en_book") }}</label>
-                        <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBookInStr" md-dense :disabled="sending">
-                            <md-option>{{ $t("message.select_hint") }}</md-option>
-                            <md-option value="true">{{ $t("message.yes") }}</md-option>
-                            <md-option value="false">{{ $t("message.no") }}</md-option>
+                        <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBook" md-dense :disabled="sending">
+                            <md-option value=true>{{ $t("message.yes") }}</md-option>
+                            <md-option value=false>{{ $t("message.no") }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.ifReadEnBook.required">
                             {{ $t("message.required_validation_error") }}
@@ -142,18 +140,18 @@
             <h4>{{ $t("message.remarks") }}</h4>
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
-                    <md-field>
-                        <label for="remarks">{{ $t("message.remarks") }}({{ $t("message.optional") }})</label>
-                        <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="entry.remarks" :disabled="sending" />                      
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
                     <md-field :class="getValidationClass('preTimeSlot')">
                         <label for="pre-timeslot">{{ $t("message.question_pre_timeslot") }}</label>
                         <md-input type="text" id="pre-timeslot" name="pre-timeslot" autocomplete="preTimeSlot" v-model="entry.preTimeSlot" :disabled="sending" />                      
                         <span class="md-error" v-if="!$v.entry.preTimeSlot.required">
                             {{ $t("message.required_validation_error") }}
                         </span>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-size-100">
+                    <md-field>
+                        <label for="remarks">{{ $t("message.remarks") }}({{ $t("message.optional") }})</label>
+                        <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="entry.remarks" :disabled="sending" />                      
                     </md-field>
                 </div>
             </div>
@@ -199,7 +197,6 @@ export default {
       phone: null,
       email: null,
       wechat: null,
-      ifReadEnBookInStr: null,
       ifReadEnBook: false,
       numBookBought: null,
       numBookRead: null,
@@ -213,14 +210,6 @@ export default {
     entrySaved: false,
     fullName: null
   }),
-  watch: {
-    entry: {
-      handler(val) {
-        this.entry.ifReadEnBook = val.ifReadEnBookInStr === "true";
-      },
-      deep: true
-    }
-  },
   validations: {
     entry: {
       cnName: {

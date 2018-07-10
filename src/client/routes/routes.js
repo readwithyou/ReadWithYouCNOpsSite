@@ -8,6 +8,7 @@ import Registration from 'pages/Registrations/Registration.vue'
 import Teachers from 'pages/Teachers/Teachers.vue'
 import CreateTeacher from 'pages/Teachers/CreateTeacher.vue'
 import Teacher from 'pages/Teachers/Teacher.vue'
+import Users from 'pages/UserProfile/Users.vue'
 import UserProfile from 'pages/UserProfile.vue'
 import TableList from 'pages/TableList.vue'
 import Typography from 'pages/Typography.vue'
@@ -85,6 +86,12 @@ const routes = [
         path: 'teachers/:id',
         name: '老师管理详情页',
         component: Teacher,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'users',
+        name: '用户管理',
+        component: Users,
         beforeEnter: ifAuthenticated,
       },
       {

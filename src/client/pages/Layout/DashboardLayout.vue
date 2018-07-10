@@ -16,9 +16,9 @@
         <md-icon>supervisor_account</md-icon>
         <p>{{ $t("message.tearchers") }}</p>
       </sidebar-link>
-      <sidebar-link to="/user">
+      <sidebar-link to="/users">
         <md-icon>person</md-icon>
-        <p>{{ $t("message.profile") }}</p>
+        <p>{{ $t("message.users") }}</p>
       </sidebar-link>
       <!--sidebar-link to="/table">
         <md-icon>content_paste</md-icon>

@@ -37,11 +37,11 @@ router.post('/', verifyToken, function (req, res, next) {
     );
 });
 
-router.post('/:id/schedule', verifyToken, function (req, res, next) {
-    var item = req.body;
-    item.status = 1;
-    registrationDao.updateAsync(req.params.id, item).then(
-        (data) => res.status(200).end(),
+router.put('/:id', verifyToken, function (req, res, next) {
+    if (req.body.scheduledTime) req.body.status = 1;
+    if (req.body.courseResultFiles && req.body.courseResultFiles.length > 0) req.body.status = 2;
+    registrationDao.updateAsync(req.body).then(
+        (data) => res.json(data.Item),
         (err) => res.status(500).end()
     );
 });
@@ -80,6 +80,22 @@ router.post('/:id/student-scheduling-mail', verifyToken, function (req, res, nex
 
 router.post('/:id/teacher-scheduling-mail', verifyToken, function (req, res, next) {
     regService.mailScheduleToTeacherAsync(req.params.id)
+        .then(
+            () => res.status(200).end(),
+            (err) => { console.log('Mail To Teacher Send Error: ' + err); res.status(500).end() }
+        )
+});
+
+router.post('/:id/student-report-mail', verifyToken, function (req, res, next) {
+    regService.mailReportToStudentAsync(req.params.id)
+        .then(
+            () => res.status(200).end(),
+            (err) => { console.log('Mail To Student Send Error: ' + err); res.status(500).end() }
+        )
+});
+
+router.post('/:id/teacher-report-mail', verifyToken, function (req, res, next) {
+    regService.mailReportToTeacherAsync(req.params.id)
         .then(
             () => res.status(200).end(),
             (err) => { console.log('Mail To Teacher Send Error: ' + err); res.status(500).end() }
