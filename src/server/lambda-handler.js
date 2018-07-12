@@ -11,15 +11,21 @@ var handler = function () {
             }
         });
         Promise.all(newRegistrationMailPromises).then(
-            (results) => context.done(null, "success"),
+            () => context.done(null, "success"),
             (err) => context.done('Mail new registration error: ' + err)
         );
     };
 
     function courseNotificationHandler(event, context, callback) {
-        console.log('LogScheduledEvent');
-        console.log('Received event:', JSON.stringify(event, null, 2));
-        callback(null, 'Finished');
+        console.log('### CourseNotificationHandler Start:');
+
+        var beginTime = new Date(event.time).getTime() + 1800000;
+        var endTime = beginTime + 900000;
+
+        regService.notifyCourseOnWechatAsync(beginTime, endTime).then(
+            () => context.done(null, "success"),
+            (err) => context.done('Send course notification error:' + err)
+        );
     };
 
     return {

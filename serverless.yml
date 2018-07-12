@@ -30,7 +30,7 @@ functions:
       - schedule:
           name: course-notification-job
           description: 'Job to detect and send course notification'
-          rate: rate(2 hours)
+          rate: rate(15 minutes)
 
 resources:
   Resources:

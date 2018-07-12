@@ -32,6 +32,7 @@ export const message = {
     phone: '电话',
     email: 'Email',
     wechat: '微信',
+    wechatOpenId: '微信Open Id',
     remarks: '备注',
     questionnaire: '问卷调查',
     relation_to_child: '与孩子关系',

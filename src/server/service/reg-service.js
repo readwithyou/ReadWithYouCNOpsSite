@@ -7,6 +7,7 @@ var mailTemplates = require('./mail-template');
 var registrationDao = require('../dao/reg-dao');
 var teacherDao = require('../dao/teacher-dao');
 var s3Accessor = require('../dao/s3-accessor');
+var wechatAccess = require('./wechat-access');
 
 var regService = function () {
     var abbrs = {
@@ -296,12 +297,45 @@ var regService = function () {
             );
     }
 
+    function notifyCourseOnWechatAsync(beginTime, endTime) {
+        var accessToken;
+        var notificationSendPromises = [];
+
+        return wechatAccess.accessTokenAsync().then(
+            (result) => {
+                if (result.errcode) {
+                    console.log('### Error to get access token: ' + result.errmsg);
+                }
+                accessToken = result.access_token;
+                return registrationDao.queryByScheduledTimeAsync(1, beginTime, endTime);
+            },
+            (err) => console.log('Error to get access token: ' + err)
+        ).then(
+            (result) => result.Items.filter(item => item.wechatOpenId).forEach(
+                item => {
+                    let name = item.cnName + ' ' + item.enName;
+                    let scheduledTimeString = formatTimeString(item.scheduledTime, 'zh-CN', 'Asia/Shanghai');
+                    notificationSendPromises.push(
+                        wechatAccess.sendCourseNotification(accessToken, item.wechatOpenId, name, scheduledTimeString)
+                    );
+                }),
+            (err) => console.log('Error to get registrations: ' + err)
+        ).then(
+            () => Promise.all(notificationSendPromises),
+            (err) => console.log('Send course notification error: ' + err)
+        ).then(
+            () => console.log("Send course notification success"),
+            (err) => console.log('Send course notification error:' + err)
+        );
+    };
+
     return {
         mailScheduleToStudentAsync: mailScheduleToStudentAsync,
         mailScheduleToTeacherAsync: mailScheduleToTeacherAsync,
         mailReportToStudentAsync: mailReportToStudentAsync,
         mailReportToTeacherAsync: mailReportToTeacherAsync,
-        mailNewRegistrationAsync: mailNewRegistrationAsync
+        mailNewRegistrationAsync: mailNewRegistrationAsync,
+        notifyCourseOnWechatAsync: notifyCourseOnWechatAsync
     };
 }();
 

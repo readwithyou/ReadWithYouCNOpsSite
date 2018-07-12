@@ -105,6 +105,12 @@
                             <md-input type="text" v-model="registration.wechat" :disabled="!editting" />
                         </md-field>
                     </div>
+                    <div class="md-layout-item md-small-size-100 md-size-33">
+                        <md-field>
+                            <label>{{ $t("message.wechatOpenId") }}</label>
+                            <md-input type="text" v-model="registration.wechatOpenId" :disabled="!editting" />
+                        </md-field>
+                    </div>
                 </div>
 
                 <div class="md-layout">

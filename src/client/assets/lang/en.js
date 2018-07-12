@@ -32,6 +32,7 @@ export const message = {
     phone: 'Phone',
     email: 'Email',
     wechat: 'WeChat',
+    wechatOpenId: 'Wechat Open Id',
     remarks: 'Remarks',
     questionnaire: 'Questionnaire',
     relation_to_child: 'Relationship with child',

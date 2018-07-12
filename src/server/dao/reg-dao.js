@@ -95,12 +95,38 @@ var dao = function () {
         });
     };
 
+    var queryByScheduledTimeAsync = function (status, scheduledTimeAfter, scheduledTimeBefore) {
+        var params = {
+            TableName: ddbTable,
+            IndexName: 'schedule-status-time',
+            KeyConditionExpression: "#status = :status and scheduledTime BETWEEN :scheduledTimeAfter and :scheduledTimeBefore",
+            ExpressionAttributeNames: { '#status': 'status' },
+            ExpressionAttributeValues: {
+                ':status': status,
+                ':scheduledTimeAfter': scheduledTimeAfter,
+                ':scheduledTimeBefore': scheduledTimeBefore
+            },
+            "ScanIndexForward": false
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.query(params, function (err, data) {
+                if (err) {
+                    console.log('Query DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         getAsync: getAsync,
         createAsync: createAsync,
         updateAsync: updateAsync,
         scanAsync: scanAsync,
-        removeAsync: removeAsync
+        removeAsync: removeAsync,
+        queryByScheduledTimeAsync: queryByScheduledTimeAsync
     };
 }();
 
