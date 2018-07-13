@@ -1,6 +1,6 @@
 var AWS = require('aws-sdk');
 var awsRegion = 'cn-north-1';
-var ddbTable = 'Teacher';
+var ddbTable = 'Book';
 
 var dao = function () {
     AWS.config.region = awsRegion;
@@ -13,23 +13,6 @@ var dao = function () {
             TableName: ddbTable,
             Item: item,
             ConditionExpression: 'attribute_not_exists(ID)',
-        };
-
-        return new Promise(function (resolve, reject) {
-            docClient.put(params, function (err, data) {
-                if (err) {
-                    console.log('Put DDB Error: ' + err);
-                    reject(err);
-                }
-                resolve(data);
-            });
-        });
-    };
-
-    var updateAsync = function (id, item) {
-        var params = {
-            TableName: ddbTable,
-            Item: item,
         };
 
         return new Promise(function (resolve, reject) {
@@ -78,6 +61,23 @@ var dao = function () {
         });
     };
 
+    var updateAsync = function (item) {
+        var params = {
+            TableName: ddbTable,
+            Item: item
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.put(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     var removeAsync = function (id) {
         var params = {
             TableName: ddbTable,
@@ -98,11 +98,11 @@ var dao = function () {
     };
 
     return {
-        getAsync: getAsync,
         createAsync: createAsync,
+        getAsync: getAsync,
         scanAsync: scanAsync,
-        removeAsync: removeAsync,
-        updateAsync: updateAsync
+        updateAsync: updateAsync,
+        removeAsync: removeAsync
     };
 }();
 

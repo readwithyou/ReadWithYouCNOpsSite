@@ -19,6 +19,11 @@ import TeachersTable from '../pages/Teachers/TeachersTable.vue'
 import TeacherForm from '../pages/Teachers/TeacherForm.vue'
 import TeacherDetailPanel from '../pages/Teachers/TeacherDetailPanel.vue'
 
+// Book
+import BooksTable from '../pages/Books/BooksTable.vue'
+import BookForm from '../pages/Books/BookForm.vue'
+import BookDetailPanel from '../pages/Books/BookDetailPanel.vue'
+
 // User
 import UsersTable from '../pages/UserProfile/UsersTable.vue'
 
@@ -36,5 +41,8 @@ export {
   TeachersTable,
   TeacherForm,
   TeacherDetailPanel,
+  BooksTable,
+  BookForm,
+  BookDetailPanel,
   UsersTable
 }

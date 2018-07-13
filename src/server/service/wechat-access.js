@@ -23,7 +23,7 @@ var wechatAccess = function () {
                 touser: touser,
                 template_id: config.wechatCourseNotificationTemplateId,
                 data: {
-                    first: { value: sprintf('你好，以下课程将在%s进行\n', courseTime) },
+                    first: { value: sprintf('你好，以下课程将在%s进行。请在预定上课时间前的10分钟进入教室。\n', courseTime) },
                     keyword1: { value: '英语试课', color: "#173177" },
                     keyword2: { value: studentName, color: "#173177" },
                     remark: { value: '\n感谢您对工作室的信任。如您有任何问题，请随时联系我们。\n\n谢谢!\n陪你读书工作室' }

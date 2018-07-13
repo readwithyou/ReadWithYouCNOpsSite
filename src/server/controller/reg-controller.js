@@ -30,6 +30,7 @@ router.post('/', verifyToken, function (req, res, next) {
     var item = req.body;
     item.ID = generatorId();
     item.createTime = new Date().toISOString();
+    item.createBy = req.username;
 
     registrationDao.createAsync(item).then(
         (data) => res.status(200).end(),
@@ -38,9 +39,13 @@ router.post('/', verifyToken, function (req, res, next) {
 });
 
 router.put('/:id', verifyToken, function (req, res, next) {
-    if (req.body.scheduledTime) req.body.status = 1;
-    if (req.body.courseResultFiles && req.body.courseResultFiles.length > 0) req.body.status = 2;
-    registrationDao.updateAsync(req.body).then(
+    var item = req.body;
+    item.modifyTime = new Date().getTime();
+    item.modifyBy = req.username;
+
+    if (item.scheduledTime) item.status = 1;
+    if (item.courseResultFiles && item.courseResultFiles.length > 0) item.status = 2;
+    registrationDao.updateAsync(item).then(
         (data) => res.json(data.Item),
         (err) => res.status(500).end()
     );

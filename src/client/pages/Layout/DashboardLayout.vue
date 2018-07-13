@@ -16,6 +16,10 @@
         <md-icon>supervisor_account</md-icon>
         <p>{{ $t("message.tearchers") }}</p>
       </sidebar-link>
+      <sidebar-link to="/books">
+        <md-icon>book</md-icon>
+        <p>{{ $t("message.books") }}</p>
+      </sidebar-link>
       <sidebar-link to="/users">
         <md-icon>person</md-icon>
         <p>{{ $t("message.users") }}</p>

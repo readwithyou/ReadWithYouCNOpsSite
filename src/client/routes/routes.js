@@ -8,6 +8,9 @@ import Registration from 'pages/Registrations/Registration.vue'
 import Teachers from 'pages/Teachers/Teachers.vue'
 import CreateTeacher from 'pages/Teachers/CreateTeacher.vue'
 import Teacher from 'pages/Teachers/Teacher.vue'
+import Books from 'pages/Books/Books.vue'
+import CreateBook from 'pages/Books/CreateBook.vue'
+import Book from 'pages/Books/Book.vue'
 import Users from 'pages/UserProfile/Users.vue'
 import UserProfile from 'pages/UserProfile.vue'
 import TableList from 'pages/TableList.vue'
@@ -86,6 +89,24 @@ const routes = [
         path: 'teachers/:id',
         name: '老师管理详情页',
         component: Teacher,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'books',
+        name: '图书管理列表页',
+        component: Books,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'books/new',
+        name: '新的图书',
+        component: CreateBook,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'books/:id',
+        name: '图书管理详情页',
+        component: Book,
         beforeEnter: ifAuthenticated,
       },
       {

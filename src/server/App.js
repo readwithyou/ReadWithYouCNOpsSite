@@ -30,6 +30,9 @@ app.use('/api/registrations', RegController);
 var TeacherController = require('./controller/teacher-controller');
 app.use('/api/teachers', TeacherController);
 
+var BookController = require('./controller/book-controller');
+app.use('/api/books', BookController);
+
 const port = process.env.PORT || 8000;
 // Server
 /*

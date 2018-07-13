@@ -17,7 +17,11 @@ router.get('/:id', verifyToken, function (req, res, next) {
 });
 
 router.put('/:id', verifyToken, function (req, res, next) {
-    teacherDao.updateAsync(req.params.id, req.body).then(
+    var item = req.body;
+    item.modifyTime = new Date().getTime();
+    item.modifyBy = req.username;
+
+    teacherDao.updateAsync(req.params.id, item).then(
         (data) => res.json(data.Item),
         (err) => res.status(500).end()
     );
@@ -33,7 +37,8 @@ router.get('/', verifyToken, function (req, res, next) {
 router.post('/', verifyToken, function (req, res, next) {
     var item = req.body;
     item.ID = generatorId();
-    item.createTime = new Date().toISOString();
+    item.createTime = new Date().getTime();
+    item.createBy = req.username;
 
     teacherDao.createAsync(item).then(
         (data) => res.status(200).end(),
