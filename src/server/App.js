@@ -30,6 +30,12 @@ app.use('/api/registrations', RegController);
 var TeacherController = require('./controller/teacher-controller');
 app.use('/api/teachers', TeacherController);
 
+var StudentController = require('./controller/student-controller');
+app.use('/api/students', StudentController);
+
+var TicketController = require('./controller/ticket-controller');
+app.use('/api/tickets', TicketController);
+
 var BookController = require('./controller/book-controller');
 app.use('/api/books', BookController);
 

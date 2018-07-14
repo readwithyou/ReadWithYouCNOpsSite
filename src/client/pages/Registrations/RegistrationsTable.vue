@@ -29,7 +29,7 @@
     <el-table-column label="处理" min-width="100px">
       <template scope="scope">
         <el-button v-for="button in customButtonsForRow(scope.row)" :key="button.name" type="text" @click="button.handler">
-          {{ button.name }}
+          <md-icon>{{button.icon}}</md-icon>
         </el-button>
       </template>
     </el-table-column>
@@ -179,13 +179,15 @@ export default {
       if (row.status === 0) {
         return [
           {
-            name: "查看",
+            name: "view",
+            icon: "edit",
             handler: _ => {
               this.$router.push({ path: "/registrations/" + row.ID });
             }
           },
           {
-            name: "删除",
+            name: "delete",
+            icon: "delete",
             handler: _ => {
               this.entryToDelete = row;
               this.deleteDialogActive = true;
@@ -195,7 +197,8 @@ export default {
       } else {
         return [
           {
-            name: "查看",
+            name: "view",
+            icon: "edit",
             handler: _ => {
               this.$router.push({ path: "/registrations/" + row.ID });
             }

@@ -107,4 +107,12 @@ router.post('/:id/teacher-report-mail', verifyToken, function (req, res, next) {
         )
 });
 
+router.post('/:id/promote', verifyToken, function (req, res, next) {
+    regService.promoteAsStudentAsync(req.params.id, req.username)
+        .then(
+            () => res.status(200).end(),
+            (err) => { console.log('Promote As Student Async Error: ' + err); res.status(500).end() }
+        )
+});
+
 module.exports = router;

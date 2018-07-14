@@ -1,10 +1,10 @@
 <template>
 
-  <data-tables :data="teachers" :show-action-bar="false" :custom-filters="customFilters" :table-props="tableProps">
+  <data-tables :data="students" :show-action-bar="false" :custom-filters="customFilters" :table-props="tableProps">
     <md-dialog-confirm
       :md-active.sync="deleteDialogActive"
       md-title="确认"
-      md-content="操作不能恢复，确定删除老师信息么？"
+      md-content="操作不能恢复，确定删除学员信息么？"
       md-confirm-text="确认"
       md-cancel-text="取消"
       @md-cancel="onCancelDelete"
@@ -14,7 +14,7 @@
         <el-dropdown @command="handleClick">
           <el-button type="default">{{ $t("message.create") }}<i class="el-icon-plus el-icon--right"></i></el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="teacher">{{ $t("message.teacher") }}</el-dropdown-item>
+            <el-dropdown-item command="student">{{ $t("message.student") }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
@@ -25,7 +25,7 @@
 
     <el-table-column v-for="title in titles" :prop="title.prop" :formatter="title.formatter" :label="title.label" :key="title.prop" sortable="custom">
     </el-table-column>
-    <el-table-column label="处理" min-width="100px">
+    <el-table-column :label="$t('message.action')" min-width="100px">
       <template scope="scope">
         <el-button v-for="button in customButtonsForRow(scope.row)" :key="button.name" type="text" @click="button.handler">
           <md-icon>{{button.icon}}</md-icon>
@@ -36,39 +36,6 @@
 </template>
 
 <script>
-var titles = [
-  {
-    prop: "ID",
-    label: "号码"
-  },
-  {
-    prop: "name",
-    label: "姓名"
-  },
-  {
-    prop: "gender",
-    label: "性别"
-  },
-  {
-    prop: "timezone",
-    label: "时区"
-  },
-  {
-    prop: "email",
-    label: "邮箱"
-  },
-  {
-    prop: "createTime",
-    label: "创建时间",
-    formatter: (row, column, cellValue, index) => {
-      if (cellValue) {
-        return new Date(cellValue).toLocaleString();
-      }
-      return "";
-    }
-  }
-];
-
 var customFilters = [
   {
     vals: ""
@@ -91,10 +58,48 @@ var tableProps = {
 export default {
   data() {
     return {
-      titles,
+      titles: [
+        {
+          prop: "ID",
+          label: this.$i18n.t("message.student_id")
+        },
+        {
+          prop: "cnName",
+          label: this.$i18n.t("message.cn_name")
+        },
+        {
+          prop: "enName",
+          label: this.$i18n.t("message.en_name")
+        },
+        {
+          prop: "gender",
+          label: this.$i18n.t("message.gender")
+        },
+        {
+          prop: "age",
+          label: this.$i18n.t("message.age")
+        },
+        {
+          prop: "type",
+          label: this.$i18n.t("message.registration_type"),
+          formatter: (row, column, cellValue, index) => {
+            return this.$i18n.t("message." + cellValue);
+          }
+        },
+        {
+          prop: "createTime",
+          label: this.$i18n.t("message.create_time"),
+          formatter: (row, column, cellValue, index) => {
+            if (cellValue) {
+              return new Date(cellValue).toLocaleString();
+            }
+            return "";
+          }
+        }
+      ],
       customFilters,
       tableProps,
-      teachers: [],
+      students: [],
       deleteDialogActive: false,
       entryToDelete: null
     };
@@ -104,13 +109,13 @@ export default {
   },
   methods: {
     handleClick(command) {
-      this.$router.push({ path: "/teachers/new" });
+      this.$router.push({ path: "/students/new" });
     },
     fetchData() {
-      var resource = this.$resource("/api/teachers");
+      var resource = this.$resource("/api/students");
       resource.get().then(
         response => {
-          this.teachers = response.body;
+          this.students = response.body;
         },
         response => {
           this.notifyFetchingError();
@@ -119,7 +124,7 @@ export default {
     },
     notifyFetchingError() {
       this.$notify({
-        message: "服务器端获取老师数据失败！",
+        message: "服务器端获取学员数据失败！",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",
@@ -129,14 +134,14 @@ export default {
     customButtonsForRow(row) {
       return [
         {
-          name: "view",
+          name: 'view',
           icon: 'edit',
           handler: _ => {
-            this.$router.push({ path: "/teachers/" + row.ID });
+            this.$router.push({ path: "/students/" + row.ID });
           }
         },
         {
-          name: "delete",
+          name: 'delete',
           icon: 'delete',
           handler: _ => {
             this.entryToDelete = row;
@@ -146,9 +151,7 @@ export default {
       ];
     },
     onConfirmDelete() {
-      var resource = this.$resource(
-        "/api/teachers/" + this.entryToDelete.ID
-      );
+      var resource = this.$resource("/api/students/" + this.entryToDelete.ID);
       resource.delete().then(
         response => {
           this.notifyRemoveSuccess();
@@ -164,7 +167,7 @@ export default {
     },
     notifyRemoveError() {
       this.$notify({
-        message: "老师信息删除失败，请稍后重试！",
+        message: "学员信息删除失败，请稍后重试！",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",
@@ -173,7 +176,7 @@ export default {
     },
     notifyRemoveSuccess() {
       this.$notify({
-        message: "老师信息删除成功！",
+        message: "学员信息删除成功！",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",

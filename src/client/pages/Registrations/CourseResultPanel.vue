@@ -1,5 +1,13 @@
 <template>
     <form novalidate class="md-layout" @submit.prevent="saveRegistration">
+        <md-dialog-confirm
+          :md-active.sync="promotionDialogActive"
+          :md-title="$t('message.confirm')"
+          :md-content="$t('message.confirm_promotion_message')"
+          :md-confirm-text="$t('message.confirm')"
+          :md-cancel-text="$t('message.cancel')"
+          @md-cancel="onCancelPromotion"
+          @md-confirm="onConfirmPromotion" />
         <h4>试课报告</h4>
         <div class="md-layout-item md-size-100">
             <Dropzone v-bind:prefix="uploadFilePrefix" @uploaded="onUploaded" @removed="onRemoved">
@@ -25,6 +33,7 @@
 
         <div class="md-layout-item md-size-100 text-center">
           <md-button type="submit" class="md-primary" :disabled="sending">{{ $t("message.save") }}</md-button>
+          <md-button @click="promoteStudent" class="md-default" :disabled="sending">{{ $t("message.promote_student") }}</md-button>
           <md-button @click="sendEmailToStudent" class="md-default" :disabled="sending">{{ $t("message.email_to_student") }}</md-button>
           <md-button @click="sendEmailToTeacher" class="md-default" :disabled="sending">{{ $t("message.email_to_teacher") }}</md-button>
         </div>
@@ -45,7 +54,8 @@ export default {
   data: () => ({
     registration: {},
     uploadFilePrefix: new Date().getTime(),
-    sending: false
+    sending: false,
+    promotionDialogActive: false
   }),
   watch: {
     initialRegistration: function() {
@@ -67,6 +77,28 @@ export default {
           this.notifySubmitError();
         }
       );
+    },
+    promoteStudent() {
+      this.promotionDialogActive = true;
+    },
+    onConfirmPromotion() {
+      this.sending = true;
+      var registration = this.$route.params.id;
+
+      var resource = this.$resource(
+        "/api/registrations/" + registration + "/promote"
+      );
+      resource.save().then(
+        response => {
+          this.notifySubmitSuccess();
+        },
+        response => {
+          this.notifySubmitError();
+        }
+      );
+    },
+    onCancelPromotion() {
+      this.promotionDialogActive = false;
     },
     sendEmailToStudent() {
       this.sending = true;

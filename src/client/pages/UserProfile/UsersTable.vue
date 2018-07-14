@@ -16,7 +16,7 @@
     <el-table-column label="处理" min-width="100px">
       <template scope="scope">
         <el-button v-for="button in customButtonsForRow(scope.row)" :key="button.name" type="text" @click="button.handler">
-          {{ button.name }}
+          <md-icon>{{button.icon}}</md-icon>
         </el-button>
       </template>
     </el-table-column>
@@ -108,10 +108,11 @@ export default {
       });
     },
     customButtonsForRow(row) {
-      if ((row.locked === true)) {
+      if (row.locked === true) {
         return [
           {
             name: "解锁",
+            icon: "lock_open",
             handler: _ => {
               this.unlockUser(row);
             }
@@ -121,6 +122,7 @@ export default {
         return [
           {
             name: "锁定",
+            icon: "lock",
             handler: _ => {
               this.lockUser(row);
             }

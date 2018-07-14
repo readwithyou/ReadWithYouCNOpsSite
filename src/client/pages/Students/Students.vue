@@ -1,0 +1,32 @@
+<template>
+  <div class="content">
+    <div class="md-layout">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
+        <md-card>
+          <md-card-header data-background-color="purple">
+            <h4 class="title">{{ $t("message.students_card_title") }}</h4>
+            <p class="category">{{ $t("message.students_card_subtitle") }}</p>
+          </md-card-header>
+          <md-card-content>
+            <students-table table-header-color="purple"></students-table>
+          </md-card-content>
+        </md-card>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { StudentsTable } from "pages";
+
+export default {
+  components: {
+    StudentsTable
+  }
+};
+</script>
+<style>
+.md-list-item-button > .md-ripple > span {
+  position: relative;
+}
+</style>

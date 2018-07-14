@@ -20,7 +20,7 @@
     <el-table-column :label="$t('message.action')" min-width="100px">
       <template scope="scope">
         <el-button v-for="button in customButtonsForRow(scope.row)" :key="button.name" type="text" @click="button.handler">
-          {{ button.name }}
+          <md-icon>{{button.icon}}</md-icon>
         </el-button>
       </template>
     </el-table-column>
@@ -124,12 +124,14 @@ export default {
       return [
         {
           name: this.$i18n.t("message.view"),
+          icon: 'edit',
           handler: _ => {
             this.$router.push({ path: "/books/" + row.ID });
           }
         },
         {
           name: this.$i18n.t("message.preview_book"),
+          icon: 'search',
           handler: _ => {
             this.$router.push({ path: "/books/" + row.ID });
           }

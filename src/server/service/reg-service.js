@@ -4,6 +4,7 @@ var ical = require('ical-generator');
 
 var sendMail = require('./send-mail');
 var mailTemplates = require('./mail-template');
+var studentDao = require('../dao/student-dao');
 var registrationDao = require('../dao/reg-dao');
 var teacherDao = require('../dao/teacher-dao');
 var s3Accessor = require('../dao/s3-accessor');
@@ -329,12 +330,42 @@ var regService = function () {
         );
     };
 
+    function promoteAsStudentAsync(registrationId, prmoteBy) {
+        return registrationDao.getAsync(registrationId)
+            .then(
+                (data) => {
+                    var student = {};
+                    student.timezone = 'Asia/Shanghai';
+                    student.createTime = new Date().getTime();
+                    student.createBy = prmoteBy;
+
+                    var registration = data.Item;
+                    student.ID = registration.ID;
+                    student.cnName = registration.cnName;
+                    student.enName = registration.enName;
+                    student.type = registration.type;
+                    student.gender = registration.gender;
+                    student.age = registration.age;
+                    student.parentName = registration.parentName;
+                    student.relationship = registration.relationship;
+                    student.phone = registration.phone;
+                    student.email = registration.email;
+                    student.wechat = registration.wechat;
+                    student.wechatOpenId = registration.wechatOpenId;
+                    student.remarks = registration.remarks;
+                    studentDao.createAsync(student);
+                },
+                (err) => console.log('DDB Error: ' + err)
+            );
+    };
+
     return {
         mailScheduleToStudentAsync: mailScheduleToStudentAsync,
         mailScheduleToTeacherAsync: mailScheduleToTeacherAsync,
         mailReportToStudentAsync: mailReportToStudentAsync,
         mailReportToTeacherAsync: mailReportToTeacherAsync,
         mailNewRegistrationAsync: mailNewRegistrationAsync,
+        promoteAsStudentAsync: promoteAsStudentAsync,
         notifyCourseOnWechatAsync: notifyCourseOnWechatAsync
     };
 }();

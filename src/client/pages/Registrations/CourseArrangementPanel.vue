@@ -51,10 +51,10 @@
         </div>
         <div class="md-layout-item md-size-100">
             <md-field :class="getValidationClass('courseRemarks')">
-                <label for="course-remarks">学生情况备注</label>
+                <label for="course-remarks">学员情况备注</label>
                 <md-textarea name="course-remarks" id="course-remarks" v-model="registration.courseRemarks" :disabled="sending"></md-textarea>
                 <span class="md-error" v-if="!$v.registration.courseRemarks.required">
-                    学生情况备注为必填项目。
+                    学员情况备注为必填项目。
                 </span>
             </md-field>
         </div>

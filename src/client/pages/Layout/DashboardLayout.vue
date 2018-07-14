@@ -9,20 +9,28 @@
         <p>{{ $t("message.home_page") }}</p>
       </sidebar-link>
       <sidebar-link to="/registrations">
-        <md-icon>library_books</md-icon>
+        <md-icon>ballot</md-icon>
         <p>{{ $t("message.registrations") }}</p>
       </sidebar-link>
       <sidebar-link to="/teachers">
         <md-icon>supervisor_account</md-icon>
         <p>{{ $t("message.tearchers") }}</p>
       </sidebar-link>
+      <sidebar-link to="/students">
+        <md-icon>person_outline</md-icon>
+        <p>{{ $t("message.students") }}</p>
+      </sidebar-link>
       <sidebar-link to="/books">
-        <md-icon>book</md-icon>
+        <md-icon>collections_bookmark</md-icon>
         <p>{{ $t("message.books") }}</p>
       </sidebar-link>
       <sidebar-link to="/users">
         <md-icon>person</md-icon>
         <p>{{ $t("message.users") }}</p>
+      </sidebar-link>
+      <sidebar-link to="/tickets">
+        <md-icon>receipt</md-icon>
+        <p>{{ $t("message.tickets") }}</p>
       </sidebar-link>
       <!--sidebar-link to="/table">
         <md-icon>content_paste</md-icon>
