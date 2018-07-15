@@ -10,7 +10,7 @@
               </md-tab>
 
               <md-tab id="tab-calendar" :md-label="$t('message.inventory_info')" md-icon="ballot">
-                under construction... please be patient...:)
+                <book-inventory-panel></book-inventory-panel>
               </md-tab>
 
             </md-tabs>
@@ -21,13 +21,14 @@
 </template>
 <script>
 import { NavTabsCard, NavTabsTable } from "components";
-import { BookDetailPanel } from "pages";
+import { BookDetailPanel, BookInventoryPanel } from "pages";
 
 export default {
   components: {
     NavTabsCard,
     NavTabsTable,
-    BookDetailPanel
+    BookDetailPanel,
+    BookInventoryPanel
   },
   data() {
     return {};

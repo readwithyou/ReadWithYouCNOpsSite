@@ -26,6 +26,8 @@ router.get('/', verifyToken, function (req, res, next) {
 router.post('/', verifyToken, function (req, res, next) {
     var item = req.body;
     item.ID = generatorId();
+    item.quantity = 0;
+    item.locked = 0;
     item.createTime = new Date().getTime();
     item.createBy = req.username;
 

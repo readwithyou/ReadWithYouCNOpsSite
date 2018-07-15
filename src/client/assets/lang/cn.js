@@ -6,6 +6,7 @@ export const message = {
     books: '图书管理',
     users: '用户管理',
     tickets: '问题报告',
+    inventory: '出入库',
     profile: '个人资料',
 
     preview_book: '预览',
@@ -67,6 +68,7 @@ export const message = {
     book_price: '价格',
     inventory_quantity: '库存',
     inventory_info: '库存记录',
+    locked_quantity: '锁仓',
     ebook_url: '电子书地址',
     book_retail_url: '零售网页',
     book_isbn: 'ISBN',
@@ -76,11 +78,15 @@ export const message = {
     course_plan: '课程计划',
     book_list: '读书清单',
     promote_student: '转正',
+    inbound: '入库',
+    outbound: '出库',
+    refresh: '刷新',
 
     priority_RECOMMENDED: '推荐',
     priority_OPTIONAL: '可使用',
     priority_NONRECOMMENDED: '不推荐',
     priority_UNAVAILABLE: '不可用',
+    priority_undefined: '',
     level_ONE: '等级一',
     level_TWO: '等级二',
     level_THREE: '等级三',
@@ -89,6 +95,7 @@ export const message = {
     level_SIX: '等级六',
     level_SIX_ADULT: '等级六（成人）',
     level_SEVEN: '等级七',
+    level_undefined: '',
 
     question_if_read_en_book: '目前在读英文书吗？',
     question_num_book_bought: '每年购买英文书的数量：',
@@ -126,6 +133,10 @@ export const message = {
     students_card_subtitle: '此表格罗列所有学员信息',
     student_create_title: '学员创建表',
     student_create_subtitle: '填写相应信息完成学员录入。',
+    book_inbound_title: '图书入库表',
+    book_inbound_subtitle: '填写相应信息完成图书入库。',
+    book_outbound_title: '图书出库表',
+    book_outbound_subtitle: '填写相应信息完成图书出库。',
 
     username_required_validation_error: '请填写用户名。',
     name_required_validation_error: '请填写姓名。',
@@ -144,6 +155,8 @@ export const message = {
     relationship_required_validation_error: '与孩子关系为必填项目。',
     group_required_validation_error: '用户组为必填项目.',
     timezone_required_validation_error: '时区为必填项目。',
+    minlength_validation_error: '是不是太短了？',
+    maxlength_validation_error: '是不是太长了？',
 
     signon_success: '注册用户名成功，请等待管理员批准后才能登陆系统。',
     server_error: '服务器端错误，请稍后重试！',
@@ -154,6 +167,10 @@ export const message = {
     book_fetch_success: '服务器端获取图书数据失败！',
     book_create_fail: '图书信息录入失败，请稍后重试！',
     book_create_success: '图书信息录入成功！',
+    book_outbound_success: '图书信息出库成功!',
+    book_inbound_success: '图书信息入库成功!',
+    book_outbound_fail: '图书信息出库失败!',
+    book_inbound_fail: '图书信息入库失败!',
 
     confirm_promotion_message: '确认转为正式学员吗？'
 }

@@ -1,18 +1,28 @@
 var regService = require('./service/reg-service');
+var bookService = require('./service/book-service');
 
 var handler = function () {
-    function registrationDdbHandler(event, context, callback) {
+    function ddbHandler(event, context, callback) {
         let newRegistrationMailPromises = [];
         event.Records.forEach(function (record) {
-            if (record.eventName === 'INSERT') {
+            if (record.eventSourceARN.indexOf('Students_Registration') !== -1 && record.eventName === 'INSERT') {
                 var newRecord = record.dynamodb.NewImage;
                 var id = newRecord.ID.S;
                 newRegistrationMailPromises.push(regService.mailNewRegistrationAsync(id));
             }
+            if (record.eventSourceARN.indexOf('Book_Inventory') !== -1 && record.eventName === 'INSERT') {
+                var newRecord = record.dynamodb.NewImage;
+
+                var type = newRecord.type.S;
+                var bookId = newRecord.BookId.S;
+                var quantity = Number(newRecord.quantity.N);
+
+                newRegistrationMailPromises.push(bookService.handleInventoryChangeAsync(bookId, type, quantity));
+            }
         });
         Promise.all(newRegistrationMailPromises).then(
             () => context.done(null, "success"),
-            (err) => context.done('Mail new registration error: ' + err)
+            (err) => context.done('DDB Handler error: ' + err)
         );
     };
 
@@ -29,7 +39,7 @@ var handler = function () {
     };
 
     return {
-        registrationDdbHandler: registrationDdbHandler,
+        ddbHandler: ddbHandler,
         courseNotificationHandler: courseNotificationHandler
     };
 }();

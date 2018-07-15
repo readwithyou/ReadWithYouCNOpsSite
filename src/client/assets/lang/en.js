@@ -6,6 +6,7 @@ export const message = {
     books: 'Books',
     users: 'Users',
     tickets: 'Tickets',
+    inventory: 'Inventory',
     profile: 'User Profile',
 
     preview_book: 'Preview',
@@ -67,6 +68,7 @@ export const message = {
     book_price: 'Price',
     inventory_quantity: 'Inventory Quantity',
     inventory_info: 'Inventory Record',
+    locked_quantity: 'Locked Quantity',
     ebook_url: 'E-Book Link',
     book_retail_url: 'Public Retail Link',
     book_isbn: 'ISBN',
@@ -76,11 +78,15 @@ export const message = {
     course_plan: 'Course Plan',
     book_list: 'Book List',
     promote_student: 'Promote',
+    inbound: 'Inbound',
+    outbound: 'Outbound',
+    refresh: 'Refresh',
 
     priority_RECOMMENDED: 'Recommended',
     priority_OPTIONAL: 'Optional',
     priority_NONRECOMMENDED: 'Not Recommended',
     priority_UNAVAILABLE: 'Not Available',
+    priority_undefined: '',
     level_ONE: 'Level One',
     level_TWO: 'Level Two',
     level_THREE: 'Level Three',
@@ -89,6 +95,7 @@ export const message = {
     level_SIX: 'Level Six',
     level_SIX_ADULT: 'Level Six (Adult)',
     level_SEVEN: 'Level Seven',
+    level_undefined: '',
 
     question_if_read_en_book: 'Reading any books in English?',
     question_num_book_bought: 'How many books bought in yearly basis?',
@@ -126,6 +133,10 @@ export const message = {
     students_card_subtitle: 'This table lists all students\' information',
     student_create_title: 'Student Creation Form',
     student_create_subtitle: 'Please fill necessary information in order to create student.',
+    book_inbound_title: 'Book Inbound Form',
+    book_inbound_subtitle: 'Please fill necessary information in order to finish book inbound.',
+    book_outbound_title: 'Book Outbound Form',
+    book_outbound_subtitle: 'Please fill necessary information in order to finish book outbound.',
 
     username_required_validation_error: 'Please enter the correct user name',
     name_required_validation_error: 'Please enter the correct name',
@@ -144,6 +155,8 @@ export const message = {
     relationship_required_validation_error: 'Relationship with child is mandatory.',
     group_required_validation_error: 'User group is mandatory.',
     timezone_required_validation_error: 'Timezone is mandatory.',
+    minlength_validation_error: 'Min length validation failed.',
+    maxlength_validation_error: 'Max length validation failed.',
 
     signon_success: 'Sign on success. Need admin\'s approval in order to log in the system',
     server_error: 'Server error, please try again later.',
@@ -154,6 +167,10 @@ export const message = {
     book_fetch_success: 'Fail to fetch book information from server side.',
     book_create_fail: 'Cannot create book information correctly. Please try again later!',
     book_create_success: 'Book information create successfully.',
+    book_outbound_success: 'Book outbound successfully',
+    book_inbound_success: 'Book inbound successfully',
+    book_outbound_fail: 'Book outbound failed',
+    book_inbound_fail: 'Book inbound failed',
 
     confirm_promotion_message: 'Do you confirm to promote trail as official student?'
 }

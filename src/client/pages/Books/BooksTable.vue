@@ -9,6 +9,13 @@
             <el-dropdown-item command="book">{{ $t("message.book") }}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <el-dropdown @command="handleInventory">
+          <el-button type="default">{{ $t("message.inventory") }}<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="inbound">{{ $t("message.inbound") }}</el-dropdown-item>
+            <el-dropdown-item command="outbound">{{ $t("message.outbound") }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-col>
       <el-col :span="5" :offset="9">
         <el-input v-model="customFilters[0].vals"></el-input>
@@ -100,6 +107,9 @@ export default {
     handleClick(command) {
       this.$router.push({ path: "/books/new" });
     },
+    handleInventory(command) {
+      this.$router.push({ path: "/books/" + command });
+    },
     fetchData() {
       var resource = this.$resource("/api/books");
       resource.get().then(
@@ -124,14 +134,14 @@ export default {
       return [
         {
           name: this.$i18n.t("message.view"),
-          icon: 'edit',
+          icon: "edit",
           handler: _ => {
             this.$router.push({ path: "/books/" + row.ID });
           }
         },
         {
           name: this.$i18n.t("message.preview_book"),
-          icon: 'search',
+          icon: "search",
           handler: _ => {
             this.$router.push({ path: "/books/" + row.ID });
           }

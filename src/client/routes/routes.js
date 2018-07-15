@@ -14,6 +14,8 @@ import Student from 'pages/Students/Student.vue'
 import Books from 'pages/Books/Books.vue'
 import CreateBook from 'pages/Books/CreateBook.vue'
 import Book from 'pages/Books/Book.vue'
+import BookInbound from 'pages/Books/BookInbound.vue'
+import BookOutbound from 'pages/Books/BookOutbound.vue'
 import Users from 'pages/UserProfile/Users.vue'
 import UserProfile from 'pages/UserProfile.vue'
 import TableList from 'pages/TableList.vue'
@@ -120,6 +122,18 @@ const routes = [
         path: 'books/new',
         name: '新的图书',
         component: CreateBook,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'books/inbound',
+        name: '图书入库',
+        component: BookInbound,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'books/outbound',
+        name: '图书出库',
+        component: BookOutbound,
         beforeEnter: ifAuthenticated,
       },
       {

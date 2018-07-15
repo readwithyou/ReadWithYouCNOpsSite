@@ -65,12 +65,15 @@
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field :class="getValidationClass('quantity')">
-                            <label for="book-price">{{ $t("message.inventory_quantity") }}</label>
-                            <md-input name="book-quantity" id="book-quantity" v-model="entry.quantity" :disabled="!editting" type="number"></md-input>
-                            <span class="md-error" v-if="!$v.entry.quantity.required">
-                                {{ $t("message.required_validation_error") }}
-                            </span>
+                        <md-field>
+                            <label for="inventory-quantity">{{ $t("message.inventory_quantity") }}</label>
+                            <md-input name="inventory-quantity" id="inventory-quantity" v-model="entry.quantity" disabled type="number"></md-input>
+                        </md-field>
+                    </div>
+                    <div class="md-layout-item md-small-size-100 md-size-33">
+                        <md-field>
+                            <label for="locked-price">{{ $t("message.locked_quantity") }}</label>
+                            <md-input name="locked-quantity" id="locked-quantity" v-model="entry.locked" disabled type="number"></md-input>
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
@@ -182,9 +185,6 @@ export default {
         maxLength: maxLength(13)
       },
       price: {
-        required
-      },
-      quantity: {
         required
       },
       ebookUrl: {

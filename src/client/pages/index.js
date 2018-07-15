@@ -23,6 +23,11 @@ import TeacherDetailPanel from '../pages/Teachers/TeacherDetailPanel.vue'
 import BooksTable from '../pages/Books/BooksTable.vue'
 import BookForm from '../pages/Books/BookForm.vue'
 import BookDetailPanel from '../pages/Books/BookDetailPanel.vue'
+import BookInventoryPanel from '../pages/Books/BookInventoryPanel.vue'
+import BookCard from '../pages/Books/BookCard.vue'
+import BookInventoryForm from '../pages/Books/BookInventoryForm.vue'
+import BookInbound from '../pages/Books/BookInbound.vue'
+import BookOutbound from '../pages/Books/BookOutbound.vue'
 
 // Student
 import StudentsTable from '../pages/Students/StudentsTable.vue'
@@ -48,7 +53,12 @@ export {
   TeacherDetailPanel,
   BooksTable,
   BookForm,
+  BookCard,
   BookDetailPanel,
+  BookInventoryPanel,
+  BookInventoryForm,
+  BookInbound,
+  BookOutbound,
   StudentsTable,
   StudentForm,
   StudentDetailPanel,

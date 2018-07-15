@@ -78,6 +78,54 @@ var dao = function () {
         });
     };
 
+    var updateQuantityAsync = function (id, quantityInc) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                "ID": id
+            },
+            UpdateExpression: "ADD quantity :quantityInc",
+            ExpressionAttributeValues: {
+                ":quantityInc": quantityInc
+            },
+            ReturnValues: "UPDATED_NEW"
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('updateQuantityAsync DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
+    var updateLockedAsync = function (id, lockedInc) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                "ID": id
+            },
+            UpdateExpression: "ADD locked :lockedInc",
+            ExpressionAttributeValues: {
+                ":lockedInc": lockedInc
+            },
+            ReturnValues: "UPDATED_NEW"
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('updateLockedAsync DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     var removeAsync = function (id) {
         var params = {
             TableName: ddbTable,
@@ -102,7 +150,9 @@ var dao = function () {
         getAsync: getAsync,
         scanAsync: scanAsync,
         updateAsync: updateAsync,
-        removeAsync: removeAsync
+        updateQuantityAsync: updateQuantityAsync,
+        updateLockedAsync: updateLockedAsync,
+        removeAsync: removeAsync,
     };
 }();
 

@@ -62,15 +62,6 @@
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('quantity')">
-                        <label for="book-price">{{ $t("message.inventory_quantity") }}</label>
-                        <md-input name="book-quantity" id="book-quantity" v-model="entry.quantity" :disabled="sending" type="number"></md-input>
-                        <span class="md-error" v-if="!$v.entry.quantity.required">
-                            {{ $t("message.required_validation_error") }}
-                        </span>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('level')">
                         <label for="book-level">{{ $t("message.read_level") }}</label>
                         <md-select name="book-level" id="book-level" v-model="entry.level" md-dense :disabled="sending">
@@ -180,9 +171,6 @@ export default {
         maxLength: maxLength(13)
       },
       price: {
-        required
-      },
-      quantity: {
         required
       },
       ebookUrl: {
