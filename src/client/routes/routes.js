@@ -18,6 +18,7 @@ import BookInbound from 'pages/Books/BookInbound.vue'
 import BookOutbound from 'pages/Books/BookOutbound.vue'
 import Users from 'pages/UserProfile/Users.vue'
 import UserProfile from 'pages/UserProfile.vue'
+import LeaveForm from 'pages/tickets/LeaveForm.vue'
 import TableList from 'pages/TableList.vue'
 import Typography from 'pages/Typography.vue'
 import Notifications from 'pages/Notifications.vue'
@@ -152,6 +153,12 @@ const routes = [
         path: 'user',
         name: '个人资料',
         component: UserProfile,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'tickets',
+        name: '问题报告',
+        component: LeaveForm,
         beforeEnter: ifAuthenticated,
       },
       {
