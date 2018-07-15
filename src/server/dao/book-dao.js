@@ -62,9 +62,15 @@ var dao = function () {
     };
 
     var updateAsync = function (item) {
+        //inventory numbers are not allowed to updated directly.
         var params = {
             TableName: ddbTable,
-            Item: item
+            Item: item,
+            ConditionExpression: 'quantity = :quantity AND locked = :locked',
+            ExpressionAttributeValues: {
+                ":quantity": item.quantity,
+                ":locked": item.locked
+            },
         };
 
         return new Promise(function (resolve, reject) {
