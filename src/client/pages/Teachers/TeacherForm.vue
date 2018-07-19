@@ -11,11 +11,17 @@
             <div class="md-layout">
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('name')">
-                        <label for="name">姓名</label>
+                        <label for="name">名字</label>
                         <md-input name="name" id="name" v-model="entry.name" :disabled="sending" type="text"></md-input>
                         <span class="md-error" v-if="!$v.entry.name.required">
-                            姓名为必填项目。
+                            名字为必填项目。
                         </span>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-33">
+                    <md-field>
+                        <label for="surname">姓氏</label>
+                        <md-input name="surname" id="surname" v-model="entry.surname" :disabled="sending" type="text"></md-input>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">

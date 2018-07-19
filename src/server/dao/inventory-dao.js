@@ -53,8 +53,8 @@ var dao = function () {
     };
 
     return {
-        createAsync: createAsync,
-        queryByTimeAsync: queryByTimeAsync
+        createAsync,
+        queryByTimeAsync
     };
 }();
 

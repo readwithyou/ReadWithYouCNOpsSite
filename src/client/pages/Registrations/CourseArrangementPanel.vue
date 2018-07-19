@@ -26,7 +26,7 @@
             <md-field :class="getValidationClass('teacherId')">
                 <label for="teacher">老师</label>
                 <md-select name="teacher" id="teacher" v-model="registration.teacherId" md-dense :disabled="sending" >
-                    <md-option v-for="teacher in teachers" :key="teacher.ID" :value="teacher.ID">{{teacher.name}}</md-option>
+                    <md-option v-for="teacher in teachers" :key="teacher.ID" :value="teacher.ID">{{teacher.surname?teacher.name+' '+teacher.surname:teacher.name}}</md-option>
                 </md-select>
                 <span class="md-error" v-if="!$v.registration.teacherId.required">
                     老师为必填项目。

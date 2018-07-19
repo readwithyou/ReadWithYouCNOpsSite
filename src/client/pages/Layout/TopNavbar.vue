@@ -3,9 +3,9 @@
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
         <h3 class="md-title">
-          <md-avatar class="md-avatar-icon md-small" v-if="canGoBack()">
-            <i class="material-icons" @click="back">arrow_back</i>
-          </md-avatar>&nbsp;
+          <md-button class="md-icon-button md-dense md-raised md-default" @click="back" v-if="canGoBack()">
+            <md-icon>arrow_back</md-icon>
+          </md-button>&nbsp;
           {{$route.name}}
         </h3>
       </div>

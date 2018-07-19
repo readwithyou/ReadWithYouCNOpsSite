@@ -19,11 +19,17 @@
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('name')">
-                        <label>{{ $t("message.name") }}</label>
+                        <label>{{ $t("message.first_name") }}</label>
                         <md-input type="text" v-model="teacher.name" :disabled="!editting" />
                         <span class="md-error" v-if="!$v.teacher.name.required">
-                            姓名为必填项目。
+                            名字为必填项目。
                         </span>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-33">
+                    <md-field>
+                        <label for="surname">{{ $t("message.last_name") }}</label>
+                        <md-input name="surname" id="surname" v-model="teacher.surname" :disabled="!editting" type="text"></md-input>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
@@ -65,7 +71,7 @@
                         <span class="md-error" v-else-if="!$v.teacher.email.email">Email地址格式错误。</span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-66">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('timezone')">
                         <label for="timezone">{{ $t("message.time_zone") }} {{ new Date().toLocaleString() | moment('timezone', teacher.timezone, 'YYYY-MM-DD, h:mm:ss a')}}</label>
                         <md-select name="timezone" id="timezone" v-model="teacher.timezone" md-dense :disabled="!editting">

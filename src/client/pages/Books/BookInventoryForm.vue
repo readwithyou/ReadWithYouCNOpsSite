@@ -1,49 +1,47 @@
 <template>
         <div class="md-layout">
             <div class="md-layout-item md-medium-size-66 md-size-66">
-                <form novalidate class="md-layout" @submit.prevent="validateEntry">
-                    <md-card>
-                        <md-card-header data-background-color="purple">
-                            <h4 class="title">{{ $t("message.book_" + this.type + "_title") }}</h4>
-                            <p class="category">{{ $t("message.book_" + this.type + "_subtitle") }}</p>
-                        </md-card-header>
+                <md-card>
+                    <md-card-header data-background-color="purple">
+                        <h4 class="title">{{ $t("message.book_" + this.type + "_title") }}</h4>
+                        <p class="category">{{ $t("message.book_" + this.type + "_subtitle") }}</p>
+                    </md-card-header>
 
-                        <md-card-content>
-                            <div class="md-layout-item md-size-100">
-                                <md-field :class="getValidationClass('description')">
-                                    <label for="description">{{ $t("message.remarks") }}</label>
-                                    <md-input type="text" id="description" name="description" autocomplete="description" v-model="entry.description" :disabled="sending" />                      
-                                    <span class="md-error" v-if="!$v.entry.description.required">
-                                        {{ $t("message.required_validation_error") }}
-                                    </span>
-                                </md-field>
-                            </div>
-                            <div class="md-layout-item md-small-size-100 md-size-100">
-                                <md-field :class="getValidationClass('isbn')">
-                                    <label for="book-isbn">{{ $t("message.book_isbn") }}</label>
-                                    <md-input @keydown.enter.prevent="onIsbnEnter" name="book-isbn" id="book-isbn" ref='isbnInput' v-model="entry.isbn" :disabled="sending" type="text"></md-input>
-                                    <span class="md-error" v-if="!$v.entry.isbn.required">{{ $t("message.required_validation_error") }}</span>
-                                    <span class="md-error" v-else-if="!$v.entry.isbn.minLength">{{ $t("message.minlength_validation_error") }}</span>
-                                    <span class="md-error" v-else-if="!$v.entry.isbn.maxLength">{{ $t("message.maxlength_validation_error") }}</span>
-                                </md-field>
-                            </div>
-                            <div class="md-layout-item md-small-size-100 md-size-100">
-                                <md-field :class="getValidationClass('quantity')">
-                                    <label for="book-price">{{ $t("message.inventory_quantity") }}</label>
-                                    <md-input name="book-quantity" id="book-quantity" ref='quantityInput' v-model.number="entry.quantity" :disabled="sending" type="number"></md-input>
-                                    <span class="md-error" v-if="!$v.entry.quantity.required">
-                                        {{ $t("message.required_validation_error") }}
-                                    </span>
-                                </md-field>
-                            </div>
-                        </md-card-content>
-
-                        <md-progress-bar md-mode="indeterminate" v-if="sending" />
-                        <div class="md-layout-item md-size-100 text-center">
-                            <md-button type="submit" class="md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
+                    <md-card-content>
+                        <div class="md-layout-item md-size-100">
+                            <md-field :class="getValidationClass('description')">
+                                <label for="description">{{ $t("message.remarks") }}</label>
+                                <md-input type="text" id="description" name="description" autocomplete="description" v-model="entry.description" :disabled="sending" />                      
+                                <span class="md-error" v-if="!$v.entry.description.required">
+                                    {{ $t("message.required_validation_error") }}
+                                </span>
+                            </md-field>
                         </div>
-                    </md-card>
-                </form>
+                        <div class="md-layout-item md-small-size-100 md-size-100">
+                            <md-field :class="getValidationClass('isbn')">
+                                <label for="book-isbn">{{ $t("message.book_isbn") }}</label>
+                                <md-input @keydown.enter="onIsbnEnter" name="book-isbn" id="book-isbn" ref='isbnInput' v-model="entry.isbn" :disabled="sending" type="text"></md-input>
+                                <span class="md-error" v-if="!$v.entry.isbn.required">{{ $t("message.required_validation_error") }}</span>
+                                <span class="md-error" v-else-if="!$v.entry.isbn.minLength">{{ $t("message.minlength_validation_error") }}</span>
+                                <span class="md-error" v-else-if="!$v.entry.isbn.maxLength">{{ $t("message.maxlength_validation_error") }}</span>
+                            </md-field>
+                        </div>
+                        <div class="md-layout-item md-small-size-100 md-size-100">
+                            <md-field :class="getValidationClass('quantity')">
+                                <label for="book-price">{{ $t("message.inventory_quantity") }}</label>
+                                <md-input @keydown.enter="validateEntry" name="book-quantity" id="book-quantity" ref='quantityInput' v-model.number="entry.quantity" :disabled="sending" type="number"></md-input>
+                                <span class="md-error" v-if="!$v.entry.quantity.required">
+                                    {{ $t("message.required_validation_error") }}
+                                </span>
+                            </md-field>
+                        </div>
+                    </md-card-content>
+
+                    <md-progress-bar md-mode="indeterminate" v-if="sending" />
+                    <div class="md-layout-item md-size-100 text-center">
+                        <md-button type="submit" @click="validateEntry" class="md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
+                    </div>
+                </md-card>
             </div>
             <div class="md-layout-item md-medium-size-33 md-size-33">
                 <book-card :book="selectedBook">
@@ -114,6 +112,7 @@ export default {
           this.entry.BookId = book.ID;
           this.entry.type = this.type;
           this.$nextTick(() => {
+            this.$refs["quantityInput"].$el.select();
             this.$refs["quantityInput"].$el.focus();
           });
         }

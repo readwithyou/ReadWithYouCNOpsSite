@@ -58,7 +58,7 @@ var ticketService = function () {
         return {
             to: email,
             cc: 'lessons@readwithyou.com',
-            subject: sprintf('%s will cancel his/her lesson on %s.', leaveRequest.studentName, timeString),
+            subject: sprintf('%s will cancel the lesson on %s.', leaveRequest.studentName, timeString),
             html: mailContent,
             attachments: [
                 {
@@ -80,7 +80,7 @@ var ticketService = function () {
     }
 
     return {
-        leaveMailAsync: leaveMailAsync
+        leaveMailAsync
     };
 }();
 

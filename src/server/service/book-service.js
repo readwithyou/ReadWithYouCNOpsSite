@@ -18,7 +18,7 @@ var bookService = function () {
     }
 
     return {
-        handleInventoryChangeAsync: handleInventoryChangeAsync
+        handleInventoryChangeAsync
     };
 }();
 

@@ -152,13 +152,13 @@ var dao = function () {
     };
 
     return {
-        createAsync: createAsync,
-        getAsync: getAsync,
-        scanAsync: scanAsync,
-        updateAsync: updateAsync,
-        updateQuantityAsync: updateQuantityAsync,
-        updateLockedAsync: updateLockedAsync,
-        removeAsync: removeAsync,
+        createAsync,
+        getAsync,
+        scanAsync,
+        updateAsync,
+        updateQuantityAsync,
+        updateLockedAsync,
+        removeAsync,
     };
 }();
 

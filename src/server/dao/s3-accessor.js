@@ -49,8 +49,8 @@ var s3accessor = function () {
     };
 
     return {
-        getPutSignedUrlAsync: getPutSignedUrlAsync,
-        getGetSignedUrlAsync: getGetSignedUrlAsync,
+        getPutSignedUrlAsync,
+        getGetSignedUrlAsync,
     };
 }();
 

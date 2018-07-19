@@ -9,22 +9,25 @@
         <md-card-content>
             <h4>{{ $t("message.basic_info") }}</h4>
             <div class="md-layout">
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('cnName')">
-                        <label for="cn-name">{{ $t("message.cn_name") }}</label>
-                        <md-input name="cn-name" id="cn-name" v-model="entry.cnName" :disabled="sending" type="text"></md-input>
-                        <span class="md-error" v-if="!$v.entry.cnName.required">
-                            {{ $t("message.cn_name_required_validation_error") }}
-                        </span>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field>
-                        <label>{{ $t("message.en_name") }}({{ $t("message.optional") }})</label>
+                        <label>{{ $t("message.en_name") }}</label>
                         <md-input v-model="entry.enName" type="text"></md-input>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-50">
+                    <md-field>
+                        <label for="cn-name">{{ $t("message.cn_name") }}({{ $t("message.optional") }})</label>
+                        <md-input name="cn-name" id="cn-name" v-model="entry.cnName" :disabled="sending" type="text"></md-input>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-50">
+                    <md-field>
+                        <label>{{ $t("message.registration_source") }}({{ $t("message.optional") }})</label>
+                        <md-input type="text" v-model="entry.tag" :disabled="sending" />
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('gender')">
                         <label for="gender">{{ $t("message.gender") }}</label>
                         <md-select name="gender" id="gender" v-model="entry.gender" md-dense :disabled="sending">
@@ -36,7 +39,7 @@
                         </span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('age')">
                         <label for="age">{{ $t("message.age") }}</label>
                         <md-input type="number" id="age" name="age" autocomplete="age" v-model="entry.age" :disabled="sending" />
@@ -44,14 +47,14 @@
                         <span class="md-error" v-else-if="!$v.entry.age.maxlength">{{ $t("message.age_max_validation_error") }}</span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('phone')">
                         <label for="phone">{{ $t("message.phone") }}</label>
                         <md-input type="text" id="phone" name="phone" autocomplete="phone" v-model="entry.phone" :disabled="sending" />
                         <span class="md-error" v-if="!$v.entry.phone.required">{{ $t("message.phone_required_validation_error") }}</span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field :class="getValidationClass('email')">
                         <label for="email">{{ $t("message.email") }}</label>
                         <md-input type="email" name="email" id="email" autocomplete="email" v-model="entry.email" :disabled="sending" />
@@ -59,7 +62,7 @@
                         <span class="md-error" v-else-if="!$v.entry.email.email">{{ $t("message.email_format_validation_error") }}</span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
+                <div class="md-layout-item md-small-size-100 md-size-50">
                     <md-field>
                         <label>{{ $t("message.wechat") }}({{ $t("message.optional") }})</label>
                         <md-input v-model="entry.wechat" type="text"></md-input>
@@ -69,68 +72,35 @@
 
             <h4>{{ $t("message.questionnaire") }}</h4>
             <div class="md-layout">
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('ifReadEnBook')">
-                        <label for="if-read-en-book">{{ $t("message.question_if_read_en_book") }}</label>
-                        <md-select name="if-read-en-book" id="if-read-en-book" v-model="entry.ifReadEnBook" md-dense :disabled="sending">
-                            <md-option value=true>{{ $t("message.yes") }}</md-option>
-                            <md-option value=false>{{ $t("message.no") }}</md-option>
+                <div class="md-layout-item md-small-size-100 md-size-50">
+                    <md-field :class="getValidationClass('currentLevel')">
+                        <label for="current-level">{{ $t("message.current_level") }}</label>
+                        <md-select name="current-level" id="current-level" v-model="entry.currentLevel" md-dense :disabled="sending">
+                            <md-option value=LEVEL_ZERO>{{ $t("message.reg_LEVEL_ZERO") }}</md-option>
+                            <md-option value=LEVEL_ONE>{{ $t("message.reg_LEVEL_ONE") }}</md-option>
+                            <md-option value=LEVEL_TWO>{{ $t("message.reg_LEVEL_TWO") }}</md-option>
+                            <md-option value=LEVEL_THREE>{{ $t("message.reg_LEVEL_THREE") }}</md-option>
                         </md-select>
-                        <span class="md-error" v-if="!$v.entry.ifReadEnBook.required">
+                        <span class="md-error" v-if="!$v.entry.currentLevel.required">
                             {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('numBookBought')">
-                        <label for="num-book-bought">{{ $t("message.question_num_book_bought") }}</label>
-                        <md-input type="number" id="num-book-bought" name="num-book-bought" autocomplete="numBookBought" v-model="entry.numBookBought" :disabled="sending" />
-                        <span class="md-error" v-if="!$v.entry.numBookBought.required">
-                            {{ $t("message.required_validation_error") }}
-                        </span>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('numBookRead')">
-                        <label for="num-book-read">{{ $t("message.question_num_book_read") }}</label>
-                        <md-input type="number" id="num-book-read" name="num-book-read" autocomplete="numBookRead" v-model="entry.numBookRead" :disabled="sending" />
-                        <span class="md-error" v-if="!$v.entry.numBookRead.required">
-                            {{ $t("message.required_validation_error") }}
-                        </span>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                    <md-field :class="getValidationClass('readingBlocker')">
-                        <label for="reading-blocker">{{ $t("message.question_reading_blocker") }}</label>
-                        <md-textarea id="reading-blocker" name="reading-blocker" v-model="entry.readingBlocker" :disabled="sending" ></md-textarea>
-                        <span class="md-error" v-if="!$v.entry.readingBlocker.required">
-                            {{ $t("message.required_validation_error") }}
-                        </span>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                    <md-field :class="getValidationClass('exprience')">
-                        <label for="exprience">{{ $t("message.question_exprience") }}</label>
-                        <md-textarea id="exprience" name="exprience" v-model="entry.exprience" :disabled="sending" ></md-textarea>
-                        <span class="md-error" v-if="!$v.entry.exprience.required">
-                            {{ $t("message.required_validation_error") }}
-                        </span>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                    <md-field :class="getValidationClass('expectation')">
-                        <label for="expectation">{{ $t("message.question_expectation") }}</label>
-                        <md-textarea id="expectation" name="expectation" v-model="entry.expectation" :disabled="sending" ></md-textarea>
-                        <span class="md-error" v-if="!$v.entry.expectation.required">
-                            {{ $t("message.required_validation_error") }}
-                        </span>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-size-100">
-                    <md-field :class="getValidationClass('favBooks')">
-                        <label for="favBooks">{{ $t("message.question_fav_books") }}</label>
-                        <md-textarea id="favBooks" name="favBooks" v-model="entry.favBooks" :disabled="sending" ></md-textarea>
-                        <span class="md-error" v-if="!$v.entry.favBooks.required">
+                <div class="md-layout-item md-small-size-100 md-size-50">
+                    <md-field :class="getValidationClass('hobby')">
+                        <label for="hobby">{{ $t("message.hobby") }}</label>
+                        <md-select v-model="entry.hobby" name="hobby" id="hobby" :disabled="sending" multiple>
+                            <md-option value="ANIMAL">{{ $t("message.animal") }}</md-option>
+                            <md-option value="PLANT">{{ $t("message.plant") }}</md-option>
+                            <md-option value="ASTRONOMY">{{ $t("message.astronomy") }}</md-option>
+                            <md-option value="ART">{{ $t("message.art") }}</md-option>
+                            <md-option value="LITERATURE">{{ $t("message.literature") }}</md-option>
+                            <md-option value="NOVEL">{{ $t("message.novel") }}</md-option>
+                            <md-option value="ECONOMIC">{{ $t("message.economic") }}</md-option>
+                            <md-option value="SOCIAL">{{ $t("message.social") }}</md-option>
+                            <md-option value="HISTORY">{{ $t("message.history") }}</md-option>
+                        </md-select>
+                        <span class="md-error" v-if="!$v.entry.hobby.required">
                             {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
@@ -151,7 +121,7 @@
                 <div class="md-layout-item md-size-100">
                     <md-field>
                         <label for="remarks">{{ $t("message.remarks") }}({{ $t("message.optional") }})</label>
-                        <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="entry.remarks" :disabled="sending" />                      
+                        <md-textarea id="remarks" name="remarks" v-model="entry.remarks" :disabled="sending"></md-textarea>                  
                     </md-field>
                 </div>
             </div>
@@ -192,19 +162,16 @@ export default {
       status: 0,
       cnName: null,
       enName: null,
+      tag: null,
       gender: null,
       age: null,
       phone: null,
       email: null,
       wechat: null,
-      ifReadEnBook: false,
-      numBookBought: null,
-      numBookRead: null,
-      readingBlocker: null,
-      exprience: null,
-      expectation: null,
-      favBooks: null,
-      preTimeSlot: null
+      currentLevel: null,
+      hobby: [],
+      preTimeSlot: null,
+      remarks: null
     },
     sending: false,
     entrySaved: false,
@@ -212,9 +179,8 @@ export default {
   }),
   validations: {
     entry: {
-      cnName: {
-        required,
-        minLength: minLength(2)
+      enName: {
+        required
       },
       gender: {
         required
@@ -230,25 +196,10 @@ export default {
         required,
         email
       },
-      ifReadEnBook: {
+      currentLevel: {
         required
       },
-      numBookBought: {
-        required
-      },
-      numBookRead: {
-        required
-      },
-      readingBlocker: {
-        required
-      },
-      exprience: {
-        required
-      },
-      expectation: {
-        required
-      },
-      favBooks: {
+      hobby: {
         required
       },
       preTimeSlot: {

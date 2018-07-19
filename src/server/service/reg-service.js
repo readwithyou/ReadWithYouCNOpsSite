@@ -12,7 +12,7 @@ var wechatAccess = require('./wechat-access');
 
 var regService = function () {
     var abbrs = {
-        EST: 'Eastern Standard Time',
+        EST: 'Eastern Standard Time/Panama Time',
         EDT: 'Eastern Daylight Time',
         CST: 'Central Standard Time',
         CDT: 'Central Daylight Time',
@@ -138,7 +138,7 @@ var regService = function () {
         let timezone = teacher.timezone;
         let scheduledTimeString = formatTimeString(registration.scheduledTime, 'en-US', timezone);
 
-        let mailSubject = sprintf('Trial email notice for %s', registration.enName);
+        let mailSubject = sprintf('Trial email notice for %s. Zoom Link: https://readwithyou.zoom.us/my/%s', registration.enName, zoomId);
         // setup email data with unicode symbols
         let mailContent = sprintf(mailTemplates.teacherSchedulingEmail,
             name, studentName, age, gender, courseRemarks,
@@ -226,10 +226,7 @@ var regService = function () {
     }
 
     var getNewRegMailOption = function (registration) {
-        let studentName = registration.cnName;
-        if (registration.type === 'child') {
-            studentName += '（家长：' + registration.parentName + '）';
-        }
+        let studentName = registration.enName ? registration.enName : registration.cnName;
 
         // setup email data with unicode symbols
         let mailContent = sprintf(mailTemplates.newRegistrationMail, studentName);
@@ -314,7 +311,7 @@ var regService = function () {
         ).then(
             (result) => result.Items.filter(item => item.wechatOpenId).forEach(
                 item => {
-                    let name = item.cnName + ' ' + item.enName;
+                    let name = item.enName + ' ' + item.cnName;
                     let scheduledTimeString = formatTimeString(item.scheduledTime, 'zh-CN', 'Asia/Shanghai');
                     notificationSendPromises.push(
                         wechatAccess.sendCourseNotification(accessToken, item.wechatOpenId, name, scheduledTimeString)
@@ -360,13 +357,13 @@ var regService = function () {
     };
 
     return {
-        mailScheduleToStudentAsync: mailScheduleToStudentAsync,
-        mailScheduleToTeacherAsync: mailScheduleToTeacherAsync,
-        mailReportToStudentAsync: mailReportToStudentAsync,
-        mailReportToTeacherAsync: mailReportToTeacherAsync,
-        mailNewRegistrationAsync: mailNewRegistrationAsync,
-        promoteAsStudentAsync: promoteAsStudentAsync,
-        notifyCourseOnWechatAsync: notifyCourseOnWechatAsync
+        mailScheduleToStudentAsync,
+        mailScheduleToTeacherAsync,
+        mailReportToStudentAsync,
+        mailReportToTeacherAsync,
+        mailNewRegistrationAsync,
+        promoteAsStudentAsync,
+        notifyCourseOnWechatAsync
     };
 }();
 

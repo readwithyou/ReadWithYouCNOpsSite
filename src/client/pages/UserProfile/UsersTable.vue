@@ -1,85 +1,48 @@
 <template>
 
-  <data-tables :data="users" :show-action-bar="false" :custom-filters="customFilters" :table-props="tableProps">
-    <el-row slot="custom-tool-bar" style="margin-bottom: 10px">
-      <el-col :span="10">
-        <el-dropdown @command="handleClick">
-        </el-dropdown>
-      </el-col>
-      <el-col :span="5" :offset="9">
-        <el-input v-model="customFilters[0].vals"></el-input>
-      </el-col>
-    </el-row>
+  <div>
+    <md-table v-model="searched" md-sort="username" md-sort-order="asc">
+      <md-table-toolbar>
+        <div class="md-toolbar-section-start">
+        </div>
 
-    <el-table-column v-for="title in titles" :prop="title.prop" :formatter="title.formatter" :label="title.label" :key="title.prop" sortable="custom">
-    </el-table-column>
-    <el-table-column label="处理" min-width="100px">
-      <template scope="scope">
-        <el-button v-for="button in customButtonsForRow(scope.row)" :key="button.name" type="text" @click="button.handler">
-          <md-icon>{{button.icon}}</md-icon>
-        </el-button>
-      </template>
-    </el-table-column>
-  </data-tables>
+        <md-field md-clearable class="md-toolbar-section-end">
+          <md-input :placeholder="$t('message.search_hint')" v-model="search" @input="searchOnTable" />
+        </md-field>
+      </md-table-toolbar>
+
+      <md-table-empty-state
+        :md-label="$t('message.no_user_found_message')"
+        :md-description="$t('message.no_user_found_message_detail')">
+      </md-table-empty-state>
+
+      <md-table-row slot="md-table-row" slot-scope="{ item }">
+        <md-table-cell :md-label="$t('message.username')" md-sort-by="username">{{ item.username }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.name')" md-sort-by="name">{{ item.name }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.email')" md-sort-by="email">{{ item.email }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.user_group')" md-sort-by="group">{{ item.group }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.status')" md-sort-by="locked">
+          <md-chip :class="getStatusClass(item.locked)">{{ formatStatus(item.locked) }}</md-chip>
+        </md-table-cell>
+        <md-table-cell :md-label="$t('message.action')">
+          <a @click="lockUser(item.username)" v-if="!item.locked">{{ $t("message.lock") }}</a>&nbsp;&nbsp;
+          <a @click="unlockUser(item.username)" v-if="item.locked">{{ $t("message.unlock") }}</a>
+        </md-table-cell>
+      </md-table-row>
+    </md-table>
+  </div>
 </template>
 
 <script>
-var titles = [
-  {
-    prop: "username",
-    label: "用户名"
-  },
-  {
-    prop: "name",
-    label: "姓名"
-  },
-  {
-    prop: "email",
-    label: "Email"
-  },
-  {
-    prop: "group",
-    label: "用户组"
-  },
-  {
-    prop: "locked",
-    label: "状态",
-    formatter: (row, column, cellValue, index) => {
-      if (cellValue === false) {
-        return "正常";
-      }
-      if (cellValue === true) {
-        return "锁定";
-      }
-    }
-  }
-];
-
-var customFilters = [
-  {
-    vals: ""
-  },
-  {
-    vals: [],
-    props: "Type"
-  }
-];
-
-var tableProps = {
-  border: false,
-  stripe: true,
-  defaultSort: {
-    prop: "username",
-    order: "descending"
-  }
+const toLower = text => {
+  return text ? text.toString().toLowerCase() : "";
 };
 
 export default {
   data() {
     return {
-      titles,
-      customFilters,
-      tableProps,
+      search: null,
+      searched: [],
       users: []
     };
   },
@@ -87,11 +50,27 @@ export default {
     this.fetchData();
   },
   methods: {
+    searchOnTable() {
+      this.searched = this.users.filter(
+        item =>
+          toLower(item.username).includes(toLower(this.search)) ||
+          toLower(item.name).includes(toLower(this.search))
+      );
+    },
+    formatStatus(locked) {
+      return locked
+        ? this.$i18n.t("message.locked")
+        : this.$i18n.t("message.unlocked");
+    },
+    getStatusClass(locked) {
+      return locked ? "md-accent" : "md-default";
+    },
     fetchData() {
       var resource = this.$resource("/api/users");
       resource.get().then(
         response => {
           this.users = response.body;
+          this.searched = this.users;
         },
         response => {
           this.notifyFetchingError();
@@ -107,31 +86,8 @@ export default {
         type: "danger"
       });
     },
-    customButtonsForRow(row) {
-      if (row.locked === true) {
-        return [
-          {
-            name: "解锁",
-            icon: "lock_open",
-            handler: _ => {
-              this.unlockUser(row);
-            }
-          }
-        ];
-      } else {
-        return [
-          {
-            name: "锁定",
-            icon: "lock",
-            handler: _ => {
-              this.lockUser(row);
-            }
-          }
-        ];
-      }
-    },
-    lockUser(user) {
-      var resource = this.$resource("/api/users/" + user.username + "/lock");
+    lockUser(username) {
+      var resource = this.$resource("/api/users/" + username + "/lock");
       resource.save().then(
         response => {
           this.notifyLockSuccess();
@@ -142,8 +98,8 @@ export default {
         }
       );
     },
-    unlockUser(user) {
-      var resource = this.$resource("/api/users/" + user.username + "/unlock");
+    unlockUser(username) {
+      var resource = this.$resource("/api/users/" + username + "/unlock");
       resource.save().then(
         response => {
           this.notifyLockSuccess();
@@ -156,7 +112,7 @@ export default {
     },
     notifyLockError() {
       this.$notify({
-        message: "老师信息删除失败，请稍后重试！",
+        message: "锁定账户失败，请稍后重试！",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",
@@ -165,7 +121,7 @@ export default {
     },
     notifyLockSuccess() {
       this.$notify({
-        message: "老师信息删除成功！",
+        message: "锁定账户成功！",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",

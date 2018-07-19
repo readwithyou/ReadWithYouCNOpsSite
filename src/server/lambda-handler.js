@@ -39,8 +39,8 @@ var handler = function () {
     };
 
     return {
-        ddbHandler: ddbHandler,
-        courseNotificationHandler: courseNotificationHandler
+        ddbHandler,
+        courseNotificationHandler
     };
 }();
 

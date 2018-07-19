@@ -10,79 +10,109 @@
                 </md-card-header>
 
                 <md-card-content>
-                    <h4>请假安排</h4>
-
-                  <div class="md-layout-item md-small-size-100 md-size-100">
-                      <md-field>
-                          <label for="student-name">学生姓名</label>
-                          <md-input name="student-name" id="student-name" v-model="entry.studentName" :disabled="sending" type="text"></md-input>
-                      </md-field>
+                  <div class="md-layout">
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <h4>请假安排</h4>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <md-switch v-model="oneDayLeave" class="edit-switch">单日请假</md-switch>
+                      </div>
                   </div>
 
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-field>
-                            <label for="teacher">老师</label>
-                            <md-select name="teacher" id="teacher" v-model="entry.teacherId" md-dense :disabled="sending" >
-                                <md-option v-for="teacher in teachers" :key="teacher.ID" :value="teacher.ID">{{teacher.name}}</md-option>
-                            </md-select>
-                        </md-field>
+                    <div class="md-layout">
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <md-field>
+                              <label for="student-name">学生姓名</label>
+                              <md-input name="student-name" id="student-name" v-model="entry.studentName" :disabled="sending" type="text"></md-input>
+                          </md-field>
+                      </div>
+
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <md-field>
+                              <label for="teacher">老师</label>
+                              <md-select name="teacher" id="teacher" v-model="entry.teacherId" md-dense :disabled="sending" >
+                                  <md-option v-for="teacher in teachers" :key="teacher.ID" :value="teacher.ID">{{teacher.surname?teacher.name+' '+teacher.surname:teacher.name}}</md-option>
+                              </md-select>
+                          </md-field>
+                      </div>
                     </div>
 
-                    <h4>请假开始时间</h4>
-
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-datepicker name="start-date-slot" id="start-date-slot" v-model="startDateSlot" :disabled="sending" md-immediately>
-                            <label>日期</label>
-                        </md-datepicker>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-field>
-                            <label for="start-time-slot">时间(hh:mm)</label>
-                            <md-input type="text" id="start-time-slot" name="start-time-slot" v-model="startTimeSlot" :disabled="sending" />
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-field>
-                            <label for="start-leave-time">请假开始时间（请先选择日期和时间）</label>
-                            <md-input type="text" id="start-leave-time" name="start-leave-time" 
-                            :value="entry.startLeaveTime | moment('timezone', 'Asia/Shanghai', 'YYYY-MM-DD, h:mm:ss a')" disabled />
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-field>
-                            <label for="teacher-local-time">老师当地时间 {{teacherTimezone}}</label>
-                            <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
-                            :value="entry.startLeaveTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD, h:mm:ss a')" disabled />
-                        </md-field>
+                    <div class="md-layout">
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <h4>请假开始时间</h4>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                      </div>
                     </div>
 
-                    <h4>请假结束时间</h4>
+                    <div class="md-layout">
+                      <div class="md-layout-item md-small-size-100 md-size-100">
+                          <md-datepicker name="start-date-slot" id="start-date-slot" v-model="startDateSlot" :disabled="sending" md-immediately>
+                              <label>日期</label>
+                          </md-datepicker>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-100">
+                          <md-field>
+                              <label for="start-day-half">上午／下午</label>
+                              <md-select name="start-day-half" id="start-day-half" v-model="startTimeSlot" md-dense :disabled="sending">
+                                  <md-option value="08:00">上午</md-option>
+                                  <md-option value="20:00">下午</md-option>
+                              </md-select>
+                          </md-field>
+                      </div>
+                    </div>
 
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-datepicker name="end-date-slot" id="end-date-slot" v-model="endDateSlot" :disabled="sending" md-immediately>
-                            <label>日期</label>
-                        </md-datepicker>
+                    <div class="md-layout" v-if="!oneDayLeave">
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <h4>请假结束时间</h4>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                      </div>
                     </div>
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-field>
-                            <label for="end-time-slot">时间(hh:mm)</label>
-                            <md-input type="text" id="end-time-slot" name="end-time-slot" v-model="endTimeSlot" :disabled="sending" />
-                        </md-field>
+
+                    <div class="md-layout" v-if="!oneDayLeave">
+                      <div class="md-layout-item md-small-size-100 md-size-100">
+                          <md-datepicker name="end-date-slot" id="end-date-slot" v-model="endDateSlot" :disabled="sending" md-immediately>
+                              <label>日期</label>
+                          </md-datepicker>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-100">
+                          <md-field>
+                              <label for="end-day-half">上午／下午</label>
+                              <md-select name="end-day-half" id="end-day-half" v-model="endTimeSlot" md-dense :disabled="sending">
+                                  <md-option value="08:00">上午</md-option>
+                                  <md-option value="20:00">下午</md-option>
+                              </md-select>
+                          </md-field>
+                      </div>
                     </div>
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-field>
-                            <label for="end-leave-time">请假结束时间（请先选择日期和时间）</label>
-                            <md-input type="text" id="end-leave-time" name="end-leave-time" 
-                            :value="entry.endLeaveTime | moment('timezone', 'Asia/Shanghai', 'YYYY-MM-DD, h:mm:ss a')" disabled />
-                        </md-field>
+
+
+                    <div class="md-layout">
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <h4>发给老师的请假时间预览</h4>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                      </div>
                     </div>
-                    <div class="md-layout-item md-small-size-100 md-size-100">
-                        <md-field>
-                            <label for="teacher-local-time">老师当地时间 {{teacherTimezone}}</label>
-                            <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
-                            :value="entry.endLeaveTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD, h:mm:ss a')" disabled />
-                        </md-field>
+
+                    <div class="md-layout">
+                      <div class="md-layout-item md-small-size-100 md-size-50">
+                          <md-field>
+                              <label for="teacher-local-time">老师当地开始时间 {{teacherTimezone}}</label>
+                              <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
+                              :value="entry.startLeaveTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD')" disabled />
+                          </md-field>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-50" v-if="!oneDayLeave">
+                          <md-field>
+                              <label for="teacher-local-time">老师当地结束时间 {{teacherTimezone}}</label>
+                              <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
+                              :value="entry.endLeaveTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD')" disabled />
+                          </md-field>
+                      </div>
                     </div>
+
                 </md-card-content>
 
                 <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
@@ -103,6 +133,7 @@ export default {
   data: () => ({
     entry: {},
     teachers: [],
+    oneDayLeave: true,
     teacherTimezone: null,
     startDateSlot: null,
     startTimeSlot: null,
@@ -190,22 +221,26 @@ export default {
           this.sending = false;
         },
         response => {
-          this.notify('失败', 'dange');
+          this.notify("失败", "dange");
           this.sending = false;
         }
       );
     },
     sendEmailToTeacher() {
       this.sending = true;
+      
+      if (this.oneDayLeave) {
+        this.entry.endLeaveTime = null;
+      }
 
       var resource = this.$resource("/api/tickets/leave-mail");
       resource.save(this.entry).then(
         response => {
-          this.notify('成功', 'success');
+          this.notify("成功", "success");
           this.sending = false;
         },
         response => {
-          this.notify('失败', 'dange');
+          this.notify("失败", "danger");
           this.sending = false;
         }
       );
@@ -226,8 +261,11 @@ export default {
 .md-progress-spinner {
   position: absolute;
   left: 50%;
-  top: 880px;
+  top: 280px;
   margin-left: -50px;
   margin-top: -50px;
+}
+.edit-switch {
+  float: right;
 }
 </style>

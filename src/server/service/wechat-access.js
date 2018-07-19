@@ -36,8 +36,8 @@ var wechatAccess = function () {
     };
 
     return {
-        accessTokenAsync: accessTokenAsync,
-        sendCourseNotification: sendCourseNotification
+        accessTokenAsync,
+        sendCourseNotification
     };
 }();
 

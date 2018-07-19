@@ -121,12 +121,12 @@ var dao = function () {
     };
 
     return {
-        getAsync: getAsync,
-        createAsync: createAsync,
-        updateAsync: updateAsync,
-        scanAsync: scanAsync,
-        removeAsync: removeAsync,
-        queryByScheduledTimeAsync: queryByScheduledTimeAsync
+        getAsync,
+        createAsync,
+        updateAsync,
+        scanAsync,
+        removeAsync,
+        queryByScheduledTimeAsync
     };
 }();
 

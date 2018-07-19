@@ -55,7 +55,7 @@ module.exports = {
         '<img src="cid:unique@kreata.ee"/></div>',
 
     teacherLeaveEmail: '<div style="font-family:Calibri (Body);">%s,<br/><br/>' +
-    '%s will cancel his/her lesson on %s. FYI.<br/><br/>' +
+    '%s will cancel the lesson on %s. FYI.<br/><br/>' +
     'Have a nice day. Thanks!<br/><br/>' +
     'OPS team<br/>' +
     '<img src="cid:unique@kreata.ee"/></div>',

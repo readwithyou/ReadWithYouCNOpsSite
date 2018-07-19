@@ -86,10 +86,10 @@ var dao = function () {
     };
 
     return {
-        createAsync: createAsync,
-        getAsync: getAsync,
-        scanAsync: scanAsync,
-        updateLockAsync: updateLockAsync
+        createAsync,
+        getAsync,
+        scanAsync,
+        updateLockAsync
     };
 }();
 

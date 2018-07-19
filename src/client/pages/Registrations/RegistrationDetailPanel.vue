@@ -119,104 +119,39 @@
                     </div>
                 </div>
 
-                <div class="md-layout" v-if="registration.type==='child'">
-                    <div class="md-layout-item md-small-size-100 md-size-50">
-                        <md-field>
-                            <label for="if-read-en-book">{{ $t("message.question_if_child_read_en_book") }}</label>
-                            <md-select name="if-read-en-book" id="if-read-en-book" v-model="registration.ifReadEnBook" md-dense :disabled="!editting">
-                                <md-option value=true>{{ $t("message.yes") }}</md-option>
-                                <md-option value=false>{{ $t("message.no") }}</md-option>
-                            </md-select>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-50">
-                        <md-field>
-                            <label for="num-book-bought">{{ $t("message.question_num_book_bought") }}</label>
-                            <md-input type="number" id="num-book-bought" name="num-book-bought" autocomplete="numBookBought" v-model="registration.numBookBought" :disabled="!editting" />
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-50">
-                        <md-field>
-                            <label for="if-read-for-child">{{ $t("message.question_if_read_for_child") }}</label>
-                            <md-select name="if-read-for-child" id="if-read-for-child" v-model="registration.ifReadForChild" md-dense :disabled="!editting">
-                                <md-option value=true>{{ $t("message.yes") }}</md-option>
-                                <md-option value=false>{{ $t("message.no") }}</md-option>
-                            </md-select>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-50">
-                        <md-field>
-                            <label for="if-intl-education">{{ $t("message.question_if_intl_education") }}</label>
-                            <md-select name="if-intl-education" id="if-intl-education" v-model="registration.ifIntlEducation" md-dense :disabled="!editting">
-                                <md-option value=true>{{ $t("message.yes") }}</md-option>
-                                <md-option value=false>{{ $t("message.no") }}</md-option>
-                            </md-select>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                        <md-field>
-                            <label for="reading-blocker">{{ $t("message.question_child_reading_blocker") }}</label>
-                            <md-textarea id="reading-blocker" name="reading-blocker" v-model="registration.readingBlocker" :disabled="!editting" ></md-textarea>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                        <md-field>
-                            <label for="en-book-example">{{ $t("message.question_child_reading_example") }}</label>
-                            <md-textarea id="en-book-example" name="en-book-example" v-model="registration.enBookExample" :disabled="!editting" ></md-textarea>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                        <md-field>
-                            <label for="expectation">{{ $t("message.question_expectation") }}</label>
-                            <md-textarea id="expectation" name="expectation" v-model="registration.expectation" :disabled="!editting" ></md-textarea>
-                        </md-field>
-                    </div>
-                </div>
 
-                <div class="md-layout" v-else>
-                    <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field>
-                            <label>{{ $t("message.question_if_read_en_book") }}</label>
-                            <md-select name="if-read-en-book" id="if-read-en-book" v-model="registration.ifReadEnBook" md-dense :disabled="!editting">
-                                <md-option value=true>{{ $t("message.yes") }}</md-option>
-                                <md-option value=false>{{ $t("message.no") }}</md-option>
+                <div class="md-layout">
+                    <div class="md-layout-item md-small-size-100 md-size-50">
+                        <md-field :class="getValidationClass('currentLevel')">
+                            <label for="current-level">{{ $t("message.current_level") }}</label>
+                            <md-select name="current-level" id="current-level" v-model="registration.currentLevel" md-dense :disabled="!editting">
+                                <md-option value=LEVEL_ZERO>{{ $t("message.reg_LEVEL_ZERO") }}</md-option>
+                                <md-option value=LEVEL_ONE>{{ $t("message.reg_LEVEL_ONE") }}</md-option>
+                                <md-option value=LEVEL_TWO>{{ $t("message.reg_LEVEL_TWO") }}</md-option>
+                                <md-option value=LEVEL_THREE>{{ $t("message.reg_LEVEL_THREE") }}</md-option>
                             </md-select>
+                            <span class="md-error" v-if="!$v.registration.currentLevel.required">
+                                {{ $t("message.required_validation_error") }}
+                            </span>
                         </md-field>
                     </div>
-                    <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field>
-                            <label>{{ $t("message.question_num_book_bought") }}</label>
-                            <md-input type="number" v-model="registration.numBookBought" :disabled="!editting" />
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field>
-                            <label>{{ $t("message.question_num_book_read") }}</label>
-                            <md-input type="number" v-model="registration.numBookRead" :disabled="!editting" />
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                        <md-field>
-                            <label for="reading-blocker">{{ $t("message.question_reading_blocker") }}</label>
-                            <md-textarea id="reading-blocker" name="reading-blocker" v-model="registration.readingBlocker" :disabled="!editting" ></md-textarea>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                        <md-field>
-                            <label for="exprience">{{ $t("message.question_exprience") }}</label>
-                            <md-textarea id="exprience" name="exprience" v-model="registration.exprience" :disabled="!editting" ></md-textarea>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                        <md-field>
-                            <label for="expectation">{{ $t("message.question_expectation") }}</label>
-                            <md-textarea id="expectation" name="expectation" v-model="registration.expectation" :disabled="!editting" ></md-textarea>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-size-100">
-                        <md-field>
-                            <label for="favBooks">{{ $t("message.question_fav_books") }}</label>
-                            <md-textarea id="favBooks" name="favBooks" v-model="registration.favBooks" :disabled="!editting" ></md-textarea>
+                    <div class="md-layout-item md-small-size-100 md-size-50">
+                        <md-field :class="getValidationClass('hobby')">
+                            <label for="hobby">{{ $t("message.hobby") }}</label>
+                            <md-select v-model="registration.hobby" name="hobby" id="hobby" :disabled="!editting" multiple>
+                                <md-option value="ANIMAL">{{ $t("message.animal") }}</md-option>
+                                <md-option value="PLANT">{{ $t("message.plant") }}</md-option>
+                                <md-option value="ASTRONOMY">{{ $t("message.astronomy") }}</md-option>
+                                <md-option value="ART">{{ $t("message.art") }}</md-option>
+                                <md-option value="LITERATURE">{{ $t("message.literature") }}</md-option>
+                                <md-option value="NOVEL">{{ $t("message.novel") }}</md-option>
+                                <md-option value="ECONOMIC">{{ $t("message.economic") }}</md-option>
+                                <md-option value="SOCIAL">{{ $t("message.social") }}</md-option>
+                                <md-option value="HISTORY">{{ $t("message.history") }}</md-option>
+                            </md-select>
+                            <span class="md-error" v-if="!$v.registration.hobby.required">
+                                {{ $t("message.required_validation_error") }}
+                            </span>
                         </md-field>
                     </div>
                 </div>
@@ -240,7 +175,7 @@
                     <div class="md-layout-item md-small-size-100 md-size-100">
                         <md-field>
                             <label>{{ $t("message.remarks") }}</label>
-                            <md-input type="text" id="remarks" name="remarks" autocomplete="remarks" v-model="registration.remarks" :disabled="!editting" />
+                            <md-textarea id="remarks" name="remarks" v-model="registration.remarks" :disabled="!editting"></md-textarea>
                         </md-field>
                     </div>
                 </div>
@@ -269,7 +204,7 @@ export default {
   },
   data() {
     return {
-      registration: {},
+      registration: { hobby: [] },
       editting: false
     };
   },
@@ -297,6 +232,12 @@ export default {
       email: {
         required,
         email
+      },
+      currentLevel: {
+        required
+      },
+      hobby: {
+        required
       },
       preTimeSlot: {
         required

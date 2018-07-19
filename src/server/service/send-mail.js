@@ -26,7 +26,7 @@ var sendMail = function () {
         })
     };
     return {
-        sendAsync: sendAsync
+        sendAsync
     };
 }();
 

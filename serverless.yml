@@ -23,7 +23,7 @@ functions:
   ddbhandler:
     handler: lambda.ddb_handler
     events:
-      - stream: arn:aws-cn:dynamodb:cn-north-1:398835145439:table/Students_Registration/stream/2018-07-09T05:54:50.917
+      - stream: arn:aws-cn:dynamodb:cn-north-1:398835145439:table/Students_Registration/stream/2018-07-18T12:12:06.787
       - stream: arn:aws-cn:dynamodb:cn-north-1:398835145439:table/Book_Inventory/stream/2018-07-15T05:23:26.952
   course_notification_handler:
     handler: lambda.course_notification_handler

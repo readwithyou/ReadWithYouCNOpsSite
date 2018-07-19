@@ -1,135 +1,79 @@
 <template>
-
-  <data-tables :data="regs" :show-action-bar="false" :custom-filters="customFilters" :table-props="tableProps">
+  <div>
     <md-dialog-confirm
       :md-active.sync="deleteDialogActive"
-      md-title="确认"
-      md-content="操作不能恢复，确定删除试课报名信息么？"
-      md-confirm-text="确认"
-      md-cancel-text="取消"
+      :md-title="$t('message.confirm')"
+      :md-content="$t('message.registration_delete_confirmation_message')"
+      :md-confirm-text="$t('message.confirm')"
+      :md-cancel-text="$t('message.cancel')"
       @md-cancel="onCancelDelete"
       @md-confirm="onConfirmDelete" />
-    <el-row slot="custom-tool-bar" style="margin-bottom: 10px">
-      <el-col :span="10">
-        <el-dropdown @command="handleClick">
-          <el-button type="default">{{ $t("message.create") }}<i class="el-icon-plus el-icon--right"></i></el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="child">{{ $t("message.child") }}</el-dropdown-item>
-            <el-dropdown-item command="adult">{{ $t("message.adult") }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </el-col>
-      <el-col :span="5" :offset="9">
-        <el-input v-model="customFilters[0].vals"></el-input>
-      </el-col>
-    </el-row>
 
-    <el-table-column v-for="title in titles" :prop="title.prop" :formatter="title.formatter" :label="title.label" :key="title.prop" sortable="custom">
-    </el-table-column>
-    <el-table-column label="处理" min-width="100px">
-      <template scope="scope">
-        <el-button v-for="button in customButtonsForRow(scope.row)" :key="button.name" type="text" @click="button.handler">
-          <md-icon>{{button.icon}}</md-icon>
-        </el-button>
-      </template>
-    </el-table-column>
-  </data-tables>
+    <md-table v-model="searched" md-sort="createTime" md-sort-order="asc">
+      <md-table-toolbar>
+        <div class="md-toolbar-section-start">
+          <md-menu>
+            <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+              <md-icon>add</md-icon>
+            </md-button>
+            <md-menu-content>
+              <md-menu-item @click="newChildRegistration">
+                <span>{{ $t("message.child_registration") }}</span>
+              </md-menu-item>
+              <md-menu-item @click="newAdultRegistration">
+                <span>{{ $t("message.adult_registration") }}</span>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </div>
+
+        <md-field md-clearable class="md-toolbar-section-end">
+          <md-input :placeholder="$t('message.name_search_hint')" v-model="search" @input="searchOnTable" />
+        </md-field>
+      </md-table-toolbar>
+
+      <md-table-empty-state
+        :md-label="$t('message.no_registration_found_message')"
+        :md-description="$t('message.no_registration_found_message_detal')">
+      </md-table-empty-state>
+
+      <md-table-row slot="md-table-row" slot-scope="{ item }">
+        <md-table-cell :md-label="$t('message.student_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.en_name')" md-sort-by="enName">{{ item.enName }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.cn_name')" md-sort-by="cnName">{{ item.cnName }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.registration_type')" md-sort-by="type">{{ item.type === "adult" ? "成人" : "少儿" }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.registration_source')" md-sort-by="tag">{{ item.tag }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.registration_time')" md-sort-by="createTime">
+          {{ item.createTime?new Date(item.createTime).toLocaleDateString():'' }}
+        </md-table-cell>
+        <md-table-cell :md-label="$t('message.status')" md-sort-by="status">
+           <md-chip :class="getStatusClass(item.status)">{{ formatStatus(item.status) }}</md-chip>
+        </md-table-cell>
+        <md-table-cell :md-label="$t('message.scheduled_time')" md-sort-by="scheduledTime">
+          {{ item.scheduledTime?new Date(item.scheduledTime).toLocaleString():'' }}
+        </md-table-cell>
+        <md-table-cell :md-label="$t('message.teacher')" md-sort-by="teacher">{{ item.teacher }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.action')">
+          <a @click="viewRegistration(item.ID)">{{ $t("message.view") }}</a>&nbsp;&nbsp;
+          <a @click="deleteRegistration(item.ID)" v-if="item.status==0">{{ $t("message.delete") }}</a>
+        </md-table-cell>
+      </md-table-row>
+    </md-table>
+  </div>
 </template>
 
 <script>
-var titles = [
-  {
-    prop: "ID",
-    label: "学号"
-  },
-  {
-    prop: "cnName",
-    label: "姓名"
-  },
-  {
-    prop: "type",
-    label: "报名类型",
-    formatter: (row, column, cellValue, index) => {
-      if (cellValue === "adult") {
-        return "成人";
-      }
-      if (cellValue === "child") {
-        return "少儿";
-      }
-    }
-  },
-  {
-    prop: "tag",
-    label: "报名来源"
-  },
-  {
-    prop: "createTime",
-    label: "报名时间",
-    formatter: (row, column, cellValue, index) => {
-      if (cellValue) {
-        return new Date(cellValue).toLocaleString();
-      }
-      return "";
-    }
-  },
-  {
-    prop: "status",
-    label: "状态",
-    formatter: (row, column, cellValue, index) => {
-      if (cellValue === 0) {
-        return "未处理";
-      }
-      if (cellValue === 1) {
-        return "已预约";
-      }
-      if (cellValue === 2) {
-        return "已完成";
-      }
-    }
-  },
-  {
-    prop: "scheduledTime",
-    label: "试课时间",
-    formatter: (row, column, cellValue, index) => {
-      if (cellValue) {
-        return new Date(cellValue).toLocaleString();
-      }
-      return "";
-    }
-  },
-  {
-    prop: "teacher",
-    label: "老师"
-  }
-];
-
-var customFilters = [
-  {
-    vals: ""
-  },
-  {
-    vals: [],
-    props: "Type"
-  }
-];
-
-var tableProps = {
-  border: false,
-  stripe: true,
-  defaultSort: {
-    prop: "ID",
-    order: "descending"
-  }
+const toLower = text => {
+  return text ? text.toString().toLowerCase() : "";
 };
 
 export default {
   data() {
     return {
-      titles,
-      customFilters,
-      tableProps,
+      search: null,
+      searched: [],
+      registrations: [],
       teachers: [],
-      regs: [],
       deleteDialogActive: false,
       entryToDelete: null
     };
@@ -138,26 +82,36 @@ export default {
     this.fetchData();
   },
   methods: {
-    handleClick(command) {
-      this.$router.push({ path: "/registrations/new?type=" + command });
-    },
-    fetchRegistrations() {
-      var resource = this.$resource("/api/registrations");
-      resource.get().then(
-        response => {
-          this.regs = response.body;
-          for (var i = 0; i < this.regs.length; i++) {
-            for (var j = 0; j < this.teachers.length; j++) {
-              if (this.teachers[j].ID === this.regs[i].teacherId) {
-                this.regs[i].teacher = this.teachers[j].name;
-              }
-            }
-          }
-        },
-        response => {
-          this.notifyFetchingError();
-        }
+    searchOnTable() {
+      this.searched = this.registrations.filter(
+        item =>
+          toLower(item.cnName).includes(toLower(this.search)) ||
+          toLower(item.enName).includes(toLower(this.search))
       );
+    },
+    formatStatus(status) {
+      switch (status) {
+        case 0:
+          return this.$i18n.t('message.pending_status');
+        case 1:
+          return this.$i18n.t('message.scheduled_status');
+        case 2:
+          return this.$i18n.t('message.finished_status');
+        default:
+          return this.$i18n.t('message.unknown_status');
+      }
+    },
+    getStatusClass(status) {
+      switch (status) {
+        case 0:
+          return 'md-primary';
+        case 1:
+          return 'md-default';
+        case 2:
+          return 'md-default';
+        default:
+          return 'md-accent';
+      }
     },
     fetchData() {
       var resource = this.$resource("/api/teachers");
@@ -165,6 +119,26 @@ export default {
         this.teachers = response.body;
         this.fetchRegistrations();
       });
+    },
+    fetchRegistrations() {
+      var resource = this.$resource("/api/registrations");
+      resource.get().then(
+        response => {
+          this.registrations = response.body;
+          for (var i = 0; i < this.registrations.length; i++) {
+            for (var j = 0; j < this.teachers.length; j++) {
+              if (this.teachers[j].ID === this.registrations[i].teacherId) {
+                this.registrations[i].teacher = this.teachers[j].name;
+              }
+            }
+          }
+
+          this.searched = this.registrations;
+        },
+        response => {
+          this.notifyFetchingError();
+        }
+      );
     },
     notifyFetchingError() {
       this.$notify({
@@ -175,40 +149,22 @@ export default {
         type: "danger"
       });
     },
-    customButtonsForRow(row) {
-      if (row.status === 0) {
-        return [
-          {
-            name: "view",
-            icon: "edit",
-            handler: _ => {
-              this.$router.push({ path: "/registrations/" + row.ID });
-            }
-          },
-          {
-            name: "delete",
-            icon: "delete",
-            handler: _ => {
-              this.entryToDelete = row;
-              this.deleteDialogActive = true;
-            }
-          }
-        ];
-      } else {
-        return [
-          {
-            name: "view",
-            icon: "edit",
-            handler: _ => {
-              this.$router.push({ path: "/registrations/" + row.ID });
-            }
-          }
-        ];
-      }
+    newAdultRegistration() {
+      this.$router.push({ path: "/registrations/new?type=adult" });
+    },
+    newChildRegistration() {
+      this.$router.push({ path: "/registrations/new?type=child" });
+    },
+    viewRegistration(registrationId){
+      this.$router.push({ path: "/registrations/" + registrationId })
+    },
+    deleteRegistration(registrationId){
+      this.idToDelete = registrationId;
+      this.deleteDialogActive = true;
     },
     onConfirmDelete() {
       var resource = this.$resource(
-        "/api/registrations/" + this.entryToDelete.ID
+        "/api/registrations/" + this.idToDelete
       );
       resource.delete().then(
         response => {
@@ -221,7 +177,7 @@ export default {
       );
     },
     onCancelDelete() {
-      this.entryToDelete = null;
+      this.idToDelete = null;
     },
     notifyRemoveError() {
       this.$notify({

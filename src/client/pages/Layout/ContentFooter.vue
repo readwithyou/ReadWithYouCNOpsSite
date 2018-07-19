@@ -3,9 +3,14 @@
     <div class="container">
         <nav>
             <ul>
-              <li>
-                <router-link :to="{path:'/dashboard'}">主页</router-link>
-              </li>
+                <li @click="back" v-if="canGoBack()">
+                    <a href="#">
+                        <md-icon>arrow_back</md-icon>{{ $t("message.return") }}
+                    </a>
+                </li>
+                <li>
+                    <router-link :to="{path:'/dashboard'}">主页</router-link>
+                </li>
                 <li>
                     <a href="#">
                         Company
@@ -31,8 +36,16 @@
 
 </template>
 <script>
-export default {}
-
+export default {
+  methods: {
+    back: function() {
+      this.$router.go(-1);
+    },
+    canGoBack: function() {
+      return this.$route.path.toString().split("/").length > 2;
+    }
+  }
+};
 </script>
 <style>
 
