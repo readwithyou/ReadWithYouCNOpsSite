@@ -1,24 +1,9 @@
 <template>
   <div>
-    <md-table v-model="searched" md-sort="code" md-sort-order="asc">
+    <md-table v-model="searched" @md-selected="onSelect">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
-          <md-menu>
-            <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
-              <md-icon>menu</md-icon>
-            </md-button>
-            <md-menu-content>
-              <md-menu-item @click="newBook()">
-                <span>{{ $t("message.new_book") }}</span>
-              </md-menu-item>
-              <md-menu-item @click="handleInventory('inbound')">
-                <span>{{ $t("message.inbound") }}</span>
-              </md-menu-item>
-              <md-menu-item @click="handleInventory('outbound')">
-                <span>{{ $t("message.outbound") }}</span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+          <h1 class="md-title">{{ $tc('message.select_book_hint_msg', selected.length, { count: selected.length}) }}</h1>
         </div>
 
         <md-field md-clearable class="md-toolbar-section-end">
@@ -26,12 +11,11 @@
         </md-field>
       </md-table-toolbar>
 
-      <md-table-empty-state
-        :md-label="$t('message.no_book_found_message')"
-        :md-description="$t('message.no_book_found_message_detail')">
-      </md-table-empty-state>
-
-      <md-table-row slot="md-table-row" slot-scope="{ item }">
+      <md-table-row 
+      slot="md-table-row" 
+      slot-scope="{ item }" 
+      :md-disabled="shouldBeDisabled(item)"
+      md-selectable="multiple" md-auto-select>
         <md-table-cell :md-label="$t('message.book_code')" md-sort-by="code">{{ item.code }}</md-table-cell>
         <md-table-cell :md-label="$t('message.book_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.book_set')" md-sort-by="set">{{ item.set }}</md-table-cell>
@@ -40,32 +24,48 @@
         <md-table-cell :md-label="$t('message.read_level')" md-sort-by="readLevel">{{ formatLevel(item.readLevel) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.priority')" md-sort-by="priority">{{ formatPriority(item.priority) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.inventory_quantity')" md-sort-by="quantity">{{ item.quantity }}</md-table-cell>      
-        <md-table-cell :md-label="$t('message.locked_quantity')" md-sort-by="locked">{{ item.locked }}</md-table-cell> 
-        <md-table-cell :md-label="$t('message.action')">
-          <a @click="viewBook(item.ID)">{{ $t("message.view") }}</a>
-        </md-table-cell>
+        <md-table-cell :md-label="$t('message.locked_quantity')" md-sort-by="locked">{{ item.locked }}</md-table-cell>    
       </md-table-row>
     </md-table>
+    
   </div>
 </template>
 
 <script>
 const toLower = text => {
-  return text ? text.toString().toLowerCase() : "";
+  return text.toString().toLowerCase();
 };
 
 export default {
-  data() {
-    return {
-      search: null,
-      searched: [],
-      books: []
-    };
+  name: "TableMultiple",
+  props: {
+    levelBaseline: {
+      type: String
+    },
+    language: {
+      type: String
+    }
   },
+  data: () => ({
+    search: null,
+    searched: [],
+    selected: [],
+    books: []
+  }),
   created() {
     this.fetchData();
   },
+  watch: {
+    selected: {
+      handler(val) {
+        this.$emit("books-selected", this.selected);
+      }
+    }
+  },
   methods: {
+    onSelect(items) {
+      this.selected = items;
+    },
     searchOnTable() {
       this.searched = this.books.filter(
         item =>
@@ -73,6 +73,15 @@ export default {
           toLower(item.name).includes(toLower(this.search)) ||
           toLower(item.set).includes(toLower(this.search)) ||
           toLower(item.isbn).includes(toLower(this.search))
+      );
+    },
+    shouldBeDisabled(item) {
+      return (
+        item.quantity <= 0 ||
+        item.priority === "UNAVAILABLE" ||
+        item.readLevel - this.levelBaseline > 10 ||
+        this.levelBaseline - item.readLevel > 10 ||
+        item.language !== this.language
       );
     },
     formatLevel(level) {
@@ -86,15 +95,6 @@ export default {
         return this.$i18n.t("message.priority_" + priority);
       }
       return "";
-    },
-    newBook() {
-      this.$router.push({ path: "/books/new" });
-    },
-    viewBook(bookId) {
-      this.$router.push({ path: "/books/" + bookId });
-    },
-    handleInventory(command) {
-      this.$router.push({ path: "/books/" + command });
     },
     fetchData() {
       var resource = this.$resource("/api/books");
@@ -110,7 +110,7 @@ export default {
     },
     notifyFetchingError() {
       this.$notify({
-        message: "服务器端获取图书数据失败！",
+        message: "Failed to fetch book information from server side!",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",
@@ -120,3 +120,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.md-table + .md-table {
+  margin-top: 16px;
+}
+</style>

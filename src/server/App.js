@@ -39,6 +39,9 @@ app.use('/api/tickets', TicketController);
 var BookController = require('./controller/book-controller');
 app.use('/api/books', BookController);
 
+var BookListController = require('./controller/book-list-controller');
+app.use('/api/booklists', BookListController);
+
 var InventoryController = require('./controller/inventory-controller');
 app.use('/api/inventory', InventoryController);
 

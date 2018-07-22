@@ -28,6 +28,8 @@ import BookCard from '../pages/Books/BookCard.vue'
 import BookInventoryForm from '../pages/Books/BookInventoryForm.vue'
 import BookInbound from '../pages/Books/BookInbound.vue'
 import BookOutbound from '../pages/Books/BookOutbound.vue'
+import BookSelector from '../pages/Books/BookSelector.vue'
+import BookListTable from '../pages/Books/BookListTable.vue'
 
 // Student
 import StudentsTable from '../pages/Students/StudentsTable.vue'
@@ -59,6 +61,8 @@ export {
   BookInventoryForm,
   BookInbound,
   BookOutbound,
+  BookSelector,
+  BookListTable,
   StudentsTable,
   StudentForm,
   StudentDetailPanel,

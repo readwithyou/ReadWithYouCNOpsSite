@@ -30,7 +30,7 @@
                     <md-field :class="getValidationClass('enName')">
                         <label>{{ $t("message.en_name") }}</label>
                         <md-input v-model="entry.enName" type="text"></md-input>
-                        <span class="md-error" v-if="!$v.entry.cnName.required">
+                        <span class="md-error" v-if="!$v.entry.enName.required">
                             {{ $t("message.en_name_required_validation_error") }}
                         </span>
                     </md-field>

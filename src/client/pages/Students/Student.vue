@@ -14,7 +14,7 @@
               </md-tab>
 
               <md-tab id="tab-other" :md-label="$t('message.book_list')" md-icon="collections_bookmark">
-                under construction... please be patient...:)
+                <book-list-table></book-list-table>
               </md-tab>
 
             </md-tabs>
@@ -25,13 +25,14 @@
 </template>
 <script>
 import { NavTabsCard, NavTabsTable } from "components";
-import { StudentDetailPanel } from "pages";
+import { StudentDetailPanel, BookListTable } from "pages";
 
 export default {
   components: {
     NavTabsCard,
     NavTabsTable,
-    StudentDetailPanel
+    StudentDetailPanel,
+    BookListTable
   },
   data() {
     return {};

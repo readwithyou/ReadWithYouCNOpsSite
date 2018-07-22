@@ -16,6 +16,7 @@ import CreateBook from 'pages/Books/CreateBook.vue'
 import Book from 'pages/Books/Book.vue'
 import BookInbound from 'pages/Books/BookInbound.vue'
 import BookOutbound from 'pages/Books/BookOutbound.vue'
+import CreateBookList from 'pages/Books/CreateBookList.vue'
 import Users from 'pages/UserProfile/Users.vue'
 import UserProfile from 'pages/UserProfile.vue'
 import LeaveForm from 'pages/tickets/LeaveForm.vue'
@@ -141,6 +142,12 @@ const routes = [
         path: 'books/:id',
         name: '图书管理详情页',
         component: Book,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'students/:id/booklists/new',
+        name: '新的书单',
+        component: CreateBookList,
         beforeEnter: ifAuthenticated,
       },
       {

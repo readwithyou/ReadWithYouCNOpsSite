@@ -37,6 +37,19 @@
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
+                    <md-field :class="getValidationClass('language')">
+                        <label for="language">{{ $t("message.language") }}</label>
+                        <md-select name="language" id="language" v-model="entry.language" md-dense> 
+                            <md-option value="en">{{ $t("message.en_lang") }}</md-option>
+                            <md-option value="cn">{{ $t("message.cn_lang") }}</md-option>
+                            <md-option value="es">{{ $t("message.es_lang") }}</md-option>
+                        </md-select>
+                        <span class="md-error" v-if="!$v.entry.language.required">
+                            {{ $t("message.required_validation_error") }}
+                        </span>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
                         <label for="book-press">{{ $t("message.book_press") }}</label>
                         <md-input name="book-press" id="book-press" v-model="entry.press" :disabled="sending" type="text"></md-input>
@@ -62,19 +75,19 @@
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('level')">
+                    <md-field :class="getValidationClass('readLevel')">
                         <label for="book-level">{{ $t("message.read_level") }}</label>
-                        <md-select name="book-level" id="book-level" v-model="entry.level" md-dense :disabled="sending">
-                            <md-option value="ONE">{{ $t("message.level_ONE") }}</md-option>
-                            <md-option value="TWO">{{ $t("message.level_TWO") }}</md-option>
-                            <md-option value="THREE">{{ $t("message.level_THREE") }}</md-option>
-                            <md-option value="FOUR">{{ $t("message.level_FOUR") }}</md-option>
-                            <md-option value="FIVE">{{ $t("message.level_FIVE") }}</md-option>
-                            <md-option value="SIX">{{ $t("message.level_SIX") }}</md-option>
-                            <md-option value="SIX_ADULT">{{ $t("message.level_SIX_ADULT") }}</md-option>
-                            <md-option value="SEVEN">{{ $t("message.level_SEVEN") }}</md-option>
+                        <md-select name="book-level" id="book-level" v-model="entry.readLevel" md-dense :disabled="sending">                                
+                            <md-option value="10">{{ $t("message.level_10") }}</md-option>
+                            <md-option value="20">{{ $t("message.level_20") }}</md-option>
+                            <md-option value="30">{{ $t("message.level_30") }}</md-option>
+                            <md-option value="40">{{ $t("message.level_40") }}</md-option>
+                            <md-option value="50">{{ $t("message.level_50") }}</md-option>
+                            <md-option value="60">{{ $t("message.level_60") }}</md-option>
+                            <md-option value="65">{{ $t("message.level_65") }}</md-option>
+                            <md-option value="70">{{ $t("message.level_70") }}</md-option>
                         </md-select>
-                        <span class="md-error" v-if="!$v.entry.level.required">
+                        <span class="md-error" v-if="!$v.entry.readLevel.required">
                             {{ $t("message.required_validation_error") }}
                         </span>
                     </md-field>
@@ -176,10 +189,13 @@ export default {
       ebookUrl: {
         required
       },
-      level: {
+      readLevel: {
         required
       },
       priority: {
+        required
+      },
+      language: {
         required
       }
     }
