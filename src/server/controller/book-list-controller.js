@@ -30,6 +30,24 @@ router.get('/', verifyToken, function (req, res, next) {
     );
 });
 
+router.get('/:id', verifyToken, function (req, res, next) {
+    bookListDao.getAsync(req.params.id).then(
+        (data) => res.json(data.Item),
+        () => res.status(500).end()
+    );
+});
+
+router.put('/:id', verifyToken, function (req, res, next) {
+    var item = req.body;
+    item.modifyTime = new Date().getTime();
+    item.modifyBy = req.username;
+
+    bookListDao.updateAsync(item).then(
+        (data) => res.json(data.Item),
+        () => res.status(500).end()
+    );
+});
+
 router.delete('/:id', verifyToken, function (req, res, next) {
     bookListDao.removeAsync(req.params.id).then(
         (data) => res.status(200).end(),

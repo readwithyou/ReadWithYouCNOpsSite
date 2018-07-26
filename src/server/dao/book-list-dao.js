@@ -26,6 +26,25 @@ var dao = function () {
         });
     };
 
+    var getAsync = function (id) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                ID: id
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.get(params, function (err, data) {
+                if (err) {
+                    console.log('Get DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     var scanAsync = function () {
         var params = {
             TableName: ddbTable
@@ -61,8 +80,27 @@ var dao = function () {
         });
     };
 
+    var updateAsync = function (item) {
+        var params = {
+            TableName: ddbTable,
+            Item: item
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.put(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         createAsync,
+        getAsync,
+        updateAsync,
         scanAsync,
         removeAsync
     };

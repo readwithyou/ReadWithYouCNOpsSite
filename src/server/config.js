@@ -1,5 +1,5 @@
 module.exports = {
-    'secret': 'da3057da-82df-4fbf-8dc2-69b41b901570',
+    'secret': 'e4f2b369-651f-409c-a5ec-c1d4ac813af4',
     'emailAccount': 'lessons@readwithyou.com',
     'emailKey': 'MXPingguo#18',
     'wechatTokenUrl': 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s',

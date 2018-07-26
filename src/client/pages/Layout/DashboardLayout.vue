@@ -32,6 +32,10 @@
         <md-icon>receipt</md-icon>
         <p>{{ $t("message.tickets") }}</p>
       </sidebar-link>
+      <sidebar-link to="/leave">
+        <md-icon>calendar_today</md-icon>
+        <p>{{ $t("message.leave_management") }}</p>
+      </sidebar-link>
       <!--sidebar-link to="/table">
         <md-icon>content_paste</md-icon>
         <p>Table list</p>

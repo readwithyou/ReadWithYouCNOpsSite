@@ -7,6 +7,7 @@
         </md-card-header>
 
         <md-card-content>
+        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">  
             <h4>{{ $t("message.basic_info") }}</h4>
             <div class="md-layout">
                 <div class="md-layout-item md-small-size-100 md-size-50">
@@ -125,6 +126,7 @@
                     </md-field>
                 </div>
             </div>
+        </div>
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />

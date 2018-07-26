@@ -28,8 +28,10 @@ import BookCard from '../pages/Books/BookCard.vue'
 import BookInventoryForm from '../pages/Books/BookInventoryForm.vue'
 import BookInbound from '../pages/Books/BookInbound.vue'
 import BookOutbound from '../pages/Books/BookOutbound.vue'
-import BookSelector from '../pages/Books/BookSelector.vue'
-import BookListTable from '../pages/Books/BookListTable.vue'
+
+// BookList
+import BookSelector from '../pages/BookList/BookSelector.vue'
+import BookListTable from '../pages/BookList/BookListTable.vue'
 
 // Student
 import StudentsTable from '../pages/Students/StudentsTable.vue'
@@ -38,6 +40,11 @@ import StudentDetailPanel from '../pages/Students/StudentDetailPanel.vue'
 
 // User
 import UsersTable from '../pages/UserProfile/UsersTable.vue'
+
+//Tickets
+import TicketsTable from '../pages/Tickets/TicketsTable.vue'
+import LeaveManagementForm from '../pages/Tickets/LeaveManagementForm.vue'
+import CreateTicket from '../pages/Tickets/CreateTicket.vue'
 
 export {
   SignInPanel,
@@ -66,5 +73,8 @@ export {
   StudentsTable,
   StudentForm,
   StudentDetailPanel,
-  UsersTable
+  UsersTable,
+  TicketsTable,
+  LeaveManagementForm,
+  CreateTicket
 }

@@ -42,6 +42,7 @@ var regService = function () {
             //CST is also abbr for China Standard Time. It is a conflict with American CST
             displayTimezone = 'China Standard Time';
         }
+        let timeOffset = 'UTC/GMT ' + startMoment.format('Z');
 
         if (locale == 'zh-CN') {
             return scheduledDay
@@ -51,7 +52,7 @@ var regService = function () {
             return scheduledDay
                 + '(' + scheduledDayOfWeek + ') '
                 + scheduledStartTime + '-' + scheduledEndTime
-                + scheduledAmPm + '(' + displayTimezone + ') ';
+                + scheduledAmPm + '(' + displayTimezone + ', ' + timeOffset + ') ';
         }
     };
 

@@ -9,7 +9,7 @@
       @md-cancel="onCancelDelete"
       @md-confirm="onConfirmDelete" />
 
-    <md-table v-model="searched" md-sort="createTime" md-sort-order="asc">
+    <md-table v-model="searched" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <md-menu>
@@ -75,7 +75,9 @@ export default {
       registrations: [],
       teachers: [],
       deleteDialogActive: false,
-      entryToDelete: null
+      entryToDelete: null,
+      currentSort: "createTime",
+      currentSortOrder: "asc"
     };
   },
   created() {
@@ -92,25 +94,25 @@ export default {
     formatStatus(status) {
       switch (status) {
         case 0:
-          return this.$i18n.t('message.pending_status');
+          return this.$i18n.t("message.pending_status");
         case 1:
-          return this.$i18n.t('message.scheduled_status');
+          return this.$i18n.t("message.scheduled_status");
         case 2:
-          return this.$i18n.t('message.finished_status');
+          return this.$i18n.t("message.finished_status");
         default:
-          return this.$i18n.t('message.unknown_status');
+          return this.$i18n.t("message.unknown_status");
       }
     },
     getStatusClass(status) {
       switch (status) {
         case 0:
-          return 'md-primary';
+          return "md-primary";
         case 1:
-          return 'md-default';
+          return "md-default";
         case 2:
-          return 'md-default';
+          return "md-default";
         default:
-          return 'md-accent';
+          return "md-accent";
       }
     },
     fetchData() {
@@ -155,17 +157,15 @@ export default {
     newChildRegistration() {
       this.$router.push({ path: "/registrations/new?type=child" });
     },
-    viewRegistration(registrationId){
-      this.$router.push({ path: "/registrations/" + registrationId })
+    viewRegistration(registrationId) {
+      this.$router.push({ path: "/registrations/" + registrationId });
     },
-    deleteRegistration(registrationId){
+    deleteRegistration(registrationId) {
       this.idToDelete = registrationId;
       this.deleteDialogActive = true;
     },
     onConfirmDelete() {
-      var resource = this.$resource(
-        "/api/registrations/" + this.idToDelete
-      );
+      var resource = this.$resource("/api/registrations/" + this.idToDelete);
       resource.delete().then(
         response => {
           this.notifyRemoveSuccess();
@@ -195,6 +195,20 @@ export default {
         horizontalAlign: "center",
         verticalAlign: "top",
         type: "success"
+      });
+    },
+    customSort(value) {
+      return value.sort((a, b) => {
+        const sortBy = this.currentSort;
+
+        var leftValue = a[sortBy] ? a[sortBy].toString() : "";
+        var rightValue = b[sortBy] ? b[sortBy].toString() : "";
+
+        if (this.currentSortOrder === "desc") {
+          return leftValue.localeCompare(rightValue);
+        }
+
+        return rightValue.localeCompare(leftValue);
       });
     }
   }

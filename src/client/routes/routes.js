@@ -16,10 +16,14 @@ import CreateBook from 'pages/Books/CreateBook.vue'
 import Book from 'pages/Books/Book.vue'
 import BookInbound from 'pages/Books/BookInbound.vue'
 import BookOutbound from 'pages/Books/BookOutbound.vue'
-import CreateBookList from 'pages/Books/CreateBookList.vue'
+import CreateBookList from 'pages/BookList/CreateBookList.vue'
+import BookList from 'pages/BookList/BookList.vue'
 import Users from 'pages/UserProfile/Users.vue'
 import UserProfile from 'pages/UserProfile.vue'
-import LeaveForm from 'pages/tickets/LeaveForm.vue'
+import Tickets from 'pages/tickets/Tickets.vue'
+import Ticket from 'pages/tickets/Ticket.vue'
+import CreateTicket from 'pages/tickets/CreateTicket.vue'
+import LeaveManagementForm from 'pages/tickets/LeaveManagementForm.vue'
 import TableList from 'pages/TableList.vue'
 import Typography from 'pages/Typography.vue'
 import Notifications from 'pages/Notifications.vue'
@@ -151,6 +155,12 @@ const routes = [
         beforeEnter: ifAuthenticated,
       },
       {
+        path: 'students/:id/booklists/:bookListId',
+        name: '书单详情',
+        component: BookList,
+        beforeEnter: ifAuthenticated,
+      },
+      {
         path: 'users',
         name: '用户管理',
         component: Users,
@@ -164,8 +174,26 @@ const routes = [
       },
       {
         path: 'tickets',
-        name: '问题报告',
-        component: LeaveForm,
+        name: 'Tickets',
+        component: Tickets,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'tickets/new',
+        name: '新的Ticket',
+        component: CreateTicket,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'tickets/:id',
+        name: 'Ticket 详情页',
+        component: Ticket,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'leave',
+        name: '请假管理',
+        component: LeaveManagementForm,
         beforeEnter: ifAuthenticated,
       },
       {
