@@ -46,6 +46,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
+    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
@@ -57,6 +58,7 @@ const toLower = text => {
 export default {
   data() {
     return {
+      preloading: true,
       search: null,
       searched: [],
       books: []
@@ -76,7 +78,7 @@ export default {
       );
     },
     formatLevel(level) {
-      if (level) {
+      if (level != null) {
         return this.$i18n.t("message.level_" + level);
       }
       return "";
@@ -102,6 +104,7 @@ export default {
         response => {
           this.books = response.body;
           this.searched = this.books;
+          this.preloading = false;
         },
         response => {
           this.notifyFetchingError();
@@ -120,3 +123,12 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.md-progress-spinner {
+  position: absolute;
+  left: 50%;
+  top: 80px;
+  margin-left: -50px;
+  margin-top: 150px;
+}
+</style>

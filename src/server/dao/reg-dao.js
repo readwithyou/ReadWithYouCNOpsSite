@@ -62,7 +62,13 @@ var dao = function () {
 
     var scanAsync = function () {
         var params = {
-            TableName: ddbTable
+            TableName: ddbTable,
+            ProjectionExpression: "ID, enName, cnName, #type, #tag, createTime, #status, scheduledTime, teacherId",
+            ExpressionAttributeNames: {
+                "#type": "type",
+                "#tag": "tag",
+                "#status": "status",
+            },
         };
 
         return new Promise(function (resolve, reject) {

@@ -18,6 +18,8 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^3.3.7",
     "chartist": "^0.10.1",
+    "csv": "^3.1.0",
+    "csv-parse": "^2.5.0",
     "dropzone": "^5.4.0",
     "express": "^4.16.3",
     "express-partials": "^0.3.0",

@@ -41,6 +41,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
+    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
@@ -52,6 +53,7 @@ const toLower = text => {
 export default {
   data() {
     return {
+      preloading: true,
       search: null,
       searched: [],
       students: []
@@ -88,8 +90,9 @@ export default {
       var resource = this.$resource("/api/students");
       resource.get().then(
         response => {
-          this.students = response.body;
+          this.students = response.body.sort((a, b) => b.createTime - a.createTime);
           this.searched = this.students;
+          this.preloading = false;
         },
         response => {
           this.notifyFetchingError();
@@ -108,3 +111,12 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.md-progress-spinner {
+  position: absolute;
+  left: 50%;
+  top: 80px;
+  margin-left: -50px;
+  margin-top: 150px;
+}
+</style>

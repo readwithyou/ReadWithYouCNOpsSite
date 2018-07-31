@@ -11,7 +11,7 @@ router.use(bodyParser.json());
 router.post('/leave-mail', verifyToken, function (req, res, next) {
     ticketService.leaveMailAsync(req.body).then(
         () => res.status(200).end(),
-        () => res.status(500).end()
+        (err) => { console.log('Mail Error: ' + err); res.status(500).end(); }
     );
 });
 

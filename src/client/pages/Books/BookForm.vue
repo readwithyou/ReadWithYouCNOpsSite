@@ -77,15 +77,17 @@
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('readLevel')">
                         <label for="book-level">{{ $t("message.read_level") }}</label>
-                        <md-select name="book-level" id="book-level" v-model="entry.readLevel" md-dense :disabled="sending">                                
+                        <md-select name="book-level" id="book-level" v-model="entry.readLevel" md-dense :disabled="sending">
+                            <md-option value="999">{{ $t("message.level_999") }}</md-option>
+                            <md-option value="0">{{ $t("message.level_0") }}</md-option>                                
                             <md-option value="10">{{ $t("message.level_10") }}</md-option>
                             <md-option value="20">{{ $t("message.level_20") }}</md-option>
                             <md-option value="30">{{ $t("message.level_30") }}</md-option>
                             <md-option value="40">{{ $t("message.level_40") }}</md-option>
                             <md-option value="50">{{ $t("message.level_50") }}</md-option>
                             <md-option value="60">{{ $t("message.level_60") }}</md-option>
-                            <md-option value="65">{{ $t("message.level_65") }}</md-option>
                             <md-option value="70">{{ $t("message.level_70") }}</md-option>
+                            <md-option value="75">{{ $t("message.level_75") }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.readLevel.required">
                             {{ $t("message.required_validation_error") }}
@@ -128,7 +130,7 @@
                 <div class="md-layout-item md-size-100">
                     <md-field>
                         <label for="remarks">{{ $t("message.remarks") }}({{ $t("message.optional") }})</label>
-                        <md-textarea id="remarks" name="remarks" v-model="entry.remarks" :disabled="sending" ></md-textarea>                 
+                        <md-textarea id="remarks" name="remarks" v-model="entry.description" :disabled="sending" ></md-textarea>                 
                     </md-field>
                 </div>
             </div>

@@ -9,23 +9,12 @@ var registrationDao = require('../dao/reg-dao');
 var teacherDao = require('../dao/teacher-dao');
 var s3Accessor = require('../dao/s3-accessor');
 var wechatAccess = require('./wechat-access');
+var timezoneUtils = require('../utils/timezone-utils');
 
 var regService = function () {
-    var abbrs = {
-        EST: 'Eastern Standard Time/Panama Time',
-        EDT: 'Eastern Daylight Time',
-        CST: 'Central Standard Time',
-        CDT: 'Central Daylight Time',
-        MST: 'Mountain Standard Time',
-        MDT: 'Mountain Daylight Time',
-        PST: 'Pacific Standard Time',
-        PDT: 'Pacific Daylight Time',
-        JST: 'Japan Standard Time'
-    };
-
     moment.fn.zoneName = function () {
         var abbr = this.zoneAbbr();
-        return abbrs[abbr] || abbr;
+        return timezoneUtils.getAbbrs()[abbr] || abbr;
     };
 
     var formatTimeString = function (scheduledTime, locale, timezone) {
@@ -56,35 +45,23 @@ var regService = function () {
         }
     };
 
-    var getStudentScheduleMailOption = function (registration) {
+    var sendStudentScheduleMailAsync = function (registration) {
         let email = registration.email;
         let name = registration.enName ? registration.enName : registration.cnName;
         let zoomId = registration.zoomLink;
         let scheduledTimeString = formatTimeString(registration.scheduledTime, 'zh-CN', 'Asia/Shanghai');
 
         // setup email data with unicode symbols
-        let mailContent = sprintf(mailTemplates.childSchedulingEmail, name, name, scheduledTimeString, zoomId, zoomId, zoomId);
+        let subject = sprintf('%s 陪你读书试课通知', name);
+        let content = sprintf(mailTemplates.childSchedulingEmail, name, name, scheduledTimeString, zoomId, zoomId, zoomId);
         if (registration.type === 'adult') {
-            mailContent = sprintf(mailTemplates.adultSchedulingEmail, name, scheduledTimeString, zoomId, zoomId, zoomId);
+            content = sprintf(mailTemplates.adultSchedulingEmail, name, scheduledTimeString, zoomId, zoomId, zoomId);
         }
 
-        return {
-            to: email,
-            cc: 'lessons@readwithyou.com',
-            subject: sprintf('%s 陪你读书试课通知', name),
-            html: mailContent,
-            attachments: [
-                {
-                    filename: 'signature.png',
-                    content: mailTemplates.encodedSignatureImg.split("base64,")[1],
-                    encoding: 'base64',
-                    cid: 'unique@kreata.ee'
-                }
-            ]
-        };
+        return sendMail.sendWithParamsAsync(email, 'lessons@readwithyou.com', subject, content, true);
     }
 
-    var getStudentReportMailOptionAsync = function (registration) {
+    var sendStudentReportMailAsync = function (registration) {
         let email = registration.email;
         let name = registration.enName ? registration.enName : registration.cnName;
 
@@ -124,10 +101,13 @@ var regService = function () {
                 return mailOptions;
             },
             (err) => console.log('S3 accessor Error: ' + err)
+        ).then(
+            () => sendMail.sendAsync(mailOptions),
+            (err) => console.log('Mail Option Error: ' + err)
         );
     }
 
-    var getTeacherScheduleMailOptionAsync = function (registration, teacher) {
+    var sendTeacherScheduleMailAsync = function (registration, teacher) {
         let studentName = registration.enName ? registration.enName : registration.cnName;
         let age = registration.age;
         let gender = registration.gender;
@@ -197,51 +177,41 @@ var regService = function () {
                 return mailOptions;
             },
             (err) => console.log('S3 accessor Error: ' + err)
+        ).then(
+            () => sendMail.sendAsync(mailOptions),
+            (err) => console.log('Mail Option Error: ' + err)
         );
     }
 
-    var getTeacherReportMailOption = function (registration, teacher) {
+    var sendTeacherReportMailAsync = function (registration, teacher) {
         let studentName = registration.enName ? registration.enName : registration.cnName;
         let resultRemarks = registration.resultRemarks;
         let email = teacher.email;
         let name = teacher.name;
 
         // setup email data with unicode symbols
-        let mailContent = sprintf(mailTemplates.teacherReportEmail,
+        let subject = sprintf('Trial Report Feedback for %s', studentName);
+        let content = sprintf(mailTemplates.teacherReportEmail,
             name, studentName, resultRemarks);
 
-        return {
-            to: email,
-            cc: 'lessons@readwithyou.com',
-            subject: sprintf('Trial Report Feedback for %s', studentName),
-            html: mailContent,
-            attachments: [
-                {
-                    filename: 'signature.png',
-                    content: mailTemplates.encodedSignatureImg.split("base64,")[1],
-                    encoding: 'base64',
-                    cid: 'unique@kreata.ee'
-                }
-            ]
-        };
+        return sendMail.sendWithParamsAsync(email, 'lessons@readwithyou.com', subject, content, true);
     }
 
-    var getNewRegMailOption = function (registration) {
-        let studentName = registration.enName ? registration.enName : registration.cnName;
+    var sendNewRegMailAsync = function (registration) {
+        let studentName = registration.enName;
 
         // setup email data with unicode symbols
-        let mailContent = sprintf(mailTemplates.newRegistrationMail, studentName);
-        return {
-            to: 'lessons@readwithyou.com',
-            subject: sprintf('[系统邮件]试课报名通知：%s', studentName),
-            html: mailContent
-        };
+        let email = 'lessons@readwithyou.com';
+        let subject = sprintf('[系统邮件]试课报名通知：%s', studentName);
+        let content = sprintf(mailTemplates.newRegistrationMail, studentName);
+
+        return sendMail.sendWithParamsAsync(email, null, subject, content, false);
     }
 
     function mailScheduleToStudentAsync(registrationId) {
         return registrationDao.getAsync(registrationId)
             .then(
-                (data) => sendMail.sendAsync(getStudentScheduleMailOption(data.Item)),
+                (data) => sendStudentScheduleMailAsync(data.Item),
                 (err) => console.log('DDB Error: ' + err)
             );
     }
@@ -254,24 +224,16 @@ var regService = function () {
                 (err) => console.log('DDB Error: ' + err)
             )
             .then(
-                (data) => { teacher = data.Item; return getTeacherScheduleMailOptionAsync(registration, teacher); },
+                (data) => { teacher = data.Item; return sendTeacherScheduleMailAsync(registration, teacher); },
                 (err) => console.log('DDB Error: ' + err)
-            )
-            .then(
-                (data) => sendMail.sendAsync(data),
-                (err) => { console.log('Get Mail Option Error: ' + err); }
             );
     }
 
     function mailReportToStudentAsync(registrationId) {
         return registrationDao.getAsync(registrationId)
             .then(
-                (data) => getStudentReportMailOptionAsync(data.Item),
+                (data) => sendStudentReportMailAsync(data.Item),
                 (err) => console.log('DDB Error: ' + err)
-            )
-            .then(
-                (data) => sendMail.sendAsync(data),
-                (err) => console.log('Get Mail Option Error: ' + err)
             );
     }
 
@@ -283,7 +245,7 @@ var regService = function () {
                 (err) => console.log('DDB Error: ' + err)
             )
             .then(
-                (data) => sendMail.sendAsync(getTeacherReportMailOption(registration, data.Item)),
+                (data) => sendTeacherReportMailAsync(registration, data.Item),
                 (err) => console.log('DDB Error: ' + err)
             );
     }
@@ -291,7 +253,7 @@ var regService = function () {
     function mailNewRegistrationAsync(registrationId) {
         return registrationDao.getAsync(registrationId)
             .then(
-                (data) => sendMail.sendAsync(getNewRegMailOption(data.Item)),
+                (data) => sendNewRegMailAsync(data.Item),
                 (err) => console.log('DDB Error: ' + err)
             );
     }

@@ -18,7 +18,7 @@ var dao = function () {
         return new Promise(function (resolve, reject) {
             docClient.put(params, function (err, data) {
                 if (err) {
-                    console.log('Put DDB Error: ' + err);
+                    console.log('Put DDB Error: ' + err + ' ' + item.ID);
                     reject(err);
                 }
                 resolve(data);
@@ -47,7 +47,13 @@ var dao = function () {
 
     var scanAsync = function () {
         var params = {
-            TableName: ddbTable
+            TableName: ddbTable,
+            ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, quantity, locked",
+            ExpressionAttributeNames: {
+                "#name": "name",
+                "#set": "set",
+                "#language": "language"
+            },
         };
 
         return new Promise(function (resolve, reject) {

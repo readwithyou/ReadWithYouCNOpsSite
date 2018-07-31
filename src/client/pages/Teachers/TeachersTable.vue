@@ -31,7 +31,7 @@
         <md-table-cell :md-label="$t('message.name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.gender')" md-sort-by="gender">{{ formatGender(item.gender) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.time_zone')" md-sort-by="timezone">{{ item.timezone }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.email')" md-sort-by="timezone">{{ item.email }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.email')">{{ item.email }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleDateString():'' }}
         </md-table-cell>
@@ -40,6 +40,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
+    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
@@ -51,6 +52,7 @@ const toLower = text => {
 export default {
   data() {
     return {
+      preloading: true,
       search: null,
       searched: [],
       teachers: []
@@ -80,8 +82,9 @@ export default {
       var resource = this.$resource("/api/teachers");
       resource.get().then(
         response => {
-          this.teachers = response.body;
+          this.teachers = response.body.sort((a, b) => b.createTime - a.createTime);
           this.searched = this.teachers;
+          this.preloading = false;
         },
         response => {
           this.notifyFetchingError();
@@ -100,3 +103,12 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.md-progress-spinner {
+  position: absolute;
+  left: 50%;
+  top: 80px;
+  margin-left: -50px;
+  margin-top: 150px;
+}
+</style>

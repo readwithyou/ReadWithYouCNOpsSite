@@ -7,6 +7,7 @@ router.use(bodyParser.json());
 
 var verifyToken = require('../service/verify-token');
 var generatorId = require('../service/generate-id');
+var bookService = require('../service/book-service');
 var bookDao = require('../dao/book-dao');
 
 router.get('/:id', verifyToken, function (req, res, next) {
@@ -30,6 +31,7 @@ router.post('/', verifyToken, function (req, res, next) {
     item.locked = 0;
     item.createTime = new Date().getTime();
     item.createBy = req.username;
+    item.type = 'TEXTBOOK';
 
     bookDao.createAsync(item).then(
         () => res.status(200).end(),
@@ -54,5 +56,9 @@ router.delete('/:id', verifyToken, function (req, res, next) {
         () => res.status(500).end()
     );
 });
-
+/*
+router.post('/import-csv', function (req, res, next) {
+    bookService.importBookFromCSV('/Users/yonglinx/workspace/books.csv');
+});
+*/
 module.exports = router;

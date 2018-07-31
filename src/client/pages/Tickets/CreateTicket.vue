@@ -86,10 +86,22 @@
                       </div>
                       <div class="md-layout-item md-small-size-100 md-size-100">
                           <md-field>
-                            <md-input type="email" name="email" id="email" v-model="emailToAdd" />
-                            <md-button class="md-icon-button md-list-action" @click="addEmail()" :disabled="sending">
-                              <md-icon>add</md-icon>
-                            </md-button>
+                              <label for="userEmails">{{ $t("message.select_user_emails") }}</label>
+                              <md-select v-model="userEmailsToAdd" name="userEmails" id="userEmails" multiple>
+                                  <md-option v-for="user in users" :key="user.username" :value="user.email">{{user.name}}</md-option>
+                              </md-select>
+                              <md-button class="md-icon-button md-list-action" @click="addUserEmails()" :disabled="sending">
+                                  <md-icon>add</md-icon>
+                              </md-button>
+                          </md-field>
+                      </div>
+                      <div class="md-layout-item md-small-size-100 md-size-100">
+                          <md-field>
+                              <label for="userEmails">{{ $t("message.free_format_emails") }}</label>
+                              <md-input type="email" name="email" id="email" v-model="emailToAdd" />
+                              <md-button class="md-icon-button md-list-action" @click="addEmail()" :disabled="sending">
+                                  <md-icon>add</md-icon>
+                              </md-button>
                           </md-field>
                       </div>
                     </div>
@@ -116,6 +128,7 @@ export default {
     ticket: {},
     users: [],
     emailToAdd: null,
+    userEmailsToAdd: [],
     sending: false
   }),
   created() {
@@ -132,6 +145,17 @@ export default {
   methods: {
     clearEmail() {
       this.emailToAdd = null;
+    },
+    addUserEmails() {
+      var userEmailsToAdd = this.userEmailsToAdd;
+      var ccEmails = this.ticket.ccEmails ? this.ticket.ccEmails : [];
+
+      this.$set(
+        this.ticket,
+        "ccEmails",
+        Array.from(new Set(ccEmails.concat(userEmailsToAdd)))
+      );
+      this.userEmailsToAdd = [];
     },
     addEmail() {
       var emailToAdd = this.emailToAdd;
