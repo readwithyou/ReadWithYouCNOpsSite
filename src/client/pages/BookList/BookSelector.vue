@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+
 const toLower = text => {
   return text.toString().toLowerCase();
 };
@@ -52,14 +54,17 @@ export default {
     selected: [],
     books: []
   }),
-  created() {
-    this.fetchData();
-  },
   watch: {
     selected: {
       handler(val) {
         this.$emit("books-selected", this.selected);
       }
+    },
+    levelBaseline: function(newVal, oldVal) {
+      this.fetchBooks();
+    },
+    language: function(newVal, oldVal) {
+      this.fetchBooks();
     }
   },
   methods: {
@@ -76,13 +81,7 @@ export default {
       );
     },
     shouldBeDisabled(item) {
-      return (
-        item.quantity <= 0 ||
-        item.priority === "UNAVAILABLE" ||
-        item.readLevel - this.levelBaseline > 10 ||
-        this.levelBaseline - item.readLevel > 10 ||
-        item.language !== this.language
-      );
+      return item.language !== this.language;
     },
     formatLevel(level) {
       if (level) {
@@ -96,17 +95,27 @@ export default {
       }
       return "";
     },
-    fetchData() {
-      var resource = this.$resource("/api/books");
-      resource.get().then(
-        response => {
+    fetchBooks() {
+      if (!this.levelBaseline || !this.language) {
+        this.books = [];
+        this.searched = this.books;
+        this.selected = [];
+        return;
+      }
+
+      Vue.http
+        .post("/api/books/query", {
+          language: this.language,
+          levelBaseline: Number(this.levelBaseline)
+        })
+        .then(response => {
           this.books = response.body;
           this.searched = this.books;
-        },
-        response => {
+          this.selected = [];
+        })
+        .catch(err => {
           this.notifyFetchingError();
-        }
-      );
+        });
     },
     notifyFetchingError() {
       this.$notify({

@@ -99,14 +99,14 @@
                 <div class="md-layout">
                   <div class="md-layout-item md-small-size-100 md-size-50">
                       <md-field>
-                          <label for="teacher-local-time">老师当地开始时间 {{teacherTimezone}}</label>
+                          <label for="teacher-local-time">老师当地开始时间 {{$t('message.'+tzStrings.get(teacherTimezone))}}</label>
                           <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
                           :value="entry.startLeaveTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD')" disabled />
                       </md-field>
                   </div>
                   <div class="md-layout-item md-small-size-100 md-size-50" v-if="!oneDayLeave">
                       <md-field>
-                          <label for="teacher-local-time">老师当地结束时间 {{teacherTimezone}}</label>
+                          <label for="teacher-local-time">老师当地结束时间 {{$t('message.'+tzStrings.get(teacherTimezone))}}</label>
                           <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
                           :value="entry.endLeaveTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD')" disabled />
                       </md-field>
@@ -128,9 +128,12 @@
 </template>
 <script>
 import Vue from "vue";
+import tzStrings from "../../utils/tzStrings.js";
+
 export default {
   name: "LeaveManagementForm",
   data: () => ({
+    tzStrings: tzStrings,
     entry: {},
     teachers: [],
     oneDayLeave: true,
@@ -228,7 +231,7 @@ export default {
     },
     sendEmailToTeacher() {
       this.sending = true;
-      
+
       if (this.oneDayLeave) {
         this.entry.endLeaveTime = null;
       }

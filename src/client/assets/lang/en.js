@@ -153,15 +153,14 @@ export const message = {
     level_40: 'Level Four',
     level_50: 'Level Five',
     level_60: 'Level Six',
-    level_70: 'Level Seven',
-    level_75: 'Level Seven (Adult)',
+    level_70: 'Level Seven (Adult)',
     level_undefined: '',
     ticket_priority_1: '1: Highest',
     ticket_priority_2: '2: Medium',
     ticket_priority_3: '3: Lowest',
-    ticket_type_pb_system_bug: 'PB System Issue',
-    ticket_type_ops_system_bug: 'OPS WebSite Issue',
-    ticket_type_ops: 'OPS Daily Job Issue',
+    ticket_type_pb_system_bug: 'PB System',
+    ticket_type_ops_system_bug: 'OPS WebSite',
+    ticket_type_ops: 'OPS Daily Task',
 
     question_if_read_en_book: 'Reading any books in English?',
     question_num_book_bought: 'How many books bought in yearly basis?',
@@ -285,5 +284,15 @@ export const message = {
     tt_update_fail: 'Ticket update failed!',
     fetch_user_fail: 'Failed to fetch user data!',
 
-    confirm_promotion_message: 'Do you confirm to promote trail as official student?'
+    confirm_promotion_message: 'Do you confirm to promote trail as official student?',
+
+    tz_shanghai: 'Shanghai',
+    tz_tokyo: 'Tokyo',
+    tz_new_york: 'EST observe DST',
+    tz_chicago: 'CST observe DST',
+    tz_los_angeles: 'PST observe DST',
+    tz_denver: 'MST observe DST',
+    tz_phoenix: 'MST not observe DST',
+    tz_panama: 'Panama',
+    undefined: ''
 }

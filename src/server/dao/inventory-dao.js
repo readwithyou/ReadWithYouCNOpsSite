@@ -25,7 +25,6 @@ var dao = function () {
         });
     };
 
-
     var queryByTimeAsync = function (bookId, after, before) {
         var params = {
             TableName: ddbTable,

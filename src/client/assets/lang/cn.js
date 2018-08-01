@@ -153,15 +153,14 @@ export const message = {
     level_40: '等级四',
     level_50: '等级五',
     level_60: '等级六',
-    level_70: '等级七',
-    level_75: '等级七(成人)',
+    level_70: '等级七(成人)',
     level_undefined: '',
     ticket_priority_1: '1: 高',
     ticket_priority_2: '2: 中',
     ticket_priority_3: '3: 低',
-    ticket_type_pb_system_bug: 'PB 系统问题',
-    ticket_type_ops_system_bug: 'OPS 站点系统问题',
-    ticket_type_ops: 'OPS 日常工作问题',
+    ticket_type_pb_system_bug: 'PB 系统',
+    ticket_type_ops_system_bug: 'OPS 站点',
+    ticket_type_ops: 'OPS 日常',
 
     question_if_read_en_book: '目前在读英文书吗？',
     question_num_book_bought: '每年购买英文书的数量：',
@@ -284,5 +283,15 @@ export const message = {
     tt_update_fail: 'Ticket更新失败!',
     fetch_user_fail: '获取用户列表失败!',
 
-    confirm_promotion_message: '确认转为正式学员吗？'
+    confirm_promotion_message: '确认转为正式学员吗？',
+
+    tz_shanghai: 'Shanghai',
+    tz_tokyo: 'Tokyo',
+    tz_new_york: 'EST observe DST',
+    tz_chicago: 'CST observe DST',
+    tz_los_angeles: 'PST observe DST',
+    tz_denver: 'MST observe DST',
+    tz_phoenix: 'MST not observe DST',
+    tz_panama: 'Panama',
+    undefined: ''
 }

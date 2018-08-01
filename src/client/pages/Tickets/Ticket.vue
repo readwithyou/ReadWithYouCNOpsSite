@@ -107,7 +107,7 @@
                             <div class="md-layout-item md-size-100">
                                 <md-field>
                                     <label for="content">{{ $t("message.content") }}({{ $t("message.optional") }})</label>
-                                    <md-textarea id="content" name="content" v-model="ticket.content" :disabled="!editting"></md-textarea>                 
+                                    <md-textarea id="ticket-content" name="content" v-model="ticket.content" :disabled="!editting"></md-textarea>                 
                                 </md-field>
                             </div>
                         </div>
@@ -363,5 +363,8 @@ export default {
   top: 100%;
   right: 0;
   left: 0;
+}
+#ticket-content {
+  min-height: 200px;
 }
 </style>

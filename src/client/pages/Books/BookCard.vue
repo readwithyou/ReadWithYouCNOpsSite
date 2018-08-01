@@ -15,7 +15,7 @@
         [ {{ $t("message.book_isbn")}} ] : {{ book.isbn }}
       </p>
       <p class="card-description">
-        [ {{ $t("message.read_level")}} ] : {{ $t("message.level_" + book.level) }}
+        [ {{ $t("message.read_level")}} ] : {{ $t("message.level_" + book.readLevel) }}
       </p>
       <p class="card-description">
         [ {{ $t("message.priority")}} ] : {{ $t("message.priority_" + book.priority) }}

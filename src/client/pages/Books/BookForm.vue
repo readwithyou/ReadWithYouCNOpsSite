@@ -87,7 +87,6 @@
                             <md-option value="50">{{ $t("message.level_50") }}</md-option>
                             <md-option value="60">{{ $t("message.level_60") }}</md-option>
                             <md-option value="70">{{ $t("message.level_70") }}</md-option>
-                            <md-option value="75">{{ $t("message.level_75") }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.readLevel.required">
                             {{ $t("message.required_validation_error") }}

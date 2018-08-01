@@ -30,7 +30,7 @@
         <md-table-cell :md-label="$t('message.teacher_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
         <md-table-cell :md-label="$t('message.name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.gender')" md-sort-by="gender">{{ formatGender(item.gender) }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.time_zone')" md-sort-by="timezone">{{ item.timezone }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.time_zone')" md-sort-by="timezone">{{ formatTimezone(item.timezone) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.email')">{{ item.email }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleDateString():'' }}
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import tzStrings from "../../utils/tzStrings.js";
+
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
 };
@@ -62,6 +64,9 @@ export default {
     this.fetchData();
   },
   methods: {
+    formatTimezone(timezone) {
+      return this.$i18n.t("message." + tzStrings.get(timezone));
+    },
     formatGender(gender) {
       return gender == "M"
         ? this.$i18n.t("message.male")
@@ -82,7 +87,9 @@ export default {
       var resource = this.$resource("/api/teachers");
       resource.get().then(
         response => {
-          this.teachers = response.body.sort((a, b) => b.createTime - a.createTime);
+          this.teachers = response.body.sort(
+            (a, b) => b.createTime - a.createTime
+          );
           this.searched = this.teachers;
           this.preloading = false;
         },

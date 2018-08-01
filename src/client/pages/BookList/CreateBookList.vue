@@ -47,14 +47,14 @@
             <div class="md-layout-item md-small-size-100 md-size-100">
                 <md-field :class="getValidationClass('readLevel')">
                     <label for="read-level">{{ $t("message.read_level") }}</label>
-                    <md-select name="read-level" id="read-level" v-model="bookList.readLevel" md-dense>                                
+                    <md-select name="read-level" id="read-level" v-model="bookList.readLevel" md-dense>
+                        <md-option value="10">{{ $t("message.level_0") }}</md-option>
                         <md-option value="10">{{ $t("message.level_10") }}</md-option>
                         <md-option value="20">{{ $t("message.level_20") }}</md-option>
                         <md-option value="30">{{ $t("message.level_30") }}</md-option>
                         <md-option value="40">{{ $t("message.level_40") }}</md-option>
                         <md-option value="50">{{ $t("message.level_50") }}</md-option>
                         <md-option value="60">{{ $t("message.level_60") }}</md-option>
-                        <md-option value="65">{{ $t("message.level_65") }}</md-option>
                         <md-option value="70">{{ $t("message.level_70") }}</md-option>
                     </md-select>
                     <span class="md-helper-text">{{ $t("message.book_list_level_select_hint") }} </span>
@@ -113,14 +113,14 @@
             <div class="md-layout-item md-small-size-100 md-size-33">
                 <md-field>
                     <label for="read-level">{{ $t("message.read_level") }}</label>
-                    <md-select name="read-level" id="read-level" v-model="bookList.readLevel" disabled md-dense>                                
+                    <md-select name="read-level" id="read-level" v-model="bookList.readLevel" disabled md-dense>
+                        <md-option value="10">{{ $t("message.level_0") }}</md-option>
                         <md-option value="10">{{ $t("message.level_10") }}</md-option>
                         <md-option value="20">{{ $t("message.level_20") }}</md-option>
                         <md-option value="30">{{ $t("message.level_30") }}</md-option>
                         <md-option value="40">{{ $t("message.level_40") }}</md-option>
                         <md-option value="50">{{ $t("message.level_50") }}</md-option>
                         <md-option value="60">{{ $t("message.level_60") }}</md-option>
-                        <md-option value="65">{{ $t("message.level_65") }}</md-option>
                         <md-option value="70">{{ $t("message.level_70") }}</md-option>
                     </md-select>
                 </md-field>

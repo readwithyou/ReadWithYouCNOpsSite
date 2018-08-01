@@ -56,6 +56,17 @@ router.delete('/:id', verifyToken, function (req, res, next) {
         () => res.status(500).end()
     );
 });
+
+router.post('/query', verifyToken, function (req, res, next) {
+    let item = req.body;
+    let startLevel = item.levelBaseline - 10;
+    let endLevel = item.levelBaseline + 10;
+
+    bookDao.queryByLevelAsync(item.language, startLevel, endLevel).then(
+        (data) => res.json(data.Items.filter(book => book.quantity > 0 && book.priority !== 'UNAVAILABLE')),
+        () => res.status(500).end()
+    );
+});
 /*
 router.post('/import-csv', function (req, res, next) {
     bookService.importBookFromCSV('/Users/yonglinx/workspace/books.csv');

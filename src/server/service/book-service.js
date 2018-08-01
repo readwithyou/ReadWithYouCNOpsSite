@@ -29,8 +29,7 @@ var bookService = function () {
             case "Level 4": readLevel = 40; break;
             case "Level 5": readLevel = 50; break;
             case "Level 6": readLevel = 60; break;
-            case "Level 7": readLevel = 70; break;
-            case "Level 7 (Adult)": readLevel = 75; break;
+            case "Level 7 (Adult)": readLevel = 70; break;
             default: readLevel = 999;
         }
 

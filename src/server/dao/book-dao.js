@@ -157,6 +157,33 @@ var dao = function () {
         });
     };
 
+    var queryByLevelAsync = function (language, startLevel, endLevel) {
+        var params = {
+            TableName: ddbTable,
+            IndexName: "language-readLevel-index",
+            KeyConditionExpression: " #language = :language and readLevel BETWEEN :startLevel and :endLevel",
+            ExpressionAttributeNames: {
+                '#language': 'language'
+            },
+            ExpressionAttributeValues: {
+                ':language': language,
+                ':startLevel': startLevel,
+                ':endLevel': endLevel
+            },
+            "ScanIndexForward": false
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.query(params, function (err, data) {
+                if (err) {
+                    console.log('Query DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         createAsync,
         getAsync,
@@ -165,6 +192,7 @@ var dao = function () {
         updateQuantityAsync,
         updateLockedAsync,
         removeAsync,
+        queryByLevelAsync
     };
 }();
 

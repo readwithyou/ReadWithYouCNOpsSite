@@ -97,7 +97,7 @@ export default {
           this.searched = this.records;
         })
         .catch(err => {
-          notifyFetchingError();
+          this.notifyFetchingError();
         });
     },
     notifyFetchingError() {

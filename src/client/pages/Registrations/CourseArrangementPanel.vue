@@ -35,7 +35,7 @@
         </div>
         <div class="md-layout-item md-small-size-100 md-size-50">
             <md-field>
-                <label for="teacher-local-time">老师当地时间 {{teacherTimezone}}</label>
+                <label for="teacher-local-time">老师当地时间 {{$t('message.'+tzStrings.get(teacherTimezone))}}</label>
                 <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
                 :value="registration.scheduledTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD, h:mm:ss a')" disabled />
             </md-field>
@@ -91,6 +91,7 @@ import {
 } from "vuelidate/lib/validators";
 
 import { Dropzone } from "components";
+import tzStrings from "../../utils/tzStrings.js";
 
 export default {
   name: "CourseArrangementPanel",
@@ -102,6 +103,7 @@ export default {
     initialRegistration: Object
   },
   data: () => ({
+    tzStrings: tzStrings,
     teachers: [],
     registration: {},
     teacherTimezone: null,
