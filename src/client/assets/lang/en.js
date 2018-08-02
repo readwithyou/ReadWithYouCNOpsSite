@@ -16,6 +16,17 @@ export const message = {
     cn_lang: 'Chinese',
     es_lang: 'Spanish',
 
+    purpose: 'Purpose',
+    textbook_type: 'Textbook',
+    ex_reading_type: 'Extensive Reading',
+    course_book: 'Course',
+    gift_book: 'Gift',
+
+    time: 'Time',
+    quantity: 'Quantity',
+    actor: 'Actor',
+    description: 'Description',
+
     title: 'Title',
     type: 'Type',
     assign_to: 'Assign To',
@@ -135,8 +146,8 @@ export const message = {
     cc_email_list: 'CC',
     reply: 'Reply',
     reply_resolve: 'Resolve',
-    correspondence_card_title: 'Corresponence History',
-    correspondence: 'Corresponence',
+    correspondence_card_title: 'Correspondence History',
+    correspondence: 'Correspondence',
     ticket_id: 'Ticket NO.',
     ticket_type: 'Ticket Type',
 

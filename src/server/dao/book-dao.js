@@ -48,6 +48,7 @@ var dao = function () {
     var scanAsync = function () {
         var params = {
             TableName: ddbTable,
+            Limit: 30,//just limit 30 items for now.
             ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, quantity, locked",
             ExpressionAttributeNames: {
                 "#name": "name",

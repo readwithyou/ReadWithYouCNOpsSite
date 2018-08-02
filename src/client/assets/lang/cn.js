@@ -16,6 +16,17 @@ export const message = {
     cn_lang: '中文',
     es_lang: '西语',
 
+    purpose: '用途',
+    textbook_type: '教材',
+    ex_reading_type: '拓展阅读',
+    course_book: '课程用书',
+    gift_book: '赠书',
+
+    time: '时间',
+    quantity: '数量',
+    actor: '操作员',
+    description: '描述',
+
     title: '标题',
     type: '类型',
     assign_to: '分配给',

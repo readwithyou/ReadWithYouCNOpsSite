@@ -18,18 +18,15 @@
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('cnName')">
+                    <md-field>
                         <label for="cn-name">{{ $t("message.cn_name") }}</label>
                         <md-input name="cn-name" id="cn-name" v-model="entry.cnName" :disabled="!editting" type="text"></md-input>
-                        <span class="md-error" v-if="!$v.entry.cnName.required">
-                            {{ $t("message.cn_name_required_validation_error") }}
-                        </span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('enName')">
                         <label>{{ $t("message.en_name") }}</label>
-                        <md-input v-model="entry.enName" type="text"></md-input>
+                        <md-input v-model="entry.enName" :disabled="!editting" type="text"></md-input>
                         <span class="md-error" v-if="!$v.entry.enName.required">
                             {{ $t("message.en_name_required_validation_error") }}
                         </span>
@@ -63,8 +60,7 @@
                     <md-field :class="getValidationClass('age')">
                         <label for="age">{{ $t("message.age") }}</label>
                         <md-input type="number" id="age" name="age" autocomplete="age" v-model="entry.age" :disabled="!editting" />
-                        <span class="md-error" v-if="!$v.entry.age.required">{{ $t("message.age_required_validation_error") }}</span>
-                        <span class="md-error" v-else-if="!$v.entry.age.maxlength">{{ $t("message.age_max_validation_error") }}</span>
+                        <span class="md-error">{{ $t("message.age_max_validation_error") }}</span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33" v-if="entry.type==='child'">
@@ -96,18 +92,22 @@
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field :class="getValidationClass('phone')">
+                    <md-field>
                         <label for="phone">{{ $t("message.phone") }}</label>
                         <md-input type="text" id="phone" name="phone" autocomplete="phone" v-model="entry.phone" :disabled="!editting" />
-                        <span class="md-error" v-if="!$v.entry.phone.required">{{ $t("message.phone_required_validation_error") }}</span>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('email')">
                         <label for="email">{{ $t("message.email") }}</label>
                         <md-input type="email" name="email" id="email" autocomplete="email" v-model="entry.email" :disabled="!editting" />
-                        <span class="md-error" v-if="!$v.entry.email.required">{{ $t("message.email_required_validation_error") }}</span>
-                        <span class="md-error" v-else-if="!$v.entry.email.email">{{ $t("message.email_format_validation_error") }}</span>
+                        <span class="md-error">{{ $t("message.email_format_validation_error") }}</span>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-33">
+                    <md-field>
+                        <label for="zoom-id">Zoom ID</label>
+                        <md-input name="zoom-id" id="zoom-id" v-model="entry.zoomId" type="text" :disabled="!editting"></md-input>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
@@ -168,10 +168,6 @@ export default {
   },
   validations: {
     entry: {
-      cnName: {
-        required,
-        minLength: minLength(2)
-      },
       enName: {
         required,
         minLength: minLength(2)
@@ -183,17 +179,12 @@ export default {
         required
       },
       age: {
-        required,
         maxLength: maxLength(3)
       },
       timezone: {
         required
       },
-      phone: {
-        required
-      },
       email: {
-        required,
         email
       }
     }
@@ -263,7 +254,7 @@ export default {
         verticalAlign: "top",
         type: "success"
       });
-      
+
       this.sending = false;
     },
     notifyFetchingError() {
