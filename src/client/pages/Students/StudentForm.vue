@@ -143,7 +143,6 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
-import { GraphQLNonNull } from "graphql";
 
 export default {
   name: "edit-teacher-form",
