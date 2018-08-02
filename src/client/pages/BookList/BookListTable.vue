@@ -37,6 +37,7 @@
         <md-table-cell :md-label="$t('message.book_list_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.language')" md-sort-by="language">{{  $t("message."+item.language+"_lang") }}</md-table-cell>
         <md-table-cell :md-label="$t('message.read_level')" md-sort-by="readLevel">{{ formatLevel(item.readLevel) }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.type')" md-sort-by="type">{{ formatType(item.type) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_by')" md-sort-by="createBy">{{ item.createBy }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleString():'' }}
@@ -76,6 +77,18 @@ export default {
       this.searched = this.bookLists.filter(item =>
         toLower(item.name).includes(toLower(this.search))
       );
+    },
+    formatType(type){
+      switch (type) {
+        case "TEXTBOOK":
+          return this.$i18n.t("message.textbook_type");
+        case "EX_READING":
+          return this.$i18n.t("message.ex_reading_type");
+        case "GIFT":
+          return this.$i18n.t("message.gift_type");
+        default:
+          return this.$i18n.t("message.unknown_status");
+      }
     },
     formatLevel(level) {
       if (level) {

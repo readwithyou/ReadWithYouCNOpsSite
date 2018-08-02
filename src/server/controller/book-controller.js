@@ -59,17 +59,20 @@ router.delete('/:id', verifyToken, function (req, res, next) {
 
 router.post('/query', verifyToken, function (req, res, next) {
     let item = req.body;
-    let startLevel = item.levelBaseline - 10;
-    let endLevel = item.levelBaseline + 10;
+    let studentId = item.studentId;
+    let language = item.language;
+    let levelBaseline = item.levelBaseline;
 
-    bookDao.queryByLevelAsync(item.language, startLevel, endLevel).then(
-        (data) => res.json(data.Items.filter(book => book.quantity > 0 && book.priority !== 'UNAVAILABLE')),
+    bookService.getSelectableBooksAsync(studentId, language, levelBaseline).then(
+        (data) => res.json(data),
         () => res.status(500).end()
     );
 });
+
 /*
 router.post('/import-csv', function (req, res, next) {
     bookService.importBookFromCSV('/Users/yonglinx/workspace/books.csv');
 });
 */
+
 module.exports = router;

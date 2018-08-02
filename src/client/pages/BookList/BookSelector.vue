@@ -35,16 +35,22 @@
 import Vue from "vue";
 
 const toLower = text => {
-  return text.toString().toLowerCase();
+  return text ? text.toString().toLowerCase() : "";
 };
 
 export default {
   name: "TableMultiple",
   props: {
+    studentId: {
+      type: String
+    },
     levelBaseline: {
       type: String
     },
     language: {
+      type: String
+    },
+    purpose: {
       type: String
     }
   },
@@ -59,6 +65,9 @@ export default {
       handler(val) {
         this.$emit("books-selected", this.selected);
       }
+    },
+    studentId: function(newVal, oldVal) {
+      this.fetchBooks();
     },
     levelBaseline: function(newVal, oldVal) {
       this.fetchBooks();
@@ -84,7 +93,7 @@ export default {
       return item.language !== this.language;
     },
     formatLevel(level) {
-      if (level) {
+      if (level !== null) {
         return this.$i18n.t("message.level_" + level);
       }
       return "";
@@ -96,7 +105,12 @@ export default {
       return "";
     },
     fetchBooks() {
-      if (!this.levelBaseline || !this.language) {
+      if (
+        !this.studentId ||
+        !this.levelBaseline ||
+        !this.language ||
+        !this.purpose
+      ) {
         this.books = [];
         this.searched = this.books;
         this.selected = [];
@@ -105,8 +119,10 @@ export default {
 
       Vue.http
         .post("/api/books/query", {
+          studentId: this.studentId,
           language: this.language,
-          levelBaseline: Number(this.levelBaseline)
+          levelBaseline: Number(this.levelBaseline),
+          purpose: this.purpose
         })
         .then(response => {
           this.books = response.body;

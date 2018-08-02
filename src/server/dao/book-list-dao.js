@@ -97,12 +97,35 @@ var dao = function () {
         });
     };
 
+    var queryByStudentIdAsync = function (studentId) {
+        var params = {
+            TableName: ddbTable,
+            IndexName: "studentId-index",
+            KeyConditionExpression: " studentId = :studentId",
+            ExpressionAttributeValues: {
+                ':studentId': studentId
+            },
+            "ScanIndexForward": false
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.query(params, function (err, data) {
+                if (err) {
+                    console.log('Query DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         createAsync,
         getAsync,
         updateAsync,
         scanAsync,
-        removeAsync
+        removeAsync,
+        queryByStudentIdAsync
     };
 }();
 
