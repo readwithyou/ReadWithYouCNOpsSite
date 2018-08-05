@@ -60,6 +60,9 @@ export default {
     selected: [],
     books: []
   }),
+  created(){
+    this.fetchBooks();
+  },
   watch: {
     selected: {
       handler(val) {

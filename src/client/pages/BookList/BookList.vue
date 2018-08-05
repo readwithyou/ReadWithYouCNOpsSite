@@ -1,5 +1,46 @@
 <template>
         <div class="md-layout">
+            <md-dialog :md-active.sync="showAddDialog">
+                <md-dialog-content>
+                    <book-selector 
+                        :studentId="bookList.studentId" 
+                        :levelBaseline="bookList.readLevel" 
+                        :language="bookList.language" 
+                        :purpose="bookList.purpose" 
+                        v-on:books-selected="onBooksSelected($event)">
+                    </book-selector>    
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary" @click="showAddDialog = false">{{ $t("message.confirm") }}</md-button>
+                </md-dialog-actions>
+            </md-dialog>
+
+            <md-dialog :md-active.sync="showDeliveryDialog">
+                <md-dialog-title>{{ $t("message.set_delivery_info") }}</md-dialog-title>
+                <md-dialog-content>
+                    <md-field>
+                        <label>{{ $t("message.delivery_number") }}</label>
+                        <md-input v-model="deliveryNumber" type="text"></md-input>
+                    </md-field>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary" @click="setDeliveryNumber(activeBook, deliveryNumber); showDeliveryDialog = false; deliveryNumber = null;">{{ $t("message.confirm") }}</md-button>
+                </md-dialog-actions>
+            </md-dialog>
+
+            <md-dialog :md-active.sync="showProgressDialog">
+                <md-dialog-title>{{ $t("message.set_progress_info") }}</md-dialog-title>
+                <md-dialog-content>
+                    <md-field>
+                        <label>{{ $t("message.set_progress_info") }}</label>
+                        <md-input v-model="readingProgress" type="number"></md-input>
+                    </md-field>
+                </md-dialog-content>
+                <md-dialog-actions>
+                    <md-button class="md-primary" @click="setReadingProgress(activeBook, readingProgress); showProgressDialog = false; readingProgress = null;">{{ $t("message.confirm") }}</md-button>
+                </md-dialog-actions>
+            </md-dialog>
+
             <div class="md-layout-item md-medium-size-100 md-size-66">
                 <md-card>
                     <md-card-header data-background-color="purple">
@@ -80,23 +121,67 @@
                                 <h4>{{ $t("message.selected_books") }}</h4>
                             </div>
                             <div class="md-layout-item md-small-size-100 md-size-50">
+                                <a @click="showAddDialog = true" class="add-link" v-if="editting">{{ $t("message.add") }}</a>
                             </div>
                         </div>
 
                         <div>
                         <md-list class="md-double-line md-dense">
                             <md-list-item v-for="book in bookList.books" :key="book.ID">
-                            <md-icon class="md-default">book</md-icon>
+                                <md-icon class="md-default">book</md-icon>
 
-                            <div class="md-list-item-text">
-                                <span>{{book.name}}</span>
-                                <span>{{book.set}}</span>
-                                <span>{{$t('message.book_code')}} : {{book.code}} | {{$t('message.book_isbn')}} : {{book.isbn}} | {{$t('message.read_level')}} : {{$t('message.level_'+book.readLevel)}}  </span>
-                            </div>
+                                <div class="md-list-item-text">
+                                    <span>{{book.name}}</span></span>
+                                    <span>{{book.set}} | {{$t('message.book_code')}} : {{book.code}} | {{$t('message.book_isbn')}} : {{book.isbn}} | {{$t('message.level_'+book.readLevel)}} </span>
+                                    <span>
+                                        {{$t('message.reading_progress')}} : {{book.readingProgress? book.readingProgress : 0 }} %| 
+                                        {{$t('message.delivery_number')}} : {{book.deliveryNumber? book.deliveryNumber: '---'}} 
+                                    </span>
+                                </div>
 
-                            <md-button class="md-icon-button md-list-action" v-if="editting" @click="removeBook(book)">
-                                <md-icon>delete</md-icon>
-                            </md-button>
+                                <div class="md-list-action">  
+                                    <md-chip class="md-default">{{ $t("message."+book.type+"_type") }}</md-chip>
+                                </div>
+
+                                <div class="md-list-action" v-if="editting">
+                                    <md-menu md-size="small">
+                                        <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+                                            <md-icon>edit</md-icon>
+                                        </md-button>
+                                        <md-menu-content>
+                                            <md-menu-item @click="setBookType(book, 'TEXTBOOK')">
+                                                <md-icon>bookmark</md-icon>
+                                                <span>{{ $t("message.set_TEXTBOOK_type") }}</span>
+                                            </md-menu-item>
+                                            <md-menu-item @click="setBookType(book, 'EX_READING')">
+                                                <md-icon>bookmark_border</md-icon>
+                                                <span>{{ $t("message.set_EX_READING_type") }}</span>
+                                            </md-menu-item>
+                                            <md-menu-item @click="removeBook(book)">
+                                                <md-icon>delete</md-icon>
+                                                <span>{{ $t("message.delete") }}</span>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </div>
+
+                                <div class="md-list-action" v-if="!editting">
+                                    <md-menu md-size="small">
+                                        <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+                                            <md-icon>menu</md-icon>
+                                        </md-button>
+                                        <md-menu-content>
+                                            <md-menu-item @click="activeBook = book; showDeliveryDialog = true">
+                                                <md-icon>local_shipping</md-icon>
+                                                <span>{{ $t("message.set_delivery_info") }}</span>
+                                            </md-menu-item>
+                                            <md-menu-item @click="activeBook = book; showProgressDialog = true">
+                                                <md-icon>pie_chart</md-icon>
+                                                <span>{{ $t("message.set_progress_info") }}</span>
+                                            </md-menu-item>
+                                        </md-menu-content>
+                                    </md-menu>
+                                </div>
                             </md-list-item>
 
                         </md-list>
@@ -112,17 +197,30 @@
             <div class="md-layout-item md-medium-size-100 md-size-33">
                 <md-card>
                     <md-card-content>
-                        <h4>{{ $t("message.review_history_card_title") }}</h4>
+                        <h4>{{ $t("message.correspondence_card_title") }}</h4>
+                        <div class="md-layout" v-for="reply in bookList.correspondence" :key="reply.time">
+                            <div class="md-layout-item md-size-20">
+                                <md-avatar class="md-avatar-icon">{{reply.by.charAt(0).toUpperCase()}}</md-avatar>
+                            </div>
+                            <div class="md-layout-item md-size-80">
+                                <span class="md-body-1">{{ reply.by }}</span>
+                                <span class="md-caption">{{ reply.time ? new Date(reply.time).toLocaleString():'' }}</span>
+                                <md-divider></md-divider>
+                                <p class="md-body-2 correspondence-content">{{ reply.content }}</p>
+                            </div>
+                        </div>
                         <div class="md-layout">
                             <div class="md-layout-item md-size-100">
                                 <md-field>
                                     <label for="comments">{{ $t("message.review_comments") }}</label>
-                                    <md-textarea id="comments" name="comments"></md-textarea>                  
+                                    <md-textarea id="comments" name="comments" v-model="comments" :disabled="sending"></md-textarea>                  
                                 </md-field>
                             </div>
                         </div>
                         <div class="md-layout-item md-size-100 text-center">
-                            <md-button class="md-round md-default">{{ $t("message.submit") }}</md-button>
+                            <md-button @click="reply" class="md-round md-default" :disabled="sending">{{ $t("message.reply") }}</md-button>
+                            <md-button @click="reject" class="md-round md-default" :disabled="sending">{{ $t("message.reject") }}</md-button>
+                            <md-button @click="approve" class="md-round md-default" :disabled="sending">{{ $t("message.approve") }}</md-button>
                         </div>
                     </md-card-content>
                 </md-card>
@@ -130,15 +228,25 @@
         </div>
 </template>
 <script>
+import { BookSelector } from "pages";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 
 export default {
   name: "book-list-form",
   mixins: [validationMixin],
+  components: {
+    BookSelector
+  },
   data: () => ({
     editting: false,
     sending: false,
+    showAddDialog: false,
+    showDeliveryDialog: false,
+    deliveryNumber: null,
+    showProgressDialog: false,
+    readingProgress: null,
+    comments: null,
     bookList: {}
   }),
   validations: {
@@ -189,18 +297,97 @@ export default {
         }
       );
     },
+    setBookType(book, type) {
+      var i = this.findBookIndex(book);
+
+      if (i != -1) {
+        this.bookList.books[i].type = type;
+        this.$set(this, "bookList", this.bookList);
+      }
+    },
+    setDeliveryNumber(book, deliveryNumber) {
+      var i = this.findBookIndex(book);
+
+      if (i != -1) {
+        this.bookList.books[i].deliveryNumber = deliveryNumber;
+        this.$set(this, "bookList", this.bookList);
+        this.saveBookList();
+      }
+    },
+    setReadingProgress(book, readingProgress) {
+      var i = this.findBookIndex(book);
+
+      if (i != -1) {
+        this.bookList.books[i].readingProgress = readingProgress;
+        this.$set(this, "bookList", this.bookList);
+        this.saveBookList();
+      }
+    },
     removeBook(book) {
+      var i = this.findBookIndex(book);
+
+      if (i != -1) {
+        this.bookList.books.splice(i, 1);
+        this.$set(this, "bookList", this.bookList);
+      }
+    },
+    findBookIndex(book) {
       var i = -1;
+
       this.bookList.books.forEach(b => {
         if (b.ID === book.ID) {
           i = this.bookList.books.indexOf(b);
         }
       });
 
-      if (i != -1) {
-        this.bookList.books.splice(i, 1);
-        this.$set(this.bookList, "bookList", this.bookList);
+      return i;
+    },
+    reply() {
+      this.review("REPLY");
+    },
+    reject() {
+      this.review("REJECT");
+    },
+    approve() {
+      this.review("APPROVE");
+    },
+    review(action) {
+      if (!this.comments) {
+        return;
       }
+
+      this.editting = false;
+      this.sending = true;
+
+      let url = "/api/booklists/" + this.$route.params.bookListId + "/review";
+      this.$resource(url)
+        .save({ comments: this.comments, action: action })
+        .then(
+          response => {
+            this.bookList = response.body;
+            this.comments = null;
+            this.notifySubmitSuccess();
+          },
+          response => {
+            this.notifySubmitError();
+          }
+        );
+    },
+    onBooksSelected(selectedBooks) {
+      selectedBooks.forEach(b => {
+        var i = this.findBookIndex(b);
+        if (i === -1) {
+          this.bookList.books.push({
+            ID: b.ID,
+            code: b.code,
+            isbn: b.isbn,
+            name: b.name,
+            set: b.set,
+            readLevel: b.readLevel,
+            type: "TEXTBOOK"
+          });
+        }
+      });
     },
     notifyFetchingError() {
       this.$notify({
@@ -238,6 +425,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .edit-switch {
+  float: right;
+}
+.add-link {
+  margin-top: 12px;
   float: right;
 }
 .md-progress-bar {

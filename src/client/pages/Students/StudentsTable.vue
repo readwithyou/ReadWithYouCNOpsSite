@@ -31,7 +31,6 @@
         <md-table-cell :md-label="$t('message.en_name')" md-sort-by="enName">{{ item.enName }}</md-table-cell>
         <md-table-cell :md-label="$t('message.cn_name')" md-sort-by="cnName">{{ item.cnName }}</md-table-cell>
         <md-table-cell :md-label="$t('message.gender')" md-sort-by="gender">{{ formatGender(item.gender) }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.age')" md-sort-by="age">{{ item.age }}</md-table-cell>
         <md-table-cell :md-label="$t('message.registration_type')" md-sort-by="type">{{ formatType(item.type) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.registration_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleDateString():'' }}

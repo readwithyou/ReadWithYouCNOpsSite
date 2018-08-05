@@ -37,7 +37,7 @@
         <md-table-cell :md-label="$t('message.book_list_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.language')" md-sort-by="language">{{  $t("message."+item.language+"_lang") }}</md-table-cell>
         <md-table-cell :md-label="$t('message.read_level')" md-sort-by="readLevel">{{ formatLevel(item.readLevel) }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.type')" md-sort-by="type">{{ formatType(item.type) }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.purpose')" md-sort-by="purpose">{{ formatPurpose(item.purpose) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_by')" md-sort-by="createBy">{{ item.createBy }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleString():'' }}
@@ -55,6 +55,8 @@
 </template>
 
 <script>
+import Vue from "vue";
+
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
 };
@@ -78,29 +80,27 @@ export default {
         toLower(item.name).includes(toLower(this.search))
       );
     },
-    formatType(type){
-      switch (type) {
-        case "TEXTBOOK":
-          return this.$i18n.t("message.textbook_type");
-        case "EX_READING":
-          return this.$i18n.t("message.ex_reading_type");
-        case "GIFT":
-          return this.$i18n.t("message.gift_type");
-        default:
-          return this.$i18n.t("message.unknown_status");
-      }
-    },
     formatLevel(level) {
       if (level) {
         return this.$i18n.t("message.level_" + level);
       }
       return "";
     },
+    formatPurpose(purpose) {
+      switch (purpose) {
+        case "COURSE":
+          return this.$i18n.t("message.course_book");
+        case "GIFT":
+          return this.$i18n.t("message.gift_book");
+        default:
+          return this.$i18n.t("message.unknown_status");
+      }
+    },
     formatStatus(status) {
       switch (status) {
         case "PENDING_FOR_APPROVAL":
           return this.$i18n.t("message.pending_status");
-        case "APPROVED":
+        case "PENDING_FOR_DELIVERY":
           return this.$i18n.t("message.approved_status");
         case "REJECTED":
           return this.$i18n.t("message.rejected_status");
@@ -146,16 +146,17 @@ export default {
       this.idToDelete = null;
     },
     fetchData() {
-      var resource = this.$resource("/api/booklists");
-      resource.get().then(
-        response => {
+      Vue.http
+        .post("/api/booklists/query", {
+          studentId: this.$route.params.id
+        })
+        .then(response => {
           this.bookLists = response.body;
           this.searched = this.bookLists;
-        },
-        response => {
+        })
+        .catch(err => {
           this.notifyFetchingError();
-        }
-      );
+        });
     },
     notifyFetchingError() {
       this.$notify({

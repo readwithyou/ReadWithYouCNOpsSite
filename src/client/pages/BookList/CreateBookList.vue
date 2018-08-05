@@ -76,7 +76,7 @@
       </md-step>
 
       <md-step id="second" :md-label="$t('message.select_book')" :md-description="$t('message.mandatory_field')" :md-error="secondStepError" :md-done.sync="second">
-        <book-selector :studentId="bookList.studentId" :levelBaseline="bookList.readLevel" :language="bookList.language" :purpose="bookList.purpose" v-on:books-selected="onBooksSelected($event)">></book-selector>
+        <book-selector :studentId="bookList.studentId" :levelBaseline="bookList.readLevel" :language="bookList.language" :purpose="bookList.purpose" v-on:books-selected="onBooksSelected($event)"></book-selector>
         <md-button class="md-raised md-primary" @click="secondStepDone('second', 'third')">{{ $t("message.continue") }}</md-button>
       </md-step>
 
@@ -162,18 +162,15 @@
                 <span>{{book.set}}</span>
                 <p>{{$t('message.book_code')}} : {{book.code}} | {{$t('message.book_isbn')}} : {{book.isbn}} | {{$t('message.read_level')}} : {{$t('message.level_'+book.readLevel)}} </p>
               </div>
-              <div class="md-list-item-text">
+              <div class="md-list-action">
                 <md-field>
-                  <label for="movie">Movie</label>
-                  <md-select v-model="movie" name="movie" id="movie" md-dense>
-                    <md-option value="fight-club">Fight Club</md-option>
-                    <md-option value="godfather">Godfather</md-option>
+                  <label for="type">{{$t('message.type')}}</label>
+                  <md-select v-model="book.type" name="type" id="type" md-dense>
+                    <md-option value="TEXTBOOK">{{ $t("message.TEXTBOOK_type") }}</md-option>
+                    <md-option value="EX_READING">{{ $t("message.EX_READING_type") }}</md-option>
                   </md-select>
                 </md-field>
               </div>
-              <md-button class="md-icon-button md-list-action" @click="removeBook(book)">
-                <md-icon>delete</md-icon>
-              </md-button>
             </md-list-item>
 
           </md-list>
@@ -276,7 +273,8 @@ export default {
           isbn: b.isbn,
           name: b.name,
           set: b.set,
-          readLevel: b.readLevel
+          readLevel: b.readLevel,
+          type: "TEXTBOOK"
         });
       });
     },

@@ -42,7 +42,9 @@ var bookService = function () {
                     );
 
                 let matchedBooks = values[1].Items;
-                return matchedBooks.filter(b => !bookIdsRead.includes(b.ID) && b.priority !== 'UNAVAILABLE');
+                return matchedBooks.filter(b =>
+                    b.ebookUrl && b.priority !== 'UNAVAILABLE' && !bookIdsRead.includes(b.ID)
+                );
             }
         )
     }

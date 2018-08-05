@@ -8,6 +8,7 @@ router.use(bodyParser.json());
 var verifyToken = require('../service/verify-token');
 var generatorId = require('../service/generate-id');
 var bookListDao = require('../dao/book-list-dao');
+var bookListService = require('../service/book-list-service');
 
 //create
 router.post('/', verifyToken, function (req, res, next) {
@@ -25,6 +26,16 @@ router.post('/', verifyToken, function (req, res, next) {
 
 router.get('/', verifyToken, function (req, res, next) {
     bookListDao.scanAsync().then(
+        (data) => res.json(data.Items),
+        () => res.status(500).end()
+    );
+});
+
+router.post('/query', verifyToken, function (req, res, next) {
+    let item = req.body;
+    let studentId = item.studentId;
+
+    bookListDao.queryByStudentIdAsync(studentId).then(
         (data) => res.json(data.Items),
         () => res.status(500).end()
     );
@@ -52,6 +63,17 @@ router.delete('/:id', verifyToken, function (req, res, next) {
     bookListDao.removeAsync(req.params.id).then(
         (data) => res.status(200).end(),
         (err) => res.status(500).end()
+    );
+});
+
+router.post('/:id/review', verifyToken, function (req, res, next) {
+    let id = req.params.id;
+    let action = req.body.action;
+    let comments = req.body.comments;
+
+    bookListService.review(id, req.username, action, comments).then(
+        (data) => res.json(data.Item),
+        () => res.status(500).end()
     );
 });
 
