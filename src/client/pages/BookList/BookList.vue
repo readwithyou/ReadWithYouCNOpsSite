@@ -15,16 +15,30 @@
                 </md-dialog-actions>
             </md-dialog>
 
-            <md-dialog :md-active.sync="showDeliveryDialog">
-                <md-dialog-title>{{ $t("message.set_delivery_info") }}</md-dialog-title>
+            <md-dialog :md-active.sync="showOutboundDialog">
+                <md-dialog-title>{{ $t("message.outbound") }}</md-dialog-title>
                 <md-dialog-content>
-                    <md-field>
+                    <md-field :class="getValidationClass('expressNo')">
                         <label>{{ $t("message.delivery_number") }}</label>
-                        <md-input v-model="deliveryNumber" type="text"></md-input>
+                        <md-input v-model="outboundRecord.expressNo" type="text"></md-input>
+                        <span class="md-error" v-if="!$v.outboundRecord.expressNo.required">
+                            {{ $t("message.required_validation_error") }}
+                        </span>
+                    </md-field>
+                    <md-field :class="getValidationClass('isbn')">
+                        <label>{{ $t("message.book_isbn") }}</label>
+                        <md-input v-model="outboundRecord.isbn" type="text"></md-input>
+                        <span class="md-error" v-if="!$v.outboundRecord.isbn.required">
+                            {{ $t("message.required_validation_error") }}
+                        </span>
+                        <span class="md-error" v-else-if="!$v.outboundRecord.isbn.containsBookInBookList">
+                            {{ $t("message.book_not_exist_in_book_list_error") }}
+                        </span>
                     </md-field>
                 </md-dialog-content>
                 <md-dialog-actions>
-                    <md-button class="md-primary" @click="setDeliveryNumber(activeBook, deliveryNumber); showDeliveryDialog = false; deliveryNumber = null;">{{ $t("message.confirm") }}</md-button>
+                    <md-button class="md-primary" @click="outboundBook">{{ $t("message.confirm") }}</md-button>
+                    <md-button class="md-default" @click="showOutboundDialog = false;">{{ $t("message.complete") }}</md-button>
                 </md-dialog-actions>
             </md-dialog>
 
@@ -34,10 +48,11 @@
                     <md-field>
                         <label>{{ $t("message.set_progress_info") }}</label>
                         <md-input v-model="readingProgress" type="number"></md-input>
+                        <span class="md-suffix">%</span>
                     </md-field>
                 </md-dialog-content>
                 <md-dialog-actions>
-                    <md-button class="md-primary" @click="setReadingProgress(activeBook, readingProgress); showProgressDialog = false; readingProgress = null;">{{ $t("message.confirm") }}</md-button>
+                    <md-button class="md-primary" @click="setReadingProgress(activeBook, readingProgress);">{{ $t("message.confirm") }}</md-button>
                 </md-dialog-actions>
             </md-dialog>
 
@@ -98,7 +113,7 @@
                             <div class="md-layout-item md-small-size-100 md-size-33">
                                 <md-field>
                                     <label for="purpose">{{ $t("message.purpose") }}</label>
-                                    <md-select name="purpose" id="purpose" v-model="bookList.purpose" :disabled="!editting" md-dense>
+                                    <md-select name="purpose" id="purpose" v-model="bookList.purpose" disabled md-dense>
                                         <md-option value="COURSE">{{ $t("message.course_book") }}</md-option>
                                         <md-option value="GIFT">{{ $t("message.gift_book") }}</md-option>
                                     </md-select>
@@ -122,6 +137,7 @@
                             </div>
                             <div class="md-layout-item md-small-size-100 md-size-50">
                                 <a @click="showAddDialog = true" class="add-link" v-if="editting">{{ $t("message.add") }}</a>
+                                <a @click="showOutboundDialog = true" class="add-link" v-if="ableToDeliver()">{{ $t("message.outbound") }}</a>
                             </div>
                         </div>
 
@@ -131,11 +147,11 @@
                                 <md-icon class="md-default">book</md-icon>
 
                                 <div class="md-list-item-text">
-                                    <span>{{book.name}}</span></span>
+                                    <span>{{book.name}}</span>
                                     <span>{{book.set}} | {{$t('message.book_code')}} : {{book.code}} | {{$t('message.book_isbn')}} : {{book.isbn}} | {{$t('message.level_'+book.readLevel)}} </span>
                                     <span>
                                         {{$t('message.reading_progress')}} : {{book.readingProgress? book.readingProgress : 0 }} %| 
-                                        {{$t('message.delivery_number')}} : {{book.deliveryNumber? book.deliveryNumber: '---'}} 
+                                        {{$t('message.delivery_number')}} : {{book.expressNo? book.expressNo: '---'}} 
                                     </span>
                                 </div>
 
@@ -166,21 +182,9 @@
                                 </div>
 
                                 <div class="md-list-action" v-if="!editting">
-                                    <md-menu md-size="small">
-                                        <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
-                                            <md-icon>menu</md-icon>
-                                        </md-button>
-                                        <md-menu-content>
-                                            <md-menu-item @click="activeBook = book; showDeliveryDialog = true">
-                                                <md-icon>local_shipping</md-icon>
-                                                <span>{{ $t("message.set_delivery_info") }}</span>
-                                            </md-menu-item>
-                                            <md-menu-item @click="activeBook = book; showProgressDialog = true">
-                                                <md-icon>pie_chart</md-icon>
-                                                <span>{{ $t("message.set_progress_info") }}</span>
-                                            </md-menu-item>
-                                        </md-menu-content>
-                                    </md-menu>
+                                    <md-button class="md-icon-button md-dense md-raised md-default" @click="activeBook = book; showProgressDialog = true">
+                                        <md-icon>pie_chart</md-icon>
+                                    </md-button>
                                 </div>
                             </md-list-item>
 
@@ -190,7 +194,7 @@
 
                     <md-progress-bar md-mode="indeterminate" v-if="sending" />
                     <div class="md-layout-item md-size-100 text-center">
-                        <md-button @click="validateEntry" class="md-primary" :disabled="sending" v-if="editting">{{ $t("message.submit") }}</md-button>
+                        <md-button @click="saveBookList" class="md-primary" :disabled="sending" v-if="editting">{{ $t("message.submit") }}</md-button>
                     </div>
                 </md-card>
             </div>
@@ -204,6 +208,7 @@
                             </div>
                             <div class="md-layout-item md-size-80">
                                 <span class="md-body-1">{{ reply.by }}</span>
+                                <span class="md-body-1">{{ $t("message.action_" + reply.action) }}</span>
                                 <span class="md-caption">{{ reply.time ? new Date(reply.time).toLocaleString():'' }}</span>
                                 <md-divider></md-divider>
                                 <p class="md-body-2 correspondence-content">{{ reply.content }}</p>
@@ -219,8 +224,10 @@
                         </div>
                         <div class="md-layout-item md-size-100 text-center">
                             <md-button @click="reply" class="md-round md-default" :disabled="sending">{{ $t("message.reply") }}</md-button>
-                            <md-button @click="reject" class="md-round md-default" :disabled="sending">{{ $t("message.reject") }}</md-button>
-                            <md-button @click="approve" class="md-round md-default" :disabled="sending">{{ $t("message.approve") }}</md-button>
+                            <md-button @click="reject" class="md-round md-default" v-if="ableToReject()" :disabled="sending">{{ $t("message.reject") }}</md-button>
+                            <md-button @click="approve" class="md-round md-default" v-if="ableToApprove()" :disabled="sending">{{ $t("message.approve") }}</md-button>
+                            <md-button @click="delivered" class="md-round md-default" v-if="ableToDeliver()" :disabled="sending">{{ $t("message.mark_delivered") }}</md-button>
+                            <md-button @click="finished" class="md-round md-default" v-if="ableToFinish()" :disabled="sending">{{ $t("message.mark_finished") }}</md-button>
                         </div>
                     </md-card-content>
                 </md-card>
@@ -228,9 +235,19 @@
         </div>
 </template>
 <script>
+import Vue from "vue";
 import { BookSelector } from "pages";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+
+function containsBookInBookList(value) {
+  return (
+    this.bookList.books
+      .filter(b => !b.expressNo)
+      .map(b => b.isbn)
+      .indexOf(value) !== -1
+  );
+}
 
 export default {
   name: "book-list-form",
@@ -242,32 +259,33 @@ export default {
     editting: false,
     sending: false,
     showAddDialog: false,
-    showDeliveryDialog: false,
-    deliveryNumber: null,
+    showOutboundDialog: false,
     showProgressDialog: false,
     readingProgress: null,
     comments: null,
-    bookList: {}
+    outboundRecord: {
+      expressNo: null,
+      isbn: null
+    },
+    bookList: { books: [] }
   }),
   validations: {
-    bookList: {
-      studentId: { required },
-      studentName: { required },
-      name: { required },
-      readLevel: { required },
-      language: { required }
+    outboundRecord: {
+      expressNo: { required },
+      isbn: { required, containsBookInBookList }
     }
   },
-  validations: {},
   created() {
     this.fetchBookList();
   },
   methods: {
-    validateEntry() {
-      this.$v.$touch();
+    getValidationClass(fieldName) {
+      const field = this.$v.outboundRecord[fieldName];
 
-      if (!this.$v.$invalid) {
-        this.saveBookList();
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty
+        };
       }
     },
     saveBookList() {
@@ -305,13 +323,25 @@ export default {
         this.$set(this, "bookList", this.bookList);
       }
     },
-    setDeliveryNumber(book, deliveryNumber) {
-      var i = this.findBookIndex(book);
+    outboundBook() {
+      this.$v.$touch();
 
-      if (i != -1) {
-        this.bookList.books[i].deliveryNumber = deliveryNumber;
-        this.$set(this, "bookList", this.bookList);
-        this.saveBookList();
+      if (!this.$v.$invalid) {
+        Vue.http
+          .post(
+            "/api/booklists/" + this.bookList.ID + "/outbound",
+            this.outboundRecord
+          )
+          .then(response => {
+            this.notifyOutboundSuccess();
+
+            this.bookList = response.body;
+            this.$set(this, "bookList", this.bookList);
+            this.outboundRecord.isbn = null;
+          })
+          .catch(err => {
+            this.notifyOutboundError();
+          });
       }
     },
     setReadingProgress(book, readingProgress) {
@@ -322,6 +352,9 @@ export default {
         this.$set(this, "bookList", this.bookList);
         this.saveBookList();
       }
+
+      this.showProgressDialog = false;
+      this.readingProgress = null;
     },
     removeBook(book) {
       var i = this.findBookIndex(book);
@@ -343,6 +376,9 @@ export default {
       return i;
     },
     reply() {
+      if (!this.comments) {
+        return;
+      }
       this.review("REPLY");
     },
     reject() {
@@ -351,11 +387,13 @@ export default {
     approve() {
       this.review("APPROVE");
     },
+    delivered() {
+      this.review("DELIVERED");
+    },
+    finished() {
+      this.review("FINISHED");
+    },
     review(action) {
-      if (!this.comments) {
-        return;
-      }
-
       this.editting = false;
       this.sending = true;
 
@@ -372,6 +410,24 @@ export default {
             this.notifySubmitError();
           }
         );
+    },
+    ableToReject() {
+      return (
+        this.bookList.status === "PENDING_FOR_APPROVAL" ||
+        this.bookList.status === "PENDING_FOR_DELIVERY"
+      );
+    },
+    ableToApprove() {
+      return (
+        this.bookList.status === "PENDING_FOR_APPROVAL" ||
+        this.bookList.status === "REJECTED"
+      );
+    },
+    ableToDeliver() {
+      return this.bookList.status === "PENDING_FOR_DELIVERY";
+    },
+    ableToFinish() {
+      return this.bookList.status === "DELIVERED";
     },
     onBooksSelected(selectedBooks) {
       selectedBooks.forEach(b => {
@@ -419,6 +475,24 @@ export default {
 
       this.editting = true;
       this.sending = false;
+    },
+    notifyOutboundSuccess() {
+      this.$notify({
+        message: this.$i18n.t("message.book_outbound_success"),
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "success"
+      });
+    },
+    notifyOutboundError() {
+      this.$notify({
+        message: this.$i18n.t("message.book_outbound_fail"),
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
     }
   }
 };

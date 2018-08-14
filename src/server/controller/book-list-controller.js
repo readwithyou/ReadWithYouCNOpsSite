@@ -71,7 +71,18 @@ router.post('/:id/review', verifyToken, function (req, res, next) {
     let action = req.body.action;
     let comments = req.body.comments;
 
-    bookListService.review(id, req.username, action, comments).then(
+    bookListService.reviewAsync(id, req.username, action, comments).then(
+        (data) => res.json(data.Item),
+        () => res.status(500).end()
+    );
+});
+
+router.post('/:id/outbound', verifyToken, function (req, res, next) {
+    let id = req.params.id;
+    let isbn = req.body.isbn;
+    let expressNo = req.body.expressNo;
+
+    bookListService.outboundAsync(id, req.username, isbn, expressNo).then(
         (data) => res.json(data.Item),
         () => res.status(500).end()
     );

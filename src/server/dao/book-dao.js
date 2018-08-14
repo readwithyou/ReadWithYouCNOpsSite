@@ -48,7 +48,6 @@ var dao = function () {
     var scanAsync = function () {
         var params = {
             TableName: ddbTable,
-            Limit: 30,//just limit 30 items for now.
             ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, quantity, locked",
             ExpressionAttributeNames: {
                 "#name": "name",
@@ -162,8 +161,11 @@ var dao = function () {
         var params = {
             TableName: ddbTable,
             IndexName: "language-readLevel-index",
+            ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, ebookUrl",
             KeyConditionExpression: " #language = :language and readLevel BETWEEN :startLevel and :endLevel",
             ExpressionAttributeNames: {
+                "#name": "name",
+                "#set": "set",
                 '#language': 'language'
             },
             ExpressionAttributeValues: {

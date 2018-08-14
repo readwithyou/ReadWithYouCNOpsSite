@@ -34,7 +34,7 @@
         </md-table-cell>
         <md-table-cell :md-label="$t('message.quantity')" md-sort-by="quantity">{{ item.quantity }}</md-table-cell>
         <md-table-cell :md-label="$t('message.actor')" md-sort-by="actor">{{ item.actor }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.description')" md-sort-by="description">{{ item.description }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.description')" md-sort-by="description" v-html="formatDescription(item.description)"></md-table-cell>
       </md-table-row>
     </md-table>
   </div>
@@ -64,6 +64,13 @@ export default {
         toLower(item.description).includes(toLower(this.search))
       );
     },
+    formatDescription(description) {
+      let desObj = JSON.parse(description);
+      if (typeof desObj === "object") {
+        return this.$i18n.t("message.outbound_description", desObj);
+      }
+      return description;
+    },
     formatType(inventoryType) {
       if (inventoryType === "inbound") {
         return this.$i18n.t("message.inbound");
@@ -74,12 +81,12 @@ export default {
     },
     getTypeClass(type) {
       switch (type) {
-        case 'inbound':
-          return 'md-primary';
-        case 'outbound':
-          return 'md-accent';
+        case "inbound":
+          return "md-primary";
+        case "outbound":
+          return "md-accent";
         default:
-          return 'md-accent';
+          return "md-accent";
       }
     },
     refresh(command) {

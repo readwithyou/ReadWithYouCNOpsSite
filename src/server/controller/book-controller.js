@@ -69,6 +69,16 @@ router.post('/query', verifyToken, function (req, res, next) {
     );
 });
 
+router.post('/generate-code', verifyToken, function (req, res, next) {
+    let item = req.body;
+    let level = item.level;
+
+    bookService.generateBookCodeAsync(level).then(
+        (data) => res.json({ code: data }),
+        () => res.status(500).end()
+    );
+});
+
 /*
 router.post('/import-csv', function (req, res, next) {
     bookService.importBookFromCSV('/Users/yonglinx/workspace/books.csv');

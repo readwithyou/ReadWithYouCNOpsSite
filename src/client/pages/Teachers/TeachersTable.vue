@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <md-table v-model="searched" md-sort="createTime" md-sort-order="asc">
+    <md-table v-model="paged" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <md-menu>
@@ -39,12 +39,16 @@
           <a @click="viewTeacher(item.ID)">{{ $t("message.view") }}</a>
         </md-table-cell>
       </md-table-row>
+
+      <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
+      </md-table-pagination>
     </md-table>
     <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
 <script>
+import { MdTablePagination } from "components";
 import tzStrings from "../../utils/tzStrings.js";
 
 const toLower = text => {
@@ -52,18 +56,41 @@ const toLower = text => {
 };
 
 export default {
+  components: {
+    MdTablePagination
+  },
   data() {
     return {
       preloading: true,
+      page: 1,
+      size: 10,
+      currentSort: "name",
+      currentSortOrder: "asc",
       search: null,
       searched: [],
-      teachers: []
+      teachers: [],
+      paged: []
     };
   },
   created() {
     this.fetchData();
   },
   methods: {
+    rePagination() {
+      this.page = 1;
+      this.pagination();
+    },
+    onUpdatePagination(evt) {
+      this.page = evt.page;
+      this.size = evt.size;
+      this.pagination();
+    },
+    pagination() {
+      this.paged = this.searched.slice(
+        (this.page - 1) * this.size,
+        this.page * this.size
+      );
+    },
     formatTimezone(timezone) {
       return this.$i18n.t("message." + tzStrings.get(timezone));
     },
@@ -76,6 +103,7 @@ export default {
       this.searched = this.teachers.filter(item =>
         toLower(item.name).includes(toLower(this.search))
       );
+      this.rePagination();
     },
     newTeacher() {
       this.$router.push({ path: "/teachers/new" });
@@ -91,6 +119,7 @@ export default {
             (a, b) => b.createTime - a.createTime
           );
           this.searched = this.teachers;
+          this.pagination();
           this.preloading = false;
         },
         response => {
@@ -106,6 +135,21 @@ export default {
         verticalAlign: "top",
         type: "danger"
       });
+    },
+    customSort(value) {
+      this.searched.sort((a, b) => {
+        const sortBy = this.currentSort;
+        var leftValue = a[sortBy] ? a[sortBy].toString() : "";
+        var rightValue = b[sortBy] ? b[sortBy].toString() : "";
+
+        if (this.currentSortOrder === "desc") {
+          return leftValue.localeCompare(rightValue);
+        }
+
+        return rightValue.localeCompare(leftValue);
+      });
+      this.rePagination();
+      return this.paged;
     }
   }
 };

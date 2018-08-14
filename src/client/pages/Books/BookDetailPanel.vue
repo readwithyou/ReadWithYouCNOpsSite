@@ -16,8 +16,10 @@
                         <md-field :class="getValidationClass('code')">
                             <label for="book-code">{{ $t("message.book_code") }}</label>
                             <md-input name="book-code" id="book-code" v-model="entry.code" :disabled="!editting" type="text"></md-input>
-                            <span class="md-error" v-if="!$v.entry.code.required">{{ $t("message.required_validation_error") }}</span>
-                            <span class="md-error" v-else-if="!$v.entry.code.minLength">{{ $t("message.minlength_validation_error") }}</span>
+                            <md-button class="md-icon-button" v-if="entry.readLevel && entry.readLevel !== '999' && editting" @click="generateCode()">
+                                <md-icon>refresh</md-icon>
+                            </md-button>
+                            <span class="md-error" v-if="!$v.entry.code.minLength">{{ $t("message.minlength_validation_error") }}</span>
                             <span class="md-error" v-else-if="!$v.entry.code.maxLength">{{ $t("message.maxlength_validation_error") }}</span>
                         </md-field>
                     </div>
@@ -31,12 +33,9 @@
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field :class="getValidationClass('set')">
+                        <md-field>
                             <label for="book-set">{{ $t("message.book_set") }}</label>
                             <md-input name="book-set" id="book-set" v-model="entry.set" :disabled="!editting" type="text"></md-input>
-                            <span class="md-error" v-if="!$v.entry.set.required">
-                                {{ $t("message.required_validation_error") }}
-                            </span>
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
@@ -68,13 +67,10 @@
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field :class="getValidationClass('price')">
+                        <md-field>
                             <label for="book-price">{{ $t("message.book_price") }}</label>
                             <md-input name="book-price" id="book-price" v-model="entry.price" :disabled="!editting" type="number"></md-input>
                             <md-icon>attach_money</md-icon>
-                            <span class="md-error" v-if="!$v.entry.price.required">
-                                {{ $t("message.required_validation_error") }}
-                            </span>
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
@@ -123,12 +119,9 @@
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field :class="getValidationClass('ebookUrl')">
+                        <md-field>
                             <label for="book-url">{{ $t("message.ebook_url") }}</label>
                             <md-input name="book-url" id="book-url" v-model="entry.ebookUrl" :disabled="!editting" type="text"></md-input>
-                            <span class="md-error" v-if="!$v.entry.ebookUrl.required">
-                                {{ $t("message.required_validation_error") }}
-                            </span>
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
@@ -164,6 +157,7 @@
     </form>
 </template>
 <script>
+import Vue from "vue";
 import { validationMixin } from "vuelidate";
 import {
   required,
@@ -183,26 +177,16 @@ export default {
   validations: {
     entry: {
       code: {
-        required,
         minLength: minLength(4),
         maxLength: maxLength(4)
       },
       name: {
         required
       },
-      set: {
-        required
-      },
       isbn: {
         required,
         minLength: minLength(13),
         maxLength: maxLength(13)
-      },
-      price: {
-        required
-      },
-      ebookUrl: {
-        required
       },
       readLevel: {
         required
@@ -259,6 +243,15 @@ export default {
           this.notifySubmitError();
         }
       );
+    },
+    generateCode() {
+      Vue.http
+        .post("/api/books/generate-code", {
+          level: Number(this.entry.readLevel)
+        })
+        .then(response => {
+          this.$set(this.entry, "code", response.body.code);
+        });
     },
     notifySubmitError() {
       this.$notify({

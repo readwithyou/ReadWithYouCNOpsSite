@@ -9,7 +9,7 @@
       @md-cancel="onCancelDelete"
       @md-confirm="onConfirmDelete" />
 
-    <md-table v-model="searched" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
+    <md-table v-model="paged" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <md-menu>
@@ -58,40 +58,66 @@
           <a @click="deleteRegistration(item.ID)" v-if="item.status==0">{{ $t("message.delete") }}</a>
         </md-table-cell>
       </md-table-row>
+
+      <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
+      </md-table-pagination>
     </md-table>
     <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
 <script>
+import { MdTablePagination } from "components";
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
 };
 
 export default {
+  components: {
+    MdTablePagination
+  },
   data() {
     return {
       preloading: true,
+      page: 1,
+      size: 10,
+      currentSort: "createTime",
+      currentSortOrder: "asc",
       search: null,
-      searched: [],
       registrations: [],
+      searched: [],
+      paged: [],
       teachers: [],
       deleteDialogActive: false,
-      entryToDelete: null,
-      currentSort: "createTime",
-      currentSortOrder: "asc"
+      entryToDelete: null
     };
   },
   created() {
     this.fetchData();
   },
   methods: {
+    rePagination() {
+      this.page = 1;
+      this.pagination();
+    },
+    onUpdatePagination(evt) {
+      this.page = evt.page;
+      this.size = evt.size;
+      this.pagination();
+    },
+    pagination() {
+      this.paged = this.searched.slice(
+        (this.page - 1) * this.size,
+        this.page * this.size
+      );
+    },
     searchOnTable() {
       this.searched = this.registrations.filter(
         item =>
           toLower(item.cnName).includes(toLower(this.search)) ||
           toLower(item.enName).includes(toLower(this.search))
       );
+      this.rePagination();
     },
     formatStatus(status) {
       switch (status) {
@@ -142,6 +168,7 @@ export default {
           }
 
           this.searched = this.registrations;
+          this.pagination();
           this.preloading = false;
         },
         response => {
@@ -205,7 +232,7 @@ export default {
       });
     },
     customSort(value) {
-      return value.sort((a, b) => {
+      this.searched.sort((a, b) => {
         const sortBy = this.currentSort;
 
         var leftValue = a[sortBy] ? a[sortBy].toString() : "";
@@ -217,6 +244,9 @@ export default {
 
         return rightValue.localeCompare(leftValue);
       });
+
+      this.rePagination();
+      return this.paged;
     }
   }
 };

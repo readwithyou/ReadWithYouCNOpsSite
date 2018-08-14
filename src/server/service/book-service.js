@@ -43,10 +43,33 @@ var bookService = function () {
 
                 let matchedBooks = values[1].Items;
                 return matchedBooks.filter(b =>
-                    b.ebookUrl && b.priority !== 'UNAVAILABLE' && !bookIdsRead.includes(b.ID)
+                    b.ebookUrl && b.code && b.priority !== 'UNAVAILABLE' && !bookIdsRead.includes(b.ID)
                 );
             }
         )
+    }
+
+    function generateBookCodeAsync(level) {
+        let promise = bookDao.scanAsync();
+        return promise.then(
+            (data) => {
+                let books = data.Items.filter(b => b.readLevel === level);
+                if (books == null || books.length === 0) {
+                    return (level / 10) + '001';
+                }
+
+                let largestCode = books.map(b => b.code).reduce(
+                    (code1, code2) => code1 > code2 ? code1 : code2
+                );
+                let newCodeInNumber = Number(largestCode) + 1;
+
+                if (newCodeInNumber < 10) return (level / 10) + '00' + newCodeInNumber;
+                if (newCodeInNumber < 100) return (level / 10) + '0' + newCodeInNumber;
+                if (newCodeInNumber < 1000) return (level / 10) + newCodeInNumber;
+                return '' + newCodeInNumber;
+            },
+            (err) => console.log('GenerateNewBookCode DDB Error: ' + err)
+        );
     }
 
     function convert(csvrow) {
@@ -118,7 +141,8 @@ var bookService = function () {
     */
     return {
         handleInventoryChangeAsync,
-        getSelectableBooksAsync
+        getSelectableBooksAsync,
+        generateBookCodeAsync
     };
 }();
 

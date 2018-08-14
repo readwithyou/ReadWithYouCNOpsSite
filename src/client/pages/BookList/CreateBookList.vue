@@ -48,7 +48,7 @@
             <div class="md-layout-item md-small-size-100 md-size-50">
                 <md-field :class="getValidationClass('purpose')">
                     <label for="purpose">{{ $t("message.purpose") }}</label>
-                    <md-select name="purpose" id="purpose" v-model="bookList.purpose" md-dense>
+                    <md-select name="purpose" id="purpose" v-model="bookList.purpose" disabled md-dense>
                         <md-option value="COURSE">{{ $t("message.course_book") }}</md-option>
                         <md-option value="GIFT">{{ $t("message.gift_book") }}</md-option>
                     </md-select>
@@ -193,15 +193,17 @@ export default {
   components: {
     BookSelector
   },
-  data: () => ({
-    active: "first",
-    first: false,
-    firstStepError: null,
-    second: false,
-    secondStepError: null,
-    third: false,
-    bookList: {}
-  }),
+  data() {
+    return {
+      active: "first",
+      first: false,
+      firstStepError: null,
+      second: false,
+      secondStepError: null,
+      third: false,
+      bookList: { purpose: this.$route.query.purpose }
+    };
+  },
   validations: {
     bookList: {
       studentId: { required },

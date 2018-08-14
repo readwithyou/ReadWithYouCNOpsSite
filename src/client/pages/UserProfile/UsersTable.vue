@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <md-table v-model="searched" md-sort="username" md-sort-order="asc">
+    <md-table v-model="paged" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
         </div>
@@ -29,35 +29,63 @@
           <a @click="unlockUser(item.username)" v-if="item.locked">{{ $t("message.unlock") }}</a>
         </md-table-cell>
       </md-table-row>
+
+      <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
+      </md-table-pagination>
     </md-table>
     <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
 <script>
+import { MdTablePagination } from "components";
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
 };
 
 export default {
+  components: {
+    MdTablePagination
+  },
   data() {
     return {
       preloading: true,
+      page: 1,
+      size: 10,
+      currentSort: "username",
+      currentSortOrder: "asc",
       search: null,
+      users: [],
       searched: [],
-      users: []
+      paged: []
     };
   },
   created() {
     this.fetchData();
   },
   methods: {
+    rePagination() {
+      this.page = 1;
+      this.pagination();
+    },
+    onUpdatePagination(evt) {
+      this.page = evt.page;
+      this.size = evt.size;
+      this.pagination();
+    },
+    pagination() {
+      this.paged = this.searched.slice(
+        (this.page - 1) * this.size,
+        this.page * this.size
+      );
+    },
     searchOnTable() {
       this.searched = this.users.filter(
         item =>
           toLower(item.username).includes(toLower(this.search)) ||
           toLower(item.name).includes(toLower(this.search))
       );
+      this.rePagination();
     },
     formatStatus(locked) {
       return locked
@@ -73,6 +101,7 @@ export default {
         response => {
           this.users = response.body;
           this.searched = this.users;
+          this.pagination();
           this.preloading = false;
         },
         response => {
@@ -130,6 +159,21 @@ export default {
         verticalAlign: "top",
         type: "success"
       });
+    },
+    customSort(value) {
+      this.searched.sort((a, b) => {
+        const sortBy = this.currentSort;
+        var leftValue = a[sortBy] ? a[sortBy].toString() : "";
+        var rightValue = b[sortBy] ? b[sortBy].toString() : "";
+
+        if (this.currentSortOrder === "desc") {
+          return leftValue.localeCompare(rightValue);
+        }
+
+        return rightValue.localeCompare(leftValue);
+      });
+      this.rePagination();
+      return this.paged;
     }
   }
 };

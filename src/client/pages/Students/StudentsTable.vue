@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <md-table v-model="searched" md-sort="createTime" md-sort-order="asc">
+    <md-table v-model="paged" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <md-menu>
@@ -39,29 +39,56 @@
           <a @click="viewStudent(item.ID)">{{ $t("message.view") }}</a>
         </md-table-cell>
       </md-table-row>
+
+      <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
+      </md-table-pagination>
     </md-table>
     <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
 <script>
+import { MdTablePagination } from "components";
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
 };
 
 export default {
+  components: {
+    MdTablePagination
+  },
   data() {
     return {
       preloading: true,
+      page: 1,
+      size: 10,
+      currentSort: "enName",
+      currentSortOrder: "asc",
       search: null,
       searched: [],
-      students: []
+      students: [],
+      paged: []
     };
   },
   created() {
     this.fetchData();
   },
   methods: {
+    rePagination() {
+      this.page = 1;
+      this.pagination();
+    },
+    onUpdatePagination(evt) {
+      this.page = evt.page;
+      this.size = evt.size;
+      this.pagination();
+    },
+    pagination() {
+      this.paged = this.searched.slice(
+        (this.page - 1) * this.size,
+        this.page * this.size
+      );
+    },
     formatGender(gender) {
       return gender == "M"
         ? this.$i18n.t("message.male")
@@ -78,6 +105,7 @@ export default {
           toLower(item.cnName).includes(toLower(this.search)) ||
           toLower(item.enName).includes(toLower(this.search))
       );
+      this.rePagination();
     },
     newStudent() {
       this.$router.push({ path: "/students/new" });
@@ -89,8 +117,11 @@ export default {
       var resource = this.$resource("/api/students");
       resource.get().then(
         response => {
-          this.students = response.body.sort((a, b) => b.createTime - a.createTime);
+          this.students = response.body.sort(
+            (a, b) => b.createTime - a.createTime
+          );
           this.searched = this.students;
+          this.pagination();
           this.preloading = false;
         },
         response => {
@@ -106,6 +137,21 @@ export default {
         verticalAlign: "top",
         type: "danger"
       });
+    },
+    customSort(value) {
+      this.searched.sort((a, b) => {
+        const sortBy = this.currentSort;
+        var leftValue = a[sortBy] ? a[sortBy].toString() : "";
+        var rightValue = b[sortBy] ? b[sortBy].toString() : "";
+
+        if (this.currentSortOrder === "desc") {
+          return leftValue.localeCompare(rightValue);
+        }
+
+        return rightValue.localeCompare(leftValue);
+      });
+      this.rePagination();
+      return this.paged;
     }
   }
 };

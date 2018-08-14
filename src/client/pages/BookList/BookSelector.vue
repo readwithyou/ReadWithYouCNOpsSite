@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-table v-model="searched" @md-selected="onSelect">
+    <md-table v-model="paged" @md-selected="onSelect">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <h1 class="md-title">{{ $tc('message.select_book_hint_msg', selected.length, { count: selected.length}) }}</h1>
@@ -11,11 +11,7 @@
         </md-field>
       </md-table-toolbar>
 
-      <md-table-row 
-      slot="md-table-row" 
-      slot-scope="{ item }" 
-      :md-disabled="shouldBeDisabled(item)"
-      md-selectable="multiple" md-auto-select>
+      <md-table-row slot="md-table-row" slot-scope="{ item }" :md-disabled="shouldBeDisabled(item)" md-selectable="multiple" md-auto-select>
         <md-table-cell :md-label="$t('message.book_code')" md-sort-by="code">{{ item.code }}</md-table-cell>
         <md-table-cell :md-label="$t('message.book_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.book_set')" md-sort-by="set">{{ item.set }}</md-table-cell>
@@ -23,9 +19,10 @@
         <md-table-cell :md-label="$t('message.book_isbn')" md-sort-by="isbn">{{ item.isbn }}</md-table-cell>
         <md-table-cell :md-label="$t('message.read_level')" md-sort-by="readLevel">{{ formatLevel(item.readLevel) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.priority')" md-sort-by="priority">{{ formatPriority(item.priority) }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.inventory_quantity')" md-sort-by="quantity">{{ item.quantity }}</md-table-cell>      
-        <md-table-cell :md-label="$t('message.locked_quantity')" md-sort-by="locked">{{ item.locked }}</md-table-cell>    
       </md-table-row>
+
+      <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
+      </md-table-pagination>
     </md-table>
     
   </div>
@@ -33,6 +30,7 @@
 
 <script>
 import Vue from "vue";
+import { MdTablePagination } from "components";
 
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
@@ -40,6 +38,9 @@ const toLower = text => {
 
 export default {
   name: "TableMultiple",
+  components: {
+    MdTablePagination
+  },
   props: {
     studentId: {
       type: String
@@ -55,12 +56,15 @@ export default {
     }
   },
   data: () => ({
+    page: 1,
+    size: 10,
     search: null,
     searched: [],
     selected: [],
-    books: []
+    books: [],
+    paged: []
   }),
-  created(){
+  created() {
     this.fetchBooks();
   },
   watch: {
@@ -80,6 +84,21 @@ export default {
     }
   },
   methods: {
+    rePagination() {
+      this.page = 1;
+      this.pagination();
+    },
+    onUpdatePagination(evt) {
+      this.page = evt.page;
+      this.size = evt.size;
+      this.pagination();
+    },
+    pagination() {
+      this.paged = this.searched.slice(
+        (this.page - 1) * this.size,
+        this.page * this.size
+      );
+    },
     onSelect(items) {
       this.selected = items;
     },
@@ -91,6 +110,7 @@ export default {
           toLower(item.set).includes(toLower(this.search)) ||
           toLower(item.isbn).includes(toLower(this.search))
       );
+      this.rePagination();
     },
     shouldBeDisabled(item) {
       return item.language !== this.language;
@@ -131,6 +151,7 @@ export default {
           this.books = response.body;
           this.searched = this.books;
           this.selected = [];
+          this.pagination();
         })
         .catch(err => {
           this.notifyFetchingError();

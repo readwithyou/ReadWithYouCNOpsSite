@@ -16,8 +16,11 @@
               <md-icon>add</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item @click="newBookList()">
-                <span>{{ $t("message.new_book_list") }}</span>
+              <md-menu-item @click="newCourseBookList()">
+                <span>{{ $t("message.new_course_book_list") }}</span>
+              </md-menu-item>
+              <md-menu-item @click="newGiftBookList()">
+                <span>{{ $t("message.new_gift_book_list") }}</span>
               </md-menu-item>
             </md-menu-content>
           </md-menu>
@@ -104,6 +107,10 @@ export default {
           return this.$i18n.t("message.approved_status");
         case "REJECTED":
           return this.$i18n.t("message.rejected_status");
+        case "DELIVERED":
+          return this.$i18n.t("message.delivered_status");
+        case "FINISHED":
+          return this.$i18n.t("message.finished_status");
         default:
           return this.$i18n.t("message.unknown_status");
       }
@@ -116,9 +123,14 @@ export default {
           return "md-default";
       }
     },
-    newBookList() {
+    newCourseBookList() {
       this.$router.push({
-        path: "/students/" + this.$route.params.id + "/booklists/new"
+        path: "/students/" + this.$route.params.id + "/booklists/new?purpose=COURSE"
+      });
+    },
+    newGiftBookList() {
+      this.$router.push({
+        path: "/students/" + this.$route.params.id + "/booklists/new?purpose=GIFT"
       });
     },
     viewBookList(bookListId) {
