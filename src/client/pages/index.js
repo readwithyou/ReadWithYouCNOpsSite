@@ -33,6 +33,11 @@ import BookOutbound from '../pages/Books/BookOutbound.vue'
 import BookSelector from '../pages/BookList/BookSelector.vue'
 import BookListTable from '../pages/BookList/BookListTable.vue'
 
+// Course Plan
+import StudentCourseTable from '../pages/CoursePlan/StudentCourseTable.vue'
+import TeacherCourseTable from '../pages/CoursePlan/TeacherCourseTable.vue'
+import CoursePlanForm from '../pages/CoursePlan/CoursePlanForm.vue'
+
 // Student
 import StudentsTable from '../pages/Students/StudentsTable.vue'
 import StudentForm from '../pages/Students/StudentForm.vue'
@@ -43,8 +48,11 @@ import UsersTable from '../pages/UserProfile/UsersTable.vue'
 
 //Tickets
 import TicketsTable from '../pages/Tickets/TicketsTable.vue'
-import LeaveManagementForm from '../pages/Tickets/LeaveManagementForm.vue'
 import CreateTicket from '../pages/Tickets/CreateTicket.vue'
+
+//Toolbox
+import LeaveForm from '../pages/Toolbox/LeaveForm.vue'
+import TimeZonePanel from '../pages/Toolbox/TimeZonePanel.vue'
 
 export {
   SignInPanel,
@@ -57,6 +65,8 @@ export {
   RegistrationDetailPanel,
   CourseArrangementPanel,
   CourseResultPanel,
+  StudentCourseTable,
+  TeacherCourseTable,
   TeachersTable,
   TeacherForm,
   TeacherDetailPanel,
@@ -70,11 +80,14 @@ export {
   BookOutbound,
   BookSelector,
   BookListTable,
+  CoursePlanTable,
+  CoursePlanForm,
   StudentsTable,
   StudentForm,
   StudentDetailPanel,
   UsersTable,
   TicketsTable,
-  LeaveManagementForm,
-  CreateTicket
+  CreateTicket,
+  LeaveForm,
+  TimeZonePanel
 }

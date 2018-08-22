@@ -12,25 +12,16 @@ var wechatAccess = require('./wechat-access');
 var timezoneUtils = require('../utils/timezone-utils');
 
 var regService = function () {
-    moment.fn.zoneName = function () {
-        var abbr = this.zoneAbbr();
-        return timezoneUtils.getAbbrs()[abbr] || abbr;
-    };
-
-    var formatTimeString = function (scheduledTime, locale, timezone) {
+    var formatTimeString = function (scheduledTime, scheduledPeriod, locale, timezone) {
         moment.locale(locale);
         let startMoment = moment(scheduledTime).tz(timezone);
         let scheduledDay = startMoment.format('LL');
         let scheduledDayOfWeek = startMoment.format('dddd');
         let scheduledAmPm = startMoment.format('A');
         let scheduledStartTime = startMoment.format('HH:mm');
-        let endMoment = moment(scheduledTime + 2700000).tz(timezone);
+        let endMoment = moment(scheduledTime + scheduledPeriod * 60 * 1000).tz(timezone);
         let scheduledEndTime = endMoment.format('HH:mm');
-        let displayTimezone = startMoment.format('z') + ', ' + startMoment.format('zz');
-        if (timezone === 'Asia/Shanghai') {
-            //CST is also abbr for China Standard Time. It is a conflict with American CST
-            displayTimezone = 'China Standard Time';
-        }
+        let displayTimezone = timezoneUtils.getTZString(timezone);
         let timeOffset = 'UTC/GMT ' + startMoment.format('Z');
 
         if (locale == 'zh-CN') {
@@ -49,7 +40,7 @@ var regService = function () {
         let email = registration.email;
         let name = registration.enName ? registration.enName : registration.cnName;
         let zoomId = registration.zoomLink;
-        let scheduledTimeString = formatTimeString(registration.scheduledTime, 'zh-CN', 'Asia/Shanghai');
+        let scheduledTimeString = formatTimeString(registration.scheduledTime, registration.scheduledPeriod, 'zh-CN', 'Asia/Shanghai');
 
         // setup email data with unicode symbols
         let subject = sprintf('%s 陪你读书试课通知', name);
@@ -117,7 +108,7 @@ var regService = function () {
         let email = teacher.email;
         let name = teacher.name;
         let timezone = teacher.timezone;
-        let scheduledTimeString = formatTimeString(registration.scheduledTime, 'en-US', timezone);
+        let scheduledTimeString = formatTimeString(registration.scheduledTime, registration.scheduledPeriod, 'en-US', timezone);
 
         let mailSubject = sprintf('Trial email notice for %s. Zoom Link: https://readwithyou.zoom.us/my/%s', registration.enName, zoomId);
         // setup email data with unicode symbols
@@ -275,7 +266,7 @@ var regService = function () {
             (result) => result.Items.filter(item => item.wechatOpenId).forEach(
                 item => {
                     let name = item.enName + ' ' + item.cnName;
-                    let scheduledTimeString = formatTimeString(item.scheduledTime, 'zh-CN', 'Asia/Shanghai');
+                    let scheduledTimeString = formatTimeString(item.scheduledTime, registration.scheduledPeriod, 'zh-CN', 'Asia/Shanghai');
                     notificationSendPromises.push(
                         wechatAccess.sendCourseNotification(accessToken, item.wechatOpenId, name, scheduledTimeString)
                     );

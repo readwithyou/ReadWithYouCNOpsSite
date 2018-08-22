@@ -92,15 +92,9 @@
                                 <md-field>
                                     <label for="read-level">{{ $t("message.read_level") }}</label>
                                     <md-select name="read-level" id="read-level" v-model="bookList.readLevel" disabled  md-dense>
-                                        <md-option value="0">{{ $t("message.level_0") }}</md-option>
-                                        <md-option value="10">{{ $t("message.level_10") }}</md-option>
-                                        <md-option value="20">{{ $t("message.level_20") }}</md-option>
-                                        <md-option value="30">{{ $t("message.level_30") }}</md-option>
-                                        <md-option value="40">{{ $t("message.level_40") }}</md-option>
-                                        <md-option value="50">{{ $t("message.level_50") }}</md-option>
-                                        <md-option value="60">{{ $t("message.level_60") }}</md-option>
-                                        <md-option value="65">{{ $t("message.level_65") }}</md-option>
-                                        <md-option value="70">{{ $t("message.level_70") }}</md-option>
+                                        <md-option v-for="levelString in levelStrings" :key="levelString.level" :value="levelString.level">
+                                            {{ $t(levelString.translation) }}
+                                        </md-option>
                                     </md-select>
                                 </md-field>
                             </div>
@@ -115,6 +109,7 @@
                                     <label for="purpose">{{ $t("message.purpose") }}</label>
                                     <md-select name="purpose" id="purpose" v-model="bookList.purpose" disabled md-dense>
                                         <md-option value="COURSE">{{ $t("message.course_book") }}</md-option>
+                                        <md-option value="SHORT_COURSE">{{ $t("message.short_course_book") }}</md-option>
                                         <md-option value="GIFT">{{ $t("message.gift_book") }}</md-option>
                                     </md-select>
                                 </md-field>
@@ -147,16 +142,12 @@
                                 <md-icon class="md-default">book</md-icon>
 
                                 <div class="md-list-item-text">
-                                    <span>{{book.name}}</span>
+                                    <span class="md-body-2">{{book.name}}&nbsp;&nbsp;<span class="md-body-1">[{{ $t("message."+book.type+"_type") }}]</span></span>
                                     <span>{{book.set}} | {{$t('message.book_code')}} : {{book.code}} | {{$t('message.book_isbn')}} : {{book.isbn}} | {{$t('message.level_'+book.readLevel)}} </span>
                                     <span>
                                         {{$t('message.reading_progress')}} : {{book.readingProgress? book.readingProgress : 0 }} %| 
                                         {{$t('message.delivery_number')}} : {{book.expressNo? book.expressNo: '---'}} 
                                     </span>
-                                </div>
-
-                                <div class="md-list-action">  
-                                    <md-chip class="md-default">{{ $t("message."+book.type+"_type") }}</md-chip>
                                 </div>
 
                                 <div class="md-list-action" v-if="editting">
@@ -183,7 +174,12 @@
 
                                 <div class="md-list-action" v-if="!editting">
                                     <md-button class="md-icon-button md-dense md-raised md-default" @click="activeBook = book; showProgressDialog = true">
-                                        <md-icon>pie_chart</md-icon>
+                                        <md-icon>data_usage</md-icon>
+                                        <md-tooltip>{{ $t("message.set_progress_info") }}</md-tooltip>
+                                    </md-button>
+                                    <md-button class="md-icon-button md-dense md-raised md-default" @click="openEBook(book.ID);">
+                                        <md-icon>launch</md-icon>
+                                        <md-tooltip>{{ $t("message.open_book") }}</md-tooltip>
                                     </md-button>
                                 </div>
                             </md-list-item>
@@ -239,6 +235,7 @@ import Vue from "vue";
 import { BookSelector } from "pages";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import levelUtility from "../../utils/levelUtility.js";
 
 function containsBookInBookList(value) {
   return (
@@ -267,7 +264,8 @@ export default {
       expressNo: null,
       isbn: null
     },
-    bookList: { books: [] }
+    bookList: { books: [] },
+    levelStrings: levelUtility.levelStrings
   }),
   validations: {
     outboundRecord: {
@@ -444,6 +442,12 @@ export default {
           });
         }
       });
+    },
+    openEBook(bookId) {
+      var urlArray = window.location.href.split("#")[0].split("/");
+      urlArray.pop();
+      var url = urlArray.join("/") + "/preview.html?id=" + bookId;
+      window.open(url, "_blank");
     },
     notifyFetchingError() {
       this.$notify({

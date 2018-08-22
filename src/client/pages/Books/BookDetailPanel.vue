@@ -89,15 +89,9 @@
                         <md-field :class="getValidationClass('readLevel')">
                             <label for="book-level">{{ $t("message.read_level") }}</label>
                             <md-select name="book-level" id="book-level" v-model="entry.readLevel" md-dense :disabled="!editting">
-                                <md-option value="999">{{ $t("message.level_999") }}</md-option>
-                                <md-option value="0">{{ $t("message.level_0") }}</md-option>                                
-                                <md-option value="10">{{ $t("message.level_10") }}</md-option>
-                                <md-option value="20">{{ $t("message.level_20") }}</md-option>
-                                <md-option value="30">{{ $t("message.level_30") }}</md-option>
-                                <md-option value="40">{{ $t("message.level_40") }}</md-option>
-                                <md-option value="50">{{ $t("message.level_50") }}</md-option>
-                                <md-option value="60">{{ $t("message.level_60") }}</md-option>
-                                <md-option value="70">{{ $t("message.level_70") }}</md-option>
+                                <md-option v-for="levelString in levelStrings" :key="levelString.level" :value="levelString.level">
+                                    {{ $t(levelString.translation) }}
+                                </md-option>
                             </md-select>
                             <span class="md-error" v-if="!$v.entry.readLevel.required">
                                 {{ $t("message.required_validation_error") }}
@@ -165,6 +159,7 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
+import levelUtility from "../../utils/levelUtility.js";
 
 export default {
   name: "book-detail-panel",
@@ -172,7 +167,8 @@ export default {
   data: () => ({
     entry: {},
     editting: false,
-    sending: false
+    sending: false,
+    levelStrings: levelUtility.levelStrings
   }),
   validations: {
     entry: {

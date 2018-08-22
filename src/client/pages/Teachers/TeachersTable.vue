@@ -49,7 +49,7 @@
 
 <script>
 import { MdTablePagination } from "components";
-import tzStrings from "../../utils/tzStrings.js";
+import tzUtility from "../../utils/tzUtility.js";
 
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
@@ -92,7 +92,7 @@ export default {
       );
     },
     formatTimezone(timezone) {
-      return this.$i18n.t("message." + tzStrings.get(timezone));
+      return this.$i18n.t(tzUtility.getTranslation(timezone));
     },
     formatGender(gender) {
       return gender == "M"

@@ -45,6 +45,9 @@ app.use('/api/booklists', BookListController);
 var InventoryController = require('./controller/inventory-controller');
 app.use('/api/inventory', InventoryController);
 
+var CoursePlanController = require('./controller/course-plan-controller');
+app.use('/api/course-plans', CoursePlanController);
+
 const port = process.env.PORT || 8000;
 // Server
 /*

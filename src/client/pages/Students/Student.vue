@@ -10,7 +10,7 @@
               </md-tab>
 
               <md-tab id="tab-calendar" :md-label="$t('message.course_plan')" md-icon="calendar_today">
-                under construction... please be patient...:)
+                <student-course-table></student-course-table>
               </md-tab>
 
               <md-tab id="tab-other" :md-label="$t('message.book_list')" md-icon="collections_bookmark">
@@ -25,13 +25,14 @@
 </template>
 <script>
 import { NavTabsCard, NavTabsTable } from "components";
-import { StudentDetailPanel, BookListTable } from "pages";
+import { StudentDetailPanel, StudentCourseTable, BookListTable } from "pages";
 
 export default {
   components: {
     NavTabsCard,
     NavTabsTable,
     StudentDetailPanel,
+    StudentCourseTable,
     BookListTable
   },
   data() {

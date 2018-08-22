@@ -73,20 +73,19 @@
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('timezone')">
-                        <label for="timezone">{{ $t("message.time_zone") }} {{ new Date().toLocaleString() | moment('timezone', teacher.timezone, 'YYYY-MM-DD, h:mm:ss a')}}</label>
+                        <label for="timezone">{{ $t("message.time_zone") }} {{ new Date().getTime() | moment('timezone', teacher.timezone, 'YYYY-MM-DD, h:mm:ss a')}}</label>
                         <md-select name="timezone" id="timezone" v-model="teacher.timezone" md-dense :disabled="!editting">
-                            <md-option value="Asia/Shanghai">Shanghai</md-option>
-                            <md-option value="Asia/Tokyo">Tokyo</md-option>
-                            <md-option value="America/New_York">EST observe DST</md-option>
-                            <md-option value="America/Chicago">CST observe DST</md-option>
-                            <md-option value="America/Los_Angeles">PST observe DST</md-option>
-                            <md-option value="America/Denver">MST observe DST</md-option>
-                            <md-option value="America/Phoenix">MST not observe DST</md-option>
-                            <md-option value="America/Panama">Panama</md-option>
+                            <md-option v-for="tzString in tzStrings" :key="tzString.tz" :value="tzString.tz">{{ $t(tzString.translation) }}</md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.teacher.timezone.required">
                             所在时区为必填项目。
                         </span>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-33">
+                    <md-field>
+                        <label for="username">{{ $t("message.username") }}</label>
+                        <md-input name="username" id="username" v-model="teacher.username" :disabled="!editting" type="text"></md-input>
                     </md-field>
                 </div>
             </div>
@@ -121,13 +120,15 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
+import tzUtility from "../../utils/tzUtility.js";
 
 export default {
   mixins: [validationMixin],
   data() {
     return {
       teacher: {},
-      editting: false
+      editting: false,
+      tzStrings: tzUtility.tzStrings
     };
   },
   validations: {

@@ -20,6 +20,10 @@
         <md-icon>person_outline</md-icon>
         <p>{{ $t("message.students") }}</p>
       </sidebar-link>
+      <sidebar-link to="/my-course-plans">
+        <md-icon>calendar_today</md-icon>
+        <p>{{ $t("message.my_course_plans") }}</p>
+      </sidebar-link>
       <sidebar-link to="/books">
         <md-icon>collections_bookmark</md-icon>
         <p>{{ $t("message.books") }}</p>
@@ -32,9 +36,9 @@
         <md-icon>receipt</md-icon>
         <p>{{ $t("message.tickets") }}</p>
       </sidebar-link>
-      <sidebar-link to="/leave">
-        <md-icon>calendar_today</md-icon>
-        <p>{{ $t("message.leave_management") }}</p>
+      <sidebar-link to="/toolbox">
+        <md-icon>build</md-icon>
+        <p>{{ $t("message.toolbox") }}</p>
       </sidebar-link>
       <!--sidebar-link to="/table">
         <md-icon>content_paste</md-icon>

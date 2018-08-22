@@ -11,6 +11,8 @@ import Teacher from 'pages/Teachers/Teacher.vue'
 import Students from 'pages/Students/Students.vue'
 import CreateStudent from 'pages/Students/CreateStudent.vue'
 import Student from 'pages/Students/Student.vue'
+import CreateCoursePlan from 'pages/CoursePlan/CreateCoursePlan.vue'
+import MyCourseTable from 'pages/CoursePlan/MyCourseTable.vue'
 import Books from 'pages/Books/Books.vue'
 import CreateBook from 'pages/Books/CreateBook.vue'
 import Book from 'pages/Books/Book.vue'
@@ -23,7 +25,7 @@ import UserProfile from 'pages/UserProfile.vue'
 import Tickets from 'pages/tickets/Tickets.vue'
 import Ticket from 'pages/tickets/Ticket.vue'
 import CreateTicket from 'pages/tickets/CreateTicket.vue'
-import LeaveManagementForm from 'pages/tickets/LeaveManagementForm.vue'
+import Toolbox from 'pages/Toolbox/Toolbox.vue'
 import TableList from 'pages/TableList.vue'
 import Typography from 'pages/Typography.vue'
 import Notifications from 'pages/Notifications.vue'
@@ -119,6 +121,18 @@ const routes = [
         beforeEnter: ifAuthenticated,
       },
       {
+        path: 'students/:id/course-plans/new',
+        name: '新的课程计划',
+        component: CreateCoursePlan,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'my-course-plans',
+        name: '我的课程计划',
+        component: MyCourseTable,
+        beforeEnter: ifAuthenticated,
+      },
+      {
         path: 'books',
         name: '图书管理列表页',
         component: Books,
@@ -191,9 +205,9 @@ const routes = [
         beforeEnter: ifAuthenticated,
       },
       {
-        path: 'leave',
-        name: '请假管理',
-        component: LeaveManagementForm,
+        path: 'toolbox',
+        name: '工具箱',
+        component: Toolbox,
         beforeEnter: ifAuthenticated,
       },
       {

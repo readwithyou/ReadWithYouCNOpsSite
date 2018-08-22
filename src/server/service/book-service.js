@@ -23,7 +23,7 @@ var bookService = function () {
     function getSelectableBooksAsync(studentId, language, levelBaseline, purpose) {
         let startLevel = 0;
         let endLevel = 999;
-        if (purpose !== 'GIFT' && language === 'en') {
+        if (purpose === 'COURSE' && language === 'en') {
             startLevel = levelBaseline - 10;
             endLevel = levelBaseline + 10;
         }
@@ -34,7 +34,7 @@ var bookService = function () {
             values => {
                 let existBookLists = values[0].Items;
                 let bookIdsRead = [];
-                existBookLists.filter(l => l.purpose === 'COURSE')
+                existBookLists.filter(l => l.purpose === 'COURSE' || l.purpose === 'SHORT_COURSE')
                     .forEach(list =>
                         list.books.forEach(b =>
                             bookIdsRead.push(b.ID)

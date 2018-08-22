@@ -10,11 +10,6 @@ var ticketsDao = require('../dao/tickets-dao');
 var timezoneUtils = require('../utils/timezone-utils');
 
 var ticketService = function () {
-    moment.fn.zoneName = function () {
-        var abbr = this.zoneAbbr();
-        return timezoneUtils.getAbbrs()[abbr] || abbr;
-    };
-
     var formatTimeString = function (startTime, endTime, locale, timezone) {
         moment.locale(locale);
         let startMoment = moment(startTime).tz(timezone);
@@ -23,12 +18,7 @@ var ticketService = function () {
         let endMoment = moment(endTime).tz(timezone);
         let endDay = endMoment.format('LL');
 
-        let displayTimezone = startMoment.format('z') + ', ' + startMoment.format('zz');
-
-        if (timezone === 'Asia/Shanghai') {
-            //CST is also abbr for China Standard Time. It is a conflict with American CST
-            displayTimezone = 'China Standard Time';
-        }
+        let displayTimezone = timezoneUtils.getTZString(timezone);
         let timeOffset = 'UTC/GMT ' + startMoment.format('Z');
 
         if (endTime) {

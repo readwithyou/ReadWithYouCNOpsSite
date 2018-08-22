@@ -97,12 +97,35 @@ var dao = function () {
         });
     };
 
+    var queryByUsernameAsync = function (username) {
+        var params = {
+            TableName: ddbTable,
+            IndexName: "username-index",
+            KeyConditionExpression: " username = :username",
+            ExpressionAttributeValues: {
+                ':username': username
+            },
+            "ScanIndexForward": false
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.query(params, function (err, data) {
+                if (err) {
+                    console.log('Query DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         getAsync,
         createAsync,
         scanAsync,
         removeAsync,
-        updateAsync
+        updateAsync,
+        queryByUsernameAsync
     };
 }();
 

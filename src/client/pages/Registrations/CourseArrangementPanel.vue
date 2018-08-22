@@ -35,12 +35,24 @@
         </div>
         <div class="md-layout-item md-small-size-100 md-size-50">
             <md-field>
-                <label for="teacher-local-time">老师当地时间 {{$t('message.'+tzStrings.get(teacherTimezone))}}</label>
+                <label for="teacher-local-time">老师当地时间 {{$t(tzUtility.getTranslation(teacherTimezone))}}</label>
                 <md-input type="text" id="teacher-local-time" name="teacher-local-time" 
                 :value="registration.scheduledTime | moment('timezone', teacherTimezone, 'YYYY-MM-DD, h:mm:ss a')" disabled />
             </md-field>
         </div>
-        <div class="md-layout-item md-small-size-100 md-size-100">
+        <div class="md-layout-item md-small-size-100 md-size-50">
+            <md-field :class="getValidationClass('scheduledPeriod')">
+                <label for="scheduled-period">时长(min)</label>
+                <md-select name="scheduled-period" id="scheduled-period" v-model="registration.scheduledPeriod" md-dense :disabled="sending">
+                    <md-option value="30">30</md-option>
+                    <md-option value="45">45</md-option>
+                </md-select>
+                <span class="md-error" v-if="!$v.registration.scheduledPeriod.required">
+                    {{ $t("message.required_validation_error") }}
+                </span>
+            </md-field>
+        </div>
+        <div class="md-layout-item md-small-size-100 md-size-50">
             <md-field :class="getValidationClass('zoomLink')">
                 <label for="zoom-link">Zoom ID</label>
                 <md-input name="zoom-link" id="zoom-link" v-model="registration.zoomLink" :disabled="sending" type="text"></md-input>
@@ -91,7 +103,7 @@ import {
 } from "vuelidate/lib/validators";
 
 import { Dropzone } from "components";
-import tzStrings from "../../utils/tzStrings.js";
+import tzUtility from "../../utils/tzUtility.js";
 
 export default {
   name: "CourseArrangementPanel",
@@ -103,7 +115,7 @@ export default {
     initialRegistration: Object
   },
   data: () => ({
-    tzStrings: tzStrings,
+    tzUtility: tzUtility,
     teachers: [],
     registration: {},
     teacherTimezone: null,
@@ -152,6 +164,9 @@ export default {
         required
       },
       zoomLink: {
+        required
+      },
+      scheduledPeriod: {
         required
       },
       courseRemarks: {

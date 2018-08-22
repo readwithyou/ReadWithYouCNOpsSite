@@ -8,9 +8,14 @@ const path = require('path');
 
 module.exports = [
     {
-        entry: './src/client/main.js',
+        entry: {
+            main: './src/client/main.js',
+            previewEntry: './src/client/pages/Preview/preview.js'
+        },
         output: {
-            filename: 'bundle.js',
+            filename: '[name].bundle.js',
+            chunkFilename: '[id].bundle_[chunkhash].js',
+            sourceMapFilename: '[file].map',
             path: __dirname + '/dist/assets',
         },
         devServer: {
@@ -91,7 +96,8 @@ module.exports = [
         },
         plugins: [
             new CleanWebpackPlugin(['dist/'], { watch: true }),
-            new HtmlWebPackPlugin({ template: './src/client/index.html', filename: './index.html', }),
+            new HtmlWebPackPlugin({ template: './src/client/index.html', filename: './index.html', chunks: ['main'] }),
+            new HtmlWebPackPlugin({ template: './src/client/pages/Preview/preview.html', filename: './preview.html', chunks: ['previewEntry'] }),
             new MiniCssExtractPlugin({
                 filename: 'index.css', chunkFilename: 'index.css',
             }),

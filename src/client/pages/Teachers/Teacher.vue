@@ -10,7 +10,7 @@
               </md-tab>
 
               <md-tab id="tab-calendar" md-label="课程安排" md-icon="calendar_today">
-                under construction... please be patient...:)
+                <teacher-course-table></teacher-course-table>
               </md-tab>
 
               <md-tab id="tab-other" md-label="其他信息" md-icon="archive">
@@ -25,13 +25,14 @@
 </template>
 <script>
 import { NavTabsCard, NavTabsTable } from "components";
-import { TeacherDetailPanel } from "pages";
+import { TeacherDetailPanel, TeacherCourseTable } from "pages";
 
 export default {
   components: {
     NavTabsCard,
     NavTabsTable,
-    TeacherDetailPanel
+    TeacherDetailPanel,
+    TeacherCourseTable
   },
   data() {
     return {};

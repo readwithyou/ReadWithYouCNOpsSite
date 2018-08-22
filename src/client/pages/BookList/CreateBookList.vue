@@ -25,14 +25,9 @@
                 <md-field>
                     <label for="read-level">{{ $t("message.read_level") }}</label>
                     <md-select name="read-level" id="read-level" v-model="bookList.readLevel" disabled md-dense>
-                        <md-option value="0">{{ $t("message.level_0") }}</md-option>
-                        <md-option value="10">{{ $t("message.level_10") }}</md-option>
-                        <md-option value="20">{{ $t("message.level_20") }}</md-option>
-                        <md-option value="30">{{ $t("message.level_30") }}</md-option>
-                        <md-option value="40">{{ $t("message.level_40") }}</md-option>
-                        <md-option value="50">{{ $t("message.level_50") }}</md-option>
-                        <md-option value="60">{{ $t("message.level_60") }}</md-option>
-                        <md-option value="70">{{ $t("message.level_70") }}</md-option>
+                      <md-option v-for="levelString in levelStrings" :key="levelString.level" :value="levelString.level">
+                          {{ $t(levelString.translation) }}
+                      </md-option>
                     </md-select>
                 </md-field>
             </div>
@@ -50,6 +45,7 @@
                     <label for="purpose">{{ $t("message.purpose") }}</label>
                     <md-select name="purpose" id="purpose" v-model="bookList.purpose" disabled md-dense>
                         <md-option value="COURSE">{{ $t("message.course_book") }}</md-option>
+                        <md-option value="SHORT_COURSE">{{ $t("message.short_course_book") }}</md-option>
                         <md-option value="GIFT">{{ $t("message.gift_book") }}</md-option>
                     </md-select>
                     <span class="md-error" v-if="!$v.bookList.purpose.required">
@@ -106,14 +102,9 @@
                 <md-field>
                     <label for="read-level">{{ $t("message.read_level") }}</label>
                     <md-select name="read-level" id="read-level" v-model="bookList.readLevel" disabled md-dense>
-                        <md-option value="0">{{ $t("message.level_0") }}</md-option>
-                        <md-option value="10">{{ $t("message.level_10") }}</md-option>
-                        <md-option value="20">{{ $t("message.level_20") }}</md-option>
-                        <md-option value="30">{{ $t("message.level_30") }}</md-option>
-                        <md-option value="40">{{ $t("message.level_40") }}</md-option>
-                        <md-option value="50">{{ $t("message.level_50") }}</md-option>
-                        <md-option value="60">{{ $t("message.level_60") }}</md-option>
-                        <md-option value="70">{{ $t("message.level_70") }}</md-option>
+                      <md-option v-for="levelString in levelStrings" :key="levelString.level" :value="levelString.level">
+                          {{ $t(levelString.translation) }}
+                      </md-option>
                     </md-select>
                 </md-field>
             </div>
@@ -186,6 +177,7 @@
 import { BookSelector } from "pages";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
+import levelUtility from "../../utils/levelUtility.js";
 
 export default {
   name: "CreateBookList",
@@ -201,7 +193,8 @@ export default {
       second: false,
       secondStepError: null,
       third: false,
-      bookList: { purpose: this.$route.query.purpose }
+      bookList: { purpose: this.$route.query.purpose },
+      levelStrings: levelUtility.levelStrings
     };
   },
   validations: {

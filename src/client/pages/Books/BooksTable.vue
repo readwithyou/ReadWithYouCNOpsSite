@@ -39,8 +39,7 @@
         <md-table-cell :md-label="$t('message.book_isbn')" md-sort-by="isbn">{{ item.isbn }}</md-table-cell>
         <md-table-cell :md-label="$t('message.read_level')" md-sort-by="readLevel">{{ formatLevel(item.readLevel) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.priority')" md-sort-by="priority">{{ formatPriority(item.priority) }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.inventory_quantity')" md-sort-by="quantity">{{ item.quantity }}</md-table-cell>      
-        <md-table-cell :md-label="$t('message.locked_quantity')" md-sort-by="locked">{{ item.locked }}</md-table-cell> 
+        <md-table-cell :md-label="$t('message.inventory_quantity')" md-sort-by="quantity">{{ item.quantity }}</md-table-cell>
         <md-table-cell :md-label="$t('message.action')">
           <a @click="viewBook(item.ID)">{{ $t("message.view") }}</a>
         </md-table-cell>
