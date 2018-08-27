@@ -4,16 +4,18 @@
     <md-table v-model="paged" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
-          <md-menu>
-            <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
-              <md-icon>add</md-icon>
-            </md-button>
-            <md-menu-content>
-              <md-menu-item @click="newStudent">
-                <span>{{ $t("message.student") }}</span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+          <can I="create" a="student">
+            <md-menu>
+              <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+                <md-icon>add</md-icon>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item @click="newStudent">
+                  <span>{{ $t("message.student") }}</span>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </can>
         </div>
 
         <md-field md-clearable class="md-toolbar-section-end">
@@ -48,6 +50,7 @@
 </template>
 
 <script>
+import { Can } from '@casl/vue'
 import { MdTablePagination } from "components";
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
@@ -55,6 +58,7 @@ const toLower = text => {
 
 export default {
   components: {
+    Can,
     MdTablePagination
   },
   data() {

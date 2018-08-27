@@ -10,13 +10,14 @@ import VueResource from 'vue-resource'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import DataTables from 'vue-data-tables'
+import { abilitiesPlugin } from '@casl/vue'
 import App from './App.vue'
 
 // router setup
 import routes from './routes/routes'
 
 // vuex
-import store from './store'
+import {store, ability} from './store'
 
 // Plugins
 import GlobalComponents from './globalComponents'
@@ -47,9 +48,10 @@ Vue.use(MaterialDashboard)
 Vue.use(GlobalComponents)
 Vue.use(GlobalDirectives)
 Vue.use(Notifications)
+Vue.use(abilitiesPlugin, ability)
 
 //set up auto logout if auth failed in backend
-import { AUTH_LOGOUT } from "store/actions/auth";
+import { AUTH_LOGOUT } from "store/actions";
 Vue.http.interceptors.push(function (request, next) {
   // continue to next interceptor
   next(function (response) {

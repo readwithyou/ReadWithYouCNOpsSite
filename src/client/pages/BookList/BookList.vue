@@ -48,7 +48,6 @@
                     <md-field>
                         <label>{{ $t("message.set_progress_info") }}</label>
                         <md-input v-model="readingProgress" type="number"></md-input>
-                        <span class="md-suffix">%</span>
                     </md-field>
                 </md-dialog-content>
                 <md-dialog-actions>
@@ -132,7 +131,9 @@
                             </div>
                             <div class="md-layout-item md-small-size-100 md-size-50">
                                 <a @click="showAddDialog = true" class="add-link" v-if="editting">{{ $t("message.add") }}</a>
-                                <a @click="showOutboundDialog = true" class="add-link" v-if="ableToDeliver()">{{ $t("message.outbound") }}</a>
+                                <can I="outbound" a="book">
+                                    <a @click="showOutboundDialog = true" class="add-link" v-if="ableToDeliver()">{{ $t("message.outbound") }}</a>
+                                </can>
                             </div>
                         </div>
 
@@ -145,7 +146,7 @@
                                     <span class="md-body-2">{{book.name}}&nbsp;&nbsp;<span class="md-body-1">[{{ $t("message."+book.type+"_type") }}]</span></span>
                                     <span>{{book.set}} | {{$t('message.book_code')}} : {{book.code}} | {{$t('message.book_isbn')}} : {{book.isbn}} | {{$t('message.level_'+book.readLevel)}} </span>
                                     <span>
-                                        {{$t('message.reading_progress')}} : {{book.readingProgress? book.readingProgress : 0 }} %| 
+                                        {{$t('message.reading_progress')}} : {{book.readingProgress? book.readingProgress : 0 }} | 
                                         {{$t('message.delivery_number')}} : {{book.expressNo? book.expressNo: '---'}} 
                                     </span>
                                 </div>
@@ -177,7 +178,7 @@
                                         <md-icon>data_usage</md-icon>
                                         <md-tooltip>{{ $t("message.set_progress_info") }}</md-tooltip>
                                     </md-button>
-                                    <md-button class="md-icon-button md-dense md-raised md-default" @click="openEBook(book.ID);">
+                                    <md-button class="md-icon-button md-dense md-raised md-default" v-if="bookList.status !== 'FINISHED'" @click="openEBook(book.ID);">
                                         <md-icon>launch</md-icon>
                                         <md-tooltip>{{ $t("message.open_book") }}</md-tooltip>
                                     </md-button>
@@ -220,9 +221,13 @@
                         </div>
                         <div class="md-layout-item md-size-100 text-center">
                             <md-button @click="reply" class="md-round md-default" :disabled="sending">{{ $t("message.reply") }}</md-button>
-                            <md-button @click="reject" class="md-round md-default" v-if="ableToReject()" :disabled="sending">{{ $t("message.reject") }}</md-button>
-                            <md-button @click="approve" class="md-round md-default" v-if="ableToApprove()" :disabled="sending">{{ $t("message.approve") }}</md-button>
-                            <md-button @click="delivered" class="md-round md-default" v-if="ableToDeliver()" :disabled="sending">{{ $t("message.mark_delivered") }}</md-button>
+                            <can I="review" a="bookList">
+                                <md-button @click="reject" class="md-round md-default" v-if="ableToReject()" :disabled="sending">{{ $t("message.reject") }}</md-button>
+                                <md-button @click="approve" class="md-round md-default" v-if="ableToApprove()" :disabled="sending">{{ $t("message.approve") }}</md-button>
+                            </can>
+                            <can I="outbound" a="book">
+                                <md-button @click="delivered" class="md-round md-default" v-if="ableToDeliver()" :disabled="sending">{{ $t("message.mark_delivered") }}</md-button>
+                            </can>
                             <md-button @click="finished" class="md-round md-default" v-if="ableToFinish()" :disabled="sending">{{ $t("message.mark_finished") }}</md-button>
                         </div>
                     </md-card-content>
@@ -232,6 +237,7 @@
 </template>
 <script>
 import Vue from "vue";
+import { Can } from "@casl/vue";
 import { BookSelector } from "pages";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
@@ -250,6 +256,7 @@ export default {
   name: "book-list-form",
   mixins: [validationMixin],
   components: {
+    Can,
     BookSelector
   },
   data: () => ({

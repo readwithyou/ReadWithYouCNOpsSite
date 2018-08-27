@@ -22,10 +22,10 @@ var ticketService = function () {
         let timeOffset = 'UTC/GMT ' + startMoment.format('Z');
 
         if (endTime) {
-            return startDay + '-' + endDay + '(' + displayTimezone + ' ' + timeOffset + ')';
+            return 'from ' + startDay + ' to ' + endDay + '(' + displayTimezone + ' ' + timeOffset + ')';
         }
         else {
-            return startDay + '(' + displayTimezone + ', ' + timeOffset + ')';
+            return 'on ' + startDay + '(' + displayTimezone + ', ' + timeOffset + ')';
         }
     };
 
@@ -36,7 +36,7 @@ var ticketService = function () {
 
         // setup email data with unicode symbols
         let timeString = formatTimeString(leaveRequest.startLeaveTime, leaveRequest.endLeaveTime, 'en-US', timezone);
-        let mailSubject = sprintf('%s will cancel the lesson on %s.', leaveRequest.studentName, timeString);
+        let mailSubject = sprintf('%s will cancel the lesson %s.', leaveRequest.studentName, timeString);
         let mailContent = sprintf(mailTemplates.teacherLeaveEmail, name, leaveRequest.studentName, timeString);
 
         return sendMail.sendWithParamsAsync(email, 'lessons@readwithyou.com', mailSubject, mailContent, true);

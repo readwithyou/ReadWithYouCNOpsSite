@@ -21,7 +21,7 @@ import BookOutbound from 'pages/Books/BookOutbound.vue'
 import CreateBookList from 'pages/BookList/CreateBookList.vue'
 import BookList from 'pages/BookList/BookList.vue'
 import Users from 'pages/UserProfile/Users.vue'
-import UserProfile from 'pages/UserProfile.vue'
+import UserProfile from 'pages/UserProfile/UserProfile.vue'
 import Tickets from 'pages/tickets/Tickets.vue'
 import Ticket from 'pages/tickets/Ticket.vue'
 import CreateTicket from 'pages/tickets/CreateTicket.vue'
@@ -29,10 +29,10 @@ import Toolbox from 'pages/Toolbox/Toolbox.vue'
 import TableList from 'pages/TableList.vue'
 import Typography from 'pages/Typography.vue'
 import Notifications from 'pages/Notifications.vue'
-import Store from 'store'
+import { store } from 'store'
 
 const ifNotAuthenticated = (to, from, next) => {
-  if (!Store.getters.isAuthenticated) {
+  if (!store.getters.isAuthenticated) {
     next()
     return
   }
@@ -40,8 +40,8 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const ifAuthenticated = (to, from, next) => {
-  if (Store.getters.isAuthenticated) {
-    Vue.http.headers.common['x-access-token'] = Store.getters.authToken;
+  if (store.getters.isAuthenticated) {
+    Vue.http.headers.common['x-access-token'] = store.getters.authToken;
     next()
     return
   }
@@ -56,133 +56,133 @@ const routes = [
     children: [
       {
         path: '/login',
-        name: '登录',
+        name: 'Login',
         component: Login,
         beforeEnter: ifNotAuthenticated,
       },
       {
         path: 'dashboard',
-        name: '主页',
+        name: 'Dashboard',
         component: Dashboard,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'registrations',
-        name: '试课报名列表页',
+        name: 'Trail Course Registrations',
         component: Registrations,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'registrations/new',
-        name: '新的试课报名',
+        name: 'New Trail Course Registration',
         component: CreateRegistration,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'registrations/:id',
-        name: '试课报名详情页',
+        name: 'Trail Course Registration Detail',
         component: Registration,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'teachers',
-        name: '老师管理列表页',
+        name: 'Teachers',
         component: Teachers,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'teachers/new',
-        name: '新的老师',
+        name: 'New Teacher',
         component: CreateTeacher,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'teachers/:id',
-        name: '老师管理详情页',
+        name: 'Teacher Detail',
         component: Teacher,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'students',
-        name: '学员管理列表页',
+        name: 'Students',
         component: Students,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'students/new',
-        name: '新的学员',
+        name: 'New Students',
         component: CreateStudent,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'students/:id',
-        name: '学员管理详情页',
+        name: 'Students Detail',
         component: Student,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'students/:id/course-plans/new',
-        name: '新的课程计划',
+        name: 'New Course Plan',
         component: CreateCoursePlan,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'my-course-plans',
-        name: '我的课程计划',
+        name: 'My Course Plan',
         component: MyCourseTable,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'books',
-        name: '图书管理列表页',
+        name: 'Books',
         component: Books,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'books/new',
-        name: '新的图书',
+        name: 'New Book',
         component: CreateBook,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'books/inbound',
-        name: '图书入库',
+        name: 'Book Inbound',
         component: BookInbound,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'books/outbound',
-        name: '图书出库',
+        name: 'Book Outbound',
         component: BookOutbound,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'books/:id',
-        name: '图书管理详情页',
+        name: 'Book Detail',
         component: Book,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'students/:id/booklists/new',
-        name: '新的书单',
+        name: 'New Book List',
         component: CreateBookList,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'students/:id/booklists/:bookListId',
-        name: '书单详情',
+        name: 'Book List Detail',
         component: BookList,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'users',
-        name: '用户管理',
+        name: 'User Management',
         component: Users,
         beforeEnter: ifAuthenticated,
       },
       {
-        path: 'user',
-        name: '个人资料',
+        path: 'users/me',
+        name: 'My Profile',
         component: UserProfile,
         beforeEnter: ifAuthenticated,
       },
@@ -194,19 +194,19 @@ const routes = [
       },
       {
         path: 'tickets/new',
-        name: '新的Ticket',
+        name: 'New Ticket',
         component: CreateTicket,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'tickets/:id',
-        name: 'Ticket 详情页',
+        name: 'Ticket Detail',
         component: Ticket,
         beforeEnter: ifAuthenticated,
       },
       {
         path: 'toolbox',
-        name: '工具箱',
+        name: 'Toolbox',
         component: Toolbox,
         beforeEnter: ifAuthenticated,
       },

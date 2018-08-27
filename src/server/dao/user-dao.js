@@ -43,6 +43,34 @@ var dao = function () {
         });
     };
 
+    var updateProfileAsync = function (username, name, email) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                username: username
+            },
+            UpdateExpression: 'SET #name =:name, #email =:email',
+            ExpressionAttributeNames: {
+                '#name': 'name',
+                '#email': 'email'
+            },
+            ExpressionAttributeValues: {
+                ':name': name,
+                ':email': email
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     var scanAsync = function () {
         var params = {
             TableName: ddbTable
@@ -87,6 +115,7 @@ var dao = function () {
 
     return {
         createAsync,
+        updateProfileAsync,
         getAsync,
         scanAsync,
         updateLockAsync

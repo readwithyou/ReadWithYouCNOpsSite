@@ -161,7 +161,7 @@ var dao = function () {
         var params = {
             TableName: ddbTable,
             IndexName: "language-readLevel-index",
-            ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, ebookUrl",
+            ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, quantity, ebookUrl",
             KeyConditionExpression: " #language = :language and readLevel BETWEEN :startLevel and :endLevel",
             ExpressionAttributeNames: {
                 "#name": "name",

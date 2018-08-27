@@ -24,7 +24,7 @@
         <md-table-cell :md-label="$t('message.status')" md-sort-by="locked">
           <md-chip :class="getStatusClass(item.locked)">{{ formatStatus(item.locked) }}</md-chip>
         </md-table-cell>
-        <md-table-cell :md-label="$t('message.action')">
+        <md-table-cell :md-label="$t('message.action')" v-if="$can('edit', 'user')">
           <a @click="lockUser(item.username)" v-if="!item.locked">{{ $t("message.lock") }}</a>&nbsp;&nbsp;
           <a @click="unlockUser(item.username)" v-if="item.locked">{{ $t("message.unlock") }}</a>
         </md-table-cell>

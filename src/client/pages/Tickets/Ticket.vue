@@ -1,5 +1,6 @@
 <template>
-        <div class="md-layout">
+    <div class="md-layout">
+        <can I="read" a="ticket">
             <div class="md-layout-item md-medium-size-100 md-size-66">
                 <md-card>
                     <md-card-header data-background-color="purple">
@@ -186,15 +187,20 @@
                     </md-card-content>
                 </md-card>
             </div>
-        </div>
+        </can>
+    </div>
 </template>
 <script>
+import { Can } from "@casl/vue";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 
 export default {
   name: "ticket-detail-form",
   mixins: [validationMixin],
+  components: {
+    Can
+  },
   data: () => ({
     ticket: {},
     users: [],

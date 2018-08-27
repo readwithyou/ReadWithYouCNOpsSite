@@ -1,0 +1,243 @@
+{
+    "zero": [
+        {}
+    ],
+    "sales": [
+        {
+            "action": "read",
+            "subject": "registration"
+        },
+        {
+            "action": "read",
+            "subject": "profile"
+        },
+        {
+            "action": "use",
+            "subject": "toolbox"
+        },
+        {
+            "action": "edit",
+            "subject": "profile"
+        }
+    ],
+    "ops": [
+        {
+            "action": "read",
+            "subject": "registration"
+        },
+        {
+            "action": "read",
+            "subject": "profile"
+        },
+        {
+            "action": "use",
+            "subject": "toolbox"
+        },
+        {
+            "action": "edit",
+            "subject": "profile"
+        }
+    ],
+    "ops_admin": [
+        {
+            "action": "read",
+            "subject": "registration"
+        },
+        {
+            "action": "create",
+            "subject": "registration"
+        },
+        {
+            "action": "edit",
+            "subject": "registration"
+        },
+        {
+            "action": "read",
+            "subject": "teacher"
+        },
+        {
+            "action": "create",
+            "subject": "teacher"
+        },
+        {
+            "action": "edit",
+            "subject": "teacher"
+        },
+        {
+            "action": "read",
+            "subject": "studentList"
+        },
+        {
+            "action": "read",
+            "subject": "student"
+        },
+        {
+            "action": "create",
+            "subject": "student"
+        },
+        {
+            "action": "edit",
+            "subject": "student"
+        },
+        {
+            "action": "read",
+            "subject": "studentCoursePlan"
+        },
+        {
+            "action": "create",
+            "subject": "studentCoursePlan"
+        },
+        {
+            "action": "read",
+            "subject": "bookList"
+        },
+        {
+            "action": "create",
+            "subject": "giftBookList"
+        },
+        {
+            "action": "create",
+            "subject": "shortCourseBookList"
+        },
+        {
+            "action": "create",
+            "subject": "courseBookList"
+        },
+        {
+            "action": "review",
+            "subject": "bookList"
+        },
+        {
+            "action": "read",
+            "subject": "book"
+        },
+        {
+            "action": "create",
+            "subject": "book"
+        },
+        {
+            "action": "inbound",
+            "subject": "book"
+        },
+        {
+            "action": "outbound",
+            "subject": "book"
+        },
+        {
+            "action": "edit",
+            "subject": "book"
+        },
+        {
+            "action": "use",
+            "subject": "toolbox"
+        },
+        {
+            "action": "read",
+            "subject": "user"
+        },
+        {
+            "action": "edit",
+            "subject": "user"
+        },
+        {
+            "action": "read",
+            "subject": "profile"
+        },
+        {
+            "action": "edit",
+            "subject": "profile"
+        },
+        {
+            "action": "read",
+            "subject": "ticket"
+        },
+        {
+            "action": "create",
+            "subject": "ticket"
+        },
+        {
+            "action": "edit",
+            "subject": "ticket"
+        }
+    ],
+    "teacher": [
+        {
+            "action": "read",
+            "subject": "myCoursePlan"
+        },
+        {
+            "action": "read",
+            "subject": "student"
+        },
+        {
+            "action": "read",
+            "subject": "studentCoursePlan"
+        },
+        {
+            "action": "read",
+            "subject": "bookList"
+        },
+        {
+            "action": "create",
+            "subject": "shortCourseBookList"
+        },
+        {
+            "action": "create",
+            "subject": "courseBookList"
+        },
+        {
+            "action": "read",
+            "subject": "profile"
+        },
+        {
+            "action": "edit",
+            "subject": "profile"
+        }
+    ],
+    "teacher_admin": [
+        {
+            "action": "read",
+            "subject": "myCoursePlan"
+        },
+        {
+            "action": "read",
+            "subject": "teacher"
+        },
+        {
+            "action": "edit",
+            "subject": "teacher"
+        },
+        {
+            "action": "read",
+            "subject": "book"
+        },
+        {
+            "action": "create",
+            "subject": "book"
+        },
+        {
+            "action": "edit",
+            "subject": "book"
+        },
+        {
+            "action": "read",
+            "subject": "ticket"
+        },
+        {
+            "action": "create",
+            "subject": "ticket"
+        },
+        {
+            "action": "edit",
+            "subject": "ticket"
+        },
+        {
+            "action": "read",
+            "subject": "profile"
+        },
+        {
+            "action": "edit",
+            "subject": "profile"
+        }
+    ]
+}

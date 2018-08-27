@@ -2,11 +2,12 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
+var userDao = require('../dao/user-dao');
 var verifyToken = require('../service/verify-token');
+var abilityRulesService = require('../service/ability-rules-service');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
-var userDao = require('../dao/user-dao');
 
 /**
  * Configure JWT
@@ -31,8 +32,13 @@ router.post('/login', function (req, res) {
                 expiresIn: 86400// expires in 24 hours
             });
 
+            // get ability rules
+            var username = user.Item.username;
+            var group = user.Item.group;
+            var rules = abilityRulesService.getRules(username, group);
+
             // return the information including token as JSON
-            return res.status(200).send({ auth: true, token: token });
+            return res.status(200).send({ auth: true, token: token, rules: rules });
         },
         (err) => res.status(500).send('Error on the server.')
     );

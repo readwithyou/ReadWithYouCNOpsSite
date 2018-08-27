@@ -35,6 +35,7 @@
                 <md-icon>group</md-icon>
                 <label for="s-group">{{ $t("message.group") }}</label>
                 <md-select name="group" id="group" v-model="entry.group" md-dense :disabled="sending">
+                    <md-option value="sales">{{ $t("message.sales") }}</md-option>
                     <md-option value="ops_admin">{{ $t("message.ops_admin") }}</md-option>
                     <md-option value="ops">{{ $t("message.ops") }}</md-option>
                     <md-option value="teacher_admin">{{ $t("message.teacher_admin") }}</md-option>
@@ -65,7 +66,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
-import { AUTH_REQUEST } from "store/actions/auth";
+import { AUTH_REQUEST } from "store/actions";
 
 export default {
   name: "SignInPanel",

@@ -7,7 +7,9 @@
                     <h4>{{ $t("message.basic_info") }}</h4>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-50">
-                    <md-switch v-model="editting" class="edit-switch">{{ $t("message.edit") }}</md-switch>
+                    <can I="edit" a="student">
+                        <md-switch v-model="editting" class="edit-switch">{{ $t("message.edit") }}</md-switch>
+                    </can>
                 </div>
             </div>
             <div class="md-layout">
@@ -145,13 +147,16 @@
             <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
 
             <div class="md-layout-item md-size-100 text-center">
-                <md-button type="submit" class="md-primary" :disabled="!editting">{{ $t("message.save") }}</md-button>
+                <can I="edit" a="student">
+                    <md-button type="submit" class="md-primary" :disabled="!editting">{{ $t("message.save") }}</md-button>
+                </can>
             </div>
         </div>
     </div>
     </form>
 </template>
 <script>
+import { Can } from "@casl/vue";
 import { validationMixin } from "vuelidate";
 import {
   required,
@@ -164,6 +169,9 @@ import levelUtility from "../../utils/levelUtility.js";
 
 export default {
   mixins: [validationMixin],
+  components: {
+    Can
+  },
   data() {
     return {
       entry: {},

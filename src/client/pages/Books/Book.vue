@@ -1,5 +1,6 @@
 <template>
   <div class="content">
+    <can I="read" a="book">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <nav-tabs-card>
           <template slot="content">
@@ -17,14 +18,17 @@
           </template>
         </nav-tabs-card>
       </div>
+    </can>
   </div>
 </template>
 <script>
+import { Can } from "@casl/vue";
 import { NavTabsCard, NavTabsTable } from "components";
 import { BookDetailPanel, BookInventoryPanel } from "pages";
 
 export default {
   components: {
+    Can,
     NavTabsCard,
     NavTabsTable,
     BookDetailPanel,

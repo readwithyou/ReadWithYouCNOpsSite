@@ -8,13 +8,13 @@
               <md-icon>menu</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item @click="newBook()">
+              <md-menu-item @click="newBook()" v-if="$can('create', 'book')">
                 <span>{{ $t("message.new_book") }}</span>
               </md-menu-item>
-              <md-menu-item @click="handleInventory('inbound')">
+              <md-menu-item @click="handleInventory('inbound')" v-if="$can('inbound', 'book')">
                 <span>{{ $t("message.inbound") }}</span>
               </md-menu-item>
-              <md-menu-item @click="handleInventory('outbound')">
+              <md-menu-item @click="handleInventory('outbound')" v-if="$can('outbound', 'book')">
                 <span>{{ $t("message.outbound") }}</span>
               </md-menu-item>
             </md-menu-content>

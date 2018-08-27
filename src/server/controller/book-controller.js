@@ -62,8 +62,9 @@ router.post('/query', verifyToken, function (req, res, next) {
     let studentId = item.studentId;
     let language = item.language;
     let levelBaseline = item.levelBaseline;
+    let purpose = item.purpose;
 
-    bookService.getSelectableBooksAsync(studentId, language, levelBaseline).then(
+    bookService.getSelectableBooksAsync(studentId, language, levelBaseline, purpose).then(
         (data) => res.json(data),
         () => res.status(500).end()
     );

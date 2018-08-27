@@ -3,16 +3,18 @@
     <md-table v-model="searched" md-sort="ID" md-sort-order="asc">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
-          <md-menu>
-            <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
-              <md-icon>add</md-icon>
-            </md-button>
-            <md-menu-content>
-              <md-menu-item @click="newCoursePlan()">
-                <span>{{ $t("message.course_plan") }}</span>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
+          <can I="create" a="studentCoursePlan">
+            <md-menu>
+              <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+                <md-icon>add</md-icon>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item @click="newCoursePlan()">
+                  <span>{{ $t("message.course_plan") }}</span>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </can>
         </div>
 
         <md-field md-clearable class="md-toolbar-section-end">
@@ -29,7 +31,7 @@
         <md-table-cell :md-label="$t('message.course_plan_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
         <md-table-cell :md-label="$t('message.course_name')" md-sort-by="courseName">{{ formatName(item.courseName) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.course_type')" md-sort-by="courseType">{{ formatType(item.courseType) }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.teacher_id')" md-sort-by="teacherId">{{ formatTeacher(item.teacherId) }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.teacher')" md-sort-by="teacherId">{{ formatTeacher(item.teacherId) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_by')" md-sort-by="createBy">{{ item.createBy }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleString():'' }}
@@ -42,6 +44,7 @@
 
 <script>
 import Vue from "vue";
+import { Can } from '@casl/vue'
 import courseUtility from "../../utils/courseUtility.js";
 
 const toLower = text => {
@@ -49,6 +52,9 @@ const toLower = text => {
 };
 
 export default {
+  components: {
+    Can
+  },
   data() {
     return {
       search: null,

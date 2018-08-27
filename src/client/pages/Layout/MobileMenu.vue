@@ -29,14 +29,14 @@
           <p>Profile</p>
         </a>
         <ul class="dropdown-menu dropdown-menu-right">
-          <li><a href="#" @click="logout">登出</a></li>
+          <li><a href="#" @click="logout">{{ $t("message.sign_out") }}</a></li>
         </ul>
       </drop-down>
     </li>
   </ul>
 </template>
 <script>
-import { AUTH_LOGOUT } from "store/actions/auth";
+import { AUTH_LOGOUT } from "store/actions";
 
 export default {
   data() {

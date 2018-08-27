@@ -16,13 +16,13 @@
               <md-icon>add</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item @click="newCourseBookList()">
+              <md-menu-item @click="newCourseBookList()" v-if="$can('create', 'courseBookList')">
                 <span>{{ $t("message.new_course_book_list") }}</span>
               </md-menu-item>
-              <md-menu-item @click="newShortCourseBookList()">
+              <md-menu-item @click="newShortCourseBookList()" v-if="$can('create', 'shortCourseBookList')">
                 <span>{{ $t("message.new_short_course_book_list") }}</span>
               </md-menu-item>
-              <md-menu-item @click="newGiftBookList()">
+              <md-menu-item @click="newGiftBookList()" v-if="$can('create', 'giftBookList')">
                 <span>{{ $t("message.new_gift_book_list") }}</span>
               </md-menu-item>
             </md-menu-content>

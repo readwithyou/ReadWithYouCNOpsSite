@@ -34,7 +34,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { AUTH_REQUEST } from "store/actions/auth";
+import { AUTH_REQUEST } from "store/actions";
 
 export default {
   name: "SignInPanel",

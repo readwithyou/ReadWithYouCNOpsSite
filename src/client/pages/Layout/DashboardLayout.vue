@@ -8,37 +8,41 @@
         <md-icon>dashboard</md-icon>
         <p>{{ $t("message.home_page") }}</p>
       </sidebar-link>
-      <sidebar-link to="/registrations">
+      <sidebar-link to="/registrations" v-if="$can('read', 'registration')">
         <md-icon>ballot</md-icon>
         <p>{{ $t("message.registrations") }}</p>
       </sidebar-link>
-      <sidebar-link to="/teachers">
+      <sidebar-link to="/teachers" v-if="$can('read', 'teacher')">
         <md-icon>supervisor_account</md-icon>
         <p>{{ $t("message.tearchers") }}</p>
       </sidebar-link>
-      <sidebar-link to="/students">
+      <sidebar-link to="/students" v-if="$can('read', 'studentList')">
         <md-icon>person_outline</md-icon>
         <p>{{ $t("message.students") }}</p>
       </sidebar-link>
-      <sidebar-link to="/my-course-plans">
+      <sidebar-link to="/my-course-plans" v-if="$can('read', 'myCoursePlan')">
         <md-icon>calendar_today</md-icon>
         <p>{{ $t("message.my_course_plans") }}</p>
       </sidebar-link>
-      <sidebar-link to="/books">
+      <sidebar-link to="/books" v-if="$can('read', 'book')">
         <md-icon>collections_bookmark</md-icon>
         <p>{{ $t("message.books") }}</p>
       </sidebar-link>
-      <sidebar-link to="/users">
+      <sidebar-link to="/users" v-if="$can('read', 'user')">
         <md-icon>person</md-icon>
         <p>{{ $t("message.users") }}</p>
       </sidebar-link>
-      <sidebar-link to="/tickets">
+      <sidebar-link to="/tickets" v-if="$can('read', 'ticket')">
         <md-icon>receipt</md-icon>
         <p>{{ $t("message.tickets") }}</p>
       </sidebar-link>
-      <sidebar-link to="/toolbox">
+      <sidebar-link to="/toolbox" v-if="$can('use', 'toolbox')">
         <md-icon>build</md-icon>
         <p>{{ $t("message.toolbox") }}</p>
+      </sidebar-link>
+      <sidebar-link to="/users/me" v-if="$can('read', 'profile')">
+        <md-icon>assignment_ind</md-icon>
+        <p>{{ $t("message.my_profile") }}</p>
       </sidebar-link>
       <!--sidebar-link to="/table">
         <md-icon>content_paste</md-icon>

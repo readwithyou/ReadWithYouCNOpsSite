@@ -1,7 +1,7 @@
 import { USER_REQUEST, USER_ERROR, USER_SUCCESS } from '../actions/user'
 import apiCall from 'utils/api'
 import Vue from 'vue'
-import { AUTH_LOGOUT } from '../actions/auth'
+import { AUTH_LOGOUT } from '../actions'
 
 const state = { status: '', profile: {} }
 

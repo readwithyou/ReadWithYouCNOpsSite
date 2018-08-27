@@ -8,7 +8,9 @@
             <p class="category">{{ $t("message.teachers_card_subtitle") }}</p>
           </md-card-header>
           <md-card-content>
-            <teachers-table table-header-color="purple"></teachers-table>
+            <can I="read" a="teacher">
+              <teachers-table table-header-color="purple"></teachers-table>
+            </can>
           </md-card-content>
         </md-card>
       </div>
@@ -17,10 +19,12 @@
 </template>
 
 <script>
+import { Can } from '@casl/vue'
 import { TeachersTable } from "pages";
 
 export default {
   components: {
+    Can,
     TeachersTable
   }
 };
