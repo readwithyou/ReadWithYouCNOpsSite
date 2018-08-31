@@ -19,7 +19,7 @@
 
         <md-field md-clearable class="md-toolbar-section-start">
           <label for="filters">{{ $t('message.filter_hint') }}</label>
-          <md-select v-model="filters" name="filters" id="filters" multiple @input="searchOnTable">
+          <md-select v-model="filters" name="filters" id="filters" md-dense multiple @input="searchOnTable">
             <md-option value="CLOSED">CLOSED Tickets</md-option>
             <md-option value="PB_SYSTEM_BUG">{{ $t("message.ticket_type_pb_system_bug") }}</md-option>
             <md-option value="OPS_SYSTEM_BUG">{{ $t("message.ticket_type_ops_system_bug") }}</md-option>
@@ -38,7 +38,9 @@
       </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell :md-label="$t('message.ticket_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.ticket_id')" md-sort-by="ID">
+          <a @click="viewTicket(item.ID)">{{ item.ID }}</a>
+        </md-table-cell>
         <md-table-cell :md-label="$t('message.title')" md-sort-by="title">{{ item.title }}</md-table-cell>
         <md-table-cell :md-label="$t('message.ticket_type')" md-sort-by="type">{{ formatType(item.type) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.priority')" :class="getPriorityClass(item.priority)" md-sort-by="priority">
@@ -53,9 +55,6 @@
         </md-table-cell>
         <md-table-cell :md-label="$t('message.update_time')" md-sort-by="modifyTime">
           {{ item.modifyTime?new Date(item.modifyTime).toLocaleString():'' }}
-        </md-table-cell>
-        <md-table-cell :md-label="$t('message.action')">
-          <a @click="viewTicket(item.ID)">{{ $t("message.view") }}</a>
         </md-table-cell>
       </md-table-row>
 

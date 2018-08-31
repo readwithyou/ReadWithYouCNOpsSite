@@ -48,7 +48,7 @@ var dao = function () {
     var scanAsync = function () {
         var params = {
             TableName: ddbTable,
-            ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, quantity, locked",
+            ProjectionExpression: "ID, code, #name, #set, #language, isbn, readLevel, priority, quantity, locked, tag",
             ExpressionAttributeNames: {
                 "#name": "name",
                 "#set": "set",

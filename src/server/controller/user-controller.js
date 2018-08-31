@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var bcrypt = require('bcryptjs');
 
 router.use(bodyParser.urlencoded({ extended: false }));
 router.use(bodyParser.json());
@@ -45,6 +46,14 @@ router.post('/:username/unlock', verifyToken, function (req, res, next) {
     userDao.updateLockAsync(req.params.username, false).then(
         (data) => res.status(200).end(),
         (err) => res.status(500).end()
+    );
+});
+
+router.post('/:username/reset', verifyToken, function (req, res, next) {
+    var newPassword = bcrypt.hashSync(req.params.username, 8);
+    userDao.updatePasswordAsync(req.params.username, newPassword).then(
+        (data) => res.status(200).send(),
+        (err) => res.status(500).send("There was a problem when reset the password.")
     );
 });
 

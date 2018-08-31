@@ -67,6 +67,27 @@ router.post('/signon', function (req, res) {
     );
 });
 
+router.post('/pwd', function (req, res) {
+    var username = req.body.username;
+    var originPassword = req.body.originPassword;
+
+    userDao.getAsync(username).then(
+        (user) => {
+            if (!user.Item) return res.status(404).send('No user found.');
+            var passwordIsValid = bcrypt.compareSync(originPassword, user.Item.password);
+
+            if (!passwordIsValid) return res.status(404).send('Password incorrect!');
+
+            var newPassword = bcrypt.hashSync(req.body.newPassword, 8);
+            userDao.updatePasswordAsync(username, newPassword).then(
+                (data) => res.status(200).send(),
+                (err) => res.status(500).send("There was a problem when changing the password.")
+            );
+        },
+        (err) => res.status(500).send('Error on the server.')
+    );
+});
+
 router.get('/me', verifyToken, function (req, res, next) {
     userDao.getAsync(req.username).then(
         (user) => {

@@ -65,10 +65,14 @@ export default {
       );
     },
     formatDescription(description) {
-      let desObj = JSON.parse(description);
-      if (typeof desObj === "object") {
-        return this.$i18n.t("message.outbound_description", desObj);
-      }
+      try {
+        let desObj = JSON.parse(description);
+
+        if (typeof desObj === "object") {
+          return this.$i18n.t("message.outbound_description", desObj);
+        }
+      } catch (e) {}
+
       return description;
     },
     formatType(inventoryType) {

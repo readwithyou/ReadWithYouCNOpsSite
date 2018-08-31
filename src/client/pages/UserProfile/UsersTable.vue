@@ -26,7 +26,8 @@
         </md-table-cell>
         <md-table-cell :md-label="$t('message.action')" v-if="$can('edit', 'user')">
           <a @click="lockUser(item.username)" v-if="!item.locked">{{ $t("message.lock") }}</a>&nbsp;&nbsp;
-          <a @click="unlockUser(item.username)" v-if="item.locked">{{ $t("message.unlock") }}</a>
+          <a @click="unlockUser(item.username)" v-if="item.locked">{{ $t("message.unlock") }}</a>&nbsp;&nbsp;
+          <a @click="reset(item.username)">{{ $t("message.reset_password") }}</a>
         </md-table-cell>
       </md-table-row>
 
@@ -142,6 +143,17 @@ export default {
         }
       );
     },
+    reset(username) {
+      var resource = this.$resource("/api/users/" + username + "/reset");
+      resource.save().then(
+        response => {
+          this.notifyResetSuccess();
+        },
+        response => {
+          this.notifyResetError();
+        }
+      );
+    },
     notifyLockError() {
       this.$notify({
         message: "锁定账户失败，请稍后重试！",
@@ -154,6 +166,24 @@ export default {
     notifyLockSuccess() {
       this.$notify({
         message: "锁定账户成功！",
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "success"
+      });
+    },
+    notifyResetError() {
+      this.$notify({
+        message: "重置密码失败，请稍后重试！",
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
+    },
+    notifyResetSuccess() {
+      this.$notify({
+        message: "重置密码成功！",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",

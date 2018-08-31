@@ -29,16 +29,15 @@
       </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell :md-label="$t('message.teacher_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.teacher_id')" md-sort-by="ID">
+          <a @click="viewTeacher(item.ID)">{{ item.ID }}</a>
+        </md-table-cell>
         <md-table-cell :md-label="$t('message.name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.gender')" md-sort-by="gender">{{ formatGender(item.gender) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.time_zone')" md-sort-by="timezone">{{ formatTimezone(item.timezone) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.email')">{{ item.email }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleDateString():'' }}
-        </md-table-cell>
-        <md-table-cell :md-label="$t('message.action')">
-          <a @click="viewTeacher(item.ID)">{{ $t("message.view") }}</a>
         </md-table-cell>
       </md-table-row>
 

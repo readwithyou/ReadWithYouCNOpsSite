@@ -1,5 +1,6 @@
 function maskResponse(req, res, next) {
     var mask = function (item) {
+        if (!item) return;
         var maskText = '******';
         if (item.email) {
             item.email = maskText;
@@ -15,7 +16,7 @@ function maskResponse(req, res, next) {
     var oldJson = res.json;
 
     res.json = function (data) {
-        if (req.group !== 'ops_admin') {
+        if (req.group !== 'ops_admin' && (req.baseUrl.includes('student') || req.baseUrl.includes('teacher'))) {
             if (Array.isArray(arguments[0])) {
                 arguments[0].forEach(function (element) {
                     mask(element);

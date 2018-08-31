@@ -165,7 +165,7 @@ import {
   maxLength
 } from "vuelidate/lib/validators";
 import tzUtility from "../../utils/tzUtility.js";
-import levelUtility from "../../utils/levelUtility.js";
+import miscUtility from "../../utils/miscUtility.js";
 
 export default {
   mixins: [validationMixin],
@@ -178,7 +178,7 @@ export default {
       editting: false,
       sending: false,
       tzStrings: tzUtility.tzStrings,
-      levelStrings: levelUtility.levelStrings
+      levelStrings: miscUtility.levelStrings
     };
   },
   validations: {

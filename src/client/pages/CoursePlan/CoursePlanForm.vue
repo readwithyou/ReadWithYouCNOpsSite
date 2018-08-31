@@ -80,7 +80,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import courseUtility from "../../utils/courseUtility.js";
+import miscUtility from "../../utils/miscUtility.js";
 
 export default {
   name: "course-plan-form",
@@ -89,8 +89,8 @@ export default {
     coursePlan: {},
     teachers: [],
     sending: false,
-    courseNameStrings: courseUtility.courseNameStrings,
-    courseTypeStrings: courseUtility.courseTypeStrings
+    courseNameStrings: miscUtility.courseNameStrings,
+    courseTypeStrings: miscUtility.courseTypeStrings
   }),
   validations: {
     coursePlan: {

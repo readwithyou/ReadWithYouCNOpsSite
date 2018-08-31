@@ -29,16 +29,15 @@
       </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell :md-label="$t('message.student_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.student_id')" md-sort-by="ID">
+          <a @click="viewStudent(item.ID)">{{ item.ID }}</a>
+        </md-table-cell>
         <md-table-cell :md-label="$t('message.en_name')" md-sort-by="enName">{{ item.enName }}</md-table-cell>
         <md-table-cell :md-label="$t('message.cn_name')" md-sort-by="cnName">{{ item.cnName }}</md-table-cell>
         <md-table-cell :md-label="$t('message.gender')" md-sort-by="gender">{{ formatGender(item.gender) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.registration_type')" md-sort-by="type">{{ formatType(item.type) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.registration_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleDateString():'' }}
-        </md-table-cell>
-        <md-table-cell :md-label="$t('message.action')">
-          <a @click="viewStudent(item.ID)">{{ $t("message.view") }}</a>
         </md-table-cell>
       </md-table-row>
 
@@ -50,7 +49,7 @@
 </template>
 
 <script>
-import { Can } from '@casl/vue'
+import { Can } from "@casl/vue";
 import { MdTablePagination } from "components";
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";

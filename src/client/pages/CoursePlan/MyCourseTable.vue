@@ -51,7 +51,7 @@
 <script>
 import Vue from "vue";
 import { Can } from "@casl/vue";
-import courseUtility from "../../utils/courseUtility.js";
+import miscUtility from "../../utils/miscUtility.js";
 
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
@@ -96,10 +96,10 @@ export default {
         });
     },
     formatName(courseName) {
-      return this.$i18n.t(courseUtility.getNameTranslation(courseName));
+      return this.$i18n.t(miscUtility.getNameTranslation(courseName));
     },
     formatType(courseType) {
-      return this.$i18n.t(courseUtility.getTypeTranslation(courseType));
+      return this.$i18n.t(miscUtility.getTypeTranslation(courseType));
     },
     viewStudent(id) {
       this.$router.push({ path: "/students/" + id });

@@ -64,13 +64,6 @@
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
-                    <md-field>
-                        <label for="book-price">{{ $t("message.book_price") }}</label>
-                        <md-input name="book-price" id="book-price" v-model="entry.price" :disabled="sending" type="number"></md-input>
-                        <md-icon>attach_money</md-icon>
-                    </md-field>
-                </div>
-                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('readLevel')">
                         <label for="book-level">{{ $t("message.read_level") }}</label>
                         <md-select name="book-level" id="book-level" v-model="entry.readLevel" md-dense :disabled="sending">
@@ -87,10 +80,9 @@
                     <md-field :class="getValidationClass('priority')">
                         <label for="book-priority">{{ $t("message.priority") }}</label>
                         <md-select name="book-priority" id="book-priority" v-model="entry.priority" md-dense :disabled="sending">
-                            <md-option value="RECOMMENDED">{{ $t("message.priority_RECOMMENDED") }}</md-option>
-                            <md-option value="OPTIONAL">{{ $t("message.priority_OPTIONAL") }}</md-option>
-                            <md-option value="NONRECOMMENDED">{{ $t("message.priority_NONRECOMMENDED") }}</md-option>
-                            <md-option value="UNAVAILABLE">{{ $t("message.priority_UNAVAILABLE") }}</md-option>
+                            <md-option v-for="priorityString in priorityStrings" :key="priorityString.name" :value="priorityString.name">
+                                {{ $t(priorityString.translation) }}
+                            </md-option>
                         </md-select>
                         <span class="md-error" v-if="!$v.entry.priority.required">
                             {{ $t("message.required_validation_error") }}
@@ -99,14 +91,16 @@
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
-                        <label for="book-url">{{ $t("message.ebook_url") }}</label>
-                        <md-input name="book-url" id="book-url" v-model="entry.ebookUrl" :disabled="sending" type="text"></md-input>
+                        <label for="tag">{{ $t("message.tag") }}</label>
+                        <md-select v-model="entry.tag" name="tag" id="tag" multiple md-dense :disabled="sending">
+                            <md-option v-for="tagString in bookTagStrings" :key="tagString.name" :value="tagString.name">{{ $t(tagString.translation) }}</md-option>
+                        </md-select>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
-                        <label for="book-retail-url">{{ $t("message.book_retail_url") }}</label>
-                        <md-input name="book-retail-url" id="book-retail-url" v-model="entry.retailUrl" :disabled="sending" type="text"></md-input>
+                        <label for="book-url">{{ $t("message.ebook_url") }}</label>
+                        <md-input name="book-url" id="book-url" v-model="entry.ebookUrl" :disabled="sending" type="text"></md-input>
                     </md-field>
                 </div>
             </div>
@@ -138,7 +132,7 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
-import levelUtility from "../../utils/levelUtility.js";
+import miscUtility from "../../utils/miscUtility.js";
 
 export default {
   name: "edit-book-form",
@@ -151,10 +145,13 @@ export default {
   },
   data: () => ({
     entry: {
-      name: null
+      name: null,
+      tag: []
     },
     sending: false,
-    levelStrings: levelUtility.levelStrings
+    levelStrings: miscUtility.levelStrings,
+    priorityStrings: miscUtility.priorityStrings,
+    bookTagStrings: miscUtility.courseNameStrings,
   }),
   validations: {
     entry: {

@@ -68,20 +68,13 @@
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
                         <md-field>
-                            <label for="book-price">{{ $t("message.book_price") }}</label>
-                            <md-input name="book-price" id="book-price" v-model="entry.price" :disabled="!editting" type="number"></md-input>
-                            <md-icon>attach_money</md-icon>
-                        </md-field>
-                    </div>
-                    <div class="md-layout-item md-small-size-100 md-size-33">
-                        <md-field>
                             <label for="inventory-quantity">{{ $t("message.inventory_quantity") }}</label>
                             <md-input name="inventory-quantity" id="inventory-quantity" v-model="entry.quantity" disabled type="number"></md-input>
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
                         <md-field>
-                            <label for="locked-price">{{ $t("message.locked_quantity") }}</label>
+                            <label for="locked-quantity">{{ $t("message.locked_quantity") }}</label>
                             <md-input name="locked-quantity" id="locked-quantity" v-model="entry.locked" disabled type="number"></md-input>
                         </md-field>
                     </div>
@@ -102,10 +95,9 @@
                         <md-field :class="getValidationClass('priority')">
                             <label for="book-priority">{{ $t("message.priority") }}</label>
                             <md-select name="book-priority" id="book-priority" v-model="entry.priority" md-dense :disabled="!editting">
-                                <md-option value="RECOMMENDED">{{ $t("message.priority_RECOMMENDED") }}</md-option>
-                                <md-option value="OPTIONAL">{{ $t("message.priority_OPTIONAL") }}</md-option>
-                                <md-option value="NONRECOMMENDED">{{ $t("message.priority_NONRECOMMENDED") }}</md-option>
-                                <md-option value="UNAVAILABLE">{{ $t("message.priority_UNAVAILABLE") }}</md-option>
+                                <md-option v-for="priorityString in priorityStrings" :key="priorityString.name" :value="priorityString.name">
+                                    {{ $t(priorityString.translation) }}
+                                </md-option>
                             </md-select>
                             <span class="md-error" v-if="!$v.entry.priority.required">
                                 {{ $t("message.required_validation_error") }}
@@ -114,14 +106,16 @@
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
                         <md-field>
-                            <label for="book-url">{{ $t("message.ebook_url") }}</label>
-                            <md-input name="book-url" id="book-url" v-model="entry.ebookUrl" :disabled="!editting" type="text"></md-input>
+                            <label for="tag">{{ $t("message.tag") }}</label>
+                            <md-select v-model="entry.tag" name="tag" id="tag" multiple md-dense :disabled="!editting">
+                                <md-option v-for="tagString in bookTagStrings" :key="tagString.name" :value="tagString.name">{{ $t(tagString.translation) }}</md-option>
+                            </md-select>
                         </md-field>
                     </div>
                     <div class="md-layout-item md-small-size-100 md-size-33">
                         <md-field>
-                            <label for="book-retail-url">{{ $t("message.book_retail_url") }}</label>
-                            <md-input name="book-retail-url" id="book-retail-url" v-model="entry.retailUrl" :disabled="!editting" type="text"></md-input>
+                            <label for="book-url">{{ $t("message.ebook_url") }}</label>
+                            <md-input name="book-url" id="book-url" v-model="entry.ebookUrl" :disabled="!editting" type="text"></md-input>
                         </md-field>
                     </div>
                 </div>
@@ -145,6 +139,7 @@
             <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
 
             <div class="md-layout-item md-size-100 text-center">
+                <md-button @click="viewInAmazon" class="md-default" v-if="entry.isbn">{{ $t("message.view_in_amazon") }}</md-button>
                 <md-button type="submit" class="md-primary" :disabled="!editting">{{ $t("message.save") }}</md-button>
             </div>
         </div>
@@ -159,16 +154,18 @@ import {
   minLength,
   maxLength
 } from "vuelidate/lib/validators";
-import levelUtility from "../../utils/levelUtility.js";
+import miscUtility from "../../utils/miscUtility.js";
 
 export default {
   name: "book-detail-panel",
   mixins: [validationMixin],
   data: () => ({
-    entry: {},
+    entry: { tag: [] },
     editting: false,
     sending: false,
-    levelStrings: levelUtility.levelStrings
+    levelStrings: miscUtility.levelStrings,
+    bookTagStrings: miscUtility.courseNameStrings,
+    priorityStrings: miscUtility.priorityStrings
   }),
   validations: {
     entry: {
@@ -219,6 +216,7 @@ export default {
       var resource = this.$resource("/api/books/" + this.$route.params.id);
       resource.get().then(
         response => {
+          if (!response.body.tag) response.body.tag = [];
           this.entry = response.body;
         },
         response => {
@@ -248,6 +246,13 @@ export default {
         .then(response => {
           this.$set(this.entry, "code", response.body.code);
         });
+    },
+    viewInAmazon() {
+      let amazonLink =
+        "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=" +
+        this.entry.isbn;
+
+      window.open(amazonLink, "_blank");
     },
     notifySubmitError() {
       this.$notify({

@@ -8,6 +8,9 @@
                 <md-input name="signon-username" id="signon-username" v-model="entry.username" :disabled="sending" type="text"></md-input>
                 <span class="md-error" v-if="!$v.entry.username.required">
                   {{ $t("message.username_required_validation_error") }}
+                </span>               
+                 <span class="md-error" v-if="!$v.entry.username.alphaNum">
+                  {{ $t("message.alphanumerics_validation_error") }}
                 </span>
             </md-field>
         </div>
@@ -65,7 +68,7 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
+import { required, alphaNum, email } from "vuelidate/lib/validators";
 import { AUTH_REQUEST } from "store/actions";
 
 export default {
@@ -86,7 +89,8 @@ export default {
   validations: {
     entry: {
       username: {
-        required
+        required,
+        alphaNum
       },
       name: {
         required

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import DashboardLayout from 'pages/Layout/DashboardLayout.vue'
 import Login from 'pages/Login/Login.vue'
 import Dashboard from 'pages/Dashboard.vue'
+import ImgDashboard from 'pages/ImgDashboard.vue'
 import Registrations from 'pages/Registrations/Registrations.vue'
 import CreateRegistration from 'pages/Registrations/CreateRegistration.vue'
 import Registration from 'pages/Registrations/Registration.vue'
@@ -63,7 +64,7 @@ const routes = [
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: Dashboard,
+        component: ImgDashboard,
         beforeEnter: ifAuthenticated,
       },
       {

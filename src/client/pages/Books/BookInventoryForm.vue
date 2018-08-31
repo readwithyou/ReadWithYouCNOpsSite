@@ -28,7 +28,7 @@
                         </div>
                         <div class="md-layout-item md-small-size-100 md-size-100">
                             <md-field :class="getValidationClass('quantity')">
-                                <label for="book-price">{{ $t("message.inventory_quantity") }}</label>
+                                <label for="book-quantity">{{ $t("message.inventory_quantity") }}</label>
                                 <md-input @keydown.enter="validateEntry" name="book-quantity" id="book-quantity" ref='quantityInput' v-model.number="entry.quantity" :disabled="sending" type="number"></md-input>
                                 <span class="md-error" v-if="!$v.entry.quantity.required">
                                     {{ $t("message.required_validation_error") }}

@@ -40,7 +40,9 @@
       </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell :md-label="$t('message.book_list_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.book_list_name')" md-sort-by="name">
+          <a @click="viewBookList(item.ID)">{{ item.name }}</a>
+        </md-table-cell>
         <md-table-cell :md-label="$t('message.language')" md-sort-by="language">{{  $t("message."+item.language+"_lang") }}</md-table-cell>
         <md-table-cell :md-label="$t('message.read_level')" md-sort-by="readLevel">{{ formatLevel(item.readLevel) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.purpose')" md-sort-by="purpose">{{ formatPurpose(item.purpose) }}</md-table-cell>
@@ -52,7 +54,6 @@
            <md-chip :class="getStatusClass(item.status)">{{ formatStatus(item.status) }}</md-chip>
         </md-table-cell>
         <md-table-cell :md-label="$t('message.action')">
-          <a @click="viewBookList(item.ID)">{{ $t("message.view") }}</a>&nbsp;&nbsp;
           <a @click="deleteBookList(item.ID)" v-if="item.status==='PENDING_FOR_APPROVAL' || item.status==='REJECTED'">{{ $t("message.delete") }}</a>
         </md-table-cell>
       </md-table-row>
@@ -122,6 +123,9 @@ export default {
       switch (status) {
         case "REJECTED":
           return "md-accent";
+        case "DELIVERED":
+        case "FINISHED":
+          return "md-primary";
         default:
           return "md-default";
       }

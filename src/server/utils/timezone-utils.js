@@ -5,11 +5,11 @@ var timezoneUtil = function () {
 
     tzStrings.push({ tz: 'Asia/Shanghai', translation: 'China Standard Time' });
     tzStrings.push({ tz: 'Asia/Tokyo', translation: 'Tokyo' });
-    tzStrings.push({ tz: 'America/New_York', translation: 'EST observe Daylight Saving (New York Time)' });
+    tzStrings.push({ tz: 'America/New_York', translation: 'EST' });
     tzStrings.push({ tz: 'America/Panama', translation: 'Panama Time' });
-    tzStrings.push({ tz: 'America/Chicago', translation: 'CST observe Daylight Saving (Chicago Time)' });
-    tzStrings.push({ tz: 'America/Los_Angeles', translation: 'PST observe Daylight Saving (Los Angeles Time)' });
-    tzStrings.push({ tz: 'America/Denver', translation: 'MST observe Daylight Saving (Denver Time)' });
+    tzStrings.push({ tz: 'America/Chicago', translation: 'CST' });
+    tzStrings.push({ tz: 'America/Los_Angeles', translation: 'PST' });
+    tzStrings.push({ tz: 'America/Denver', translation: 'MST' });
     tzStrings.push({ tz: 'America/Phoenix', translation: 'Phoenix Time' });
     tzStrings.push({ tz: 'Europe/Berlin', translation: 'Germany(Berlin, Munich) Time' });
     tzStrings.push({ tz: 'Canada/Atlantic', translation: 'Canada Atlantic Time (Halifax Time)' });

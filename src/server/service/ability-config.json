@@ -201,6 +201,22 @@
         },
         {
             "action": "read",
+            "subject": "student"
+        },
+        {
+            "action": "read",
+            "subject": "studentCoursePlan"
+        },
+        {
+            "action": "read",
+            "subject": "studentList"
+        },
+        {
+            "action": "read",
+            "subject": "student"
+        },
+        {
+            "action": "read",
             "subject": "teacher"
         },
         {
@@ -230,6 +246,22 @@
         {
             "action": "edit",
             "subject": "ticket"
+        },
+        {
+            "action": "read",
+            "subject": "bookList"
+        },
+        {
+            "action": "review",
+            "subject": "bookList"
+        },
+        {
+            "action": "create",
+            "subject": "shortCourseBookList"
+        },
+        {
+            "action": "create",
+            "subject": "courseBookList"
         },
         {
             "action": "read",

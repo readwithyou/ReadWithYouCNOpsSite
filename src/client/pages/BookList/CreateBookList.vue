@@ -177,7 +177,7 @@
 import { BookSelector } from "pages";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import levelUtility from "../../utils/levelUtility.js";
+import miscUtility from "../../utils/miscUtility.js";
 
 export default {
   name: "CreateBookList",
@@ -193,8 +193,12 @@ export default {
       second: false,
       secondStepError: null,
       third: false,
-      bookList: { purpose: this.$route.query.purpose },
-      levelStrings: levelUtility.levelStrings
+      bookList: {
+        purpose: this.$route.query.purpose,
+        language: "en",
+        name: this.getDefaultBookName()
+      },
+      levelStrings: miscUtility.levelStrings
     };
   },
   validations: {
@@ -285,6 +289,18 @@ export default {
         this.bookList.books.splice(i, 1);
         this.$set(this.bookList, "bookList", this.bookList);
       }
+    },
+    getDefaultBookName() {
+      var d1 = new Date();
+      var curr_year = d1.getFullYear();
+
+      var curr_month = d1.getMonth() + 1; //Months are zero based
+      if (curr_month < 10) curr_month = "0" + curr_month;
+
+      var curr_date = d1.getDate();
+      if (curr_date < 10) curr_date = "0" + curr_date;
+
+      return curr_year + "-" + curr_month + "-" + curr_date;
     },
     notifyFetchingError() {
       this.$notify({

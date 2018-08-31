@@ -71,6 +71,32 @@ var dao = function () {
         });
     };
 
+    var updatePasswordAsync = function (username, newPassword) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                username: username
+            },
+            UpdateExpression: 'SET #password =:newPassword',
+            ExpressionAttributeNames: {
+                '#password': 'password'
+            },
+            ExpressionAttributeValues: {
+                ':newPassword': newPassword
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     var scanAsync = function () {
         var params = {
             TableName: ddbTable
@@ -116,6 +142,7 @@ var dao = function () {
     return {
         createAsync,
         updateProfileAsync,
+        updatePasswordAsync,
         getAsync,
         scanAsync,
         updateLockAsync

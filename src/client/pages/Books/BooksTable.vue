@@ -21,6 +21,15 @@
           </md-menu>
         </div>
 
+        <md-field md-clearable class="md-toolbar-section-start">
+          <label for="filters">{{ $t('message.filter_hint') }}</label>
+          <md-select v-model="filters" name="filters" id="filters" md-dense multiple @input="searchOnTable">
+            <md-option v-for="tagString in bookTagStrings" :key="tagString.name" :value="tagString.name">
+              {{ $t(tagString.translation) }}
+            </md-option>
+          </md-select>
+        </md-field>
+        &nbsp;
         <md-field md-clearable class="md-toolbar-section-end">
           <md-input :placeholder="$t('message.search_hint')" v-model="search" @input="searchOnTable" />
         </md-field>
@@ -32,7 +41,9 @@
       </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell :md-label="$t('message.book_code')" md-sort-by="code">{{ item.code }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.book_code')" md-sort-by="code">
+          <a @click="viewBook(item.ID)">{{ item.code }}</a>
+        </md-table-cell>
         <md-table-cell :md-label="$t('message.book_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.book_set')" md-sort-by="set">{{ item.set }}</md-table-cell>
         <md-table-cell :md-label="$t('message.language')" md-sort-by="language">{{  $t("message."+item.language+"_lang") }}</md-table-cell>
@@ -40,9 +51,6 @@
         <md-table-cell :md-label="$t('message.read_level')" md-sort-by="readLevel">{{ formatLevel(item.readLevel) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.priority')" md-sort-by="priority">{{ formatPriority(item.priority) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.inventory_quantity')" md-sort-by="quantity">{{ item.quantity }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.action')">
-          <a @click="viewBook(item.ID)">{{ $t("message.view") }}</a>
-        </md-table-cell>
       </md-table-row>
 
       <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
@@ -54,6 +62,7 @@
 
 <script>
 import { MdTablePagination } from "components";
+import miscUtility from "../../utils/miscUtility.js";
 
 const toLower = text => {
   return text ? text.toString().toLowerCase() : "";
@@ -70,10 +79,12 @@ export default {
       size: 10,
       currentSort: "code",
       currentSortOrder: "asc",
+      filters: [],
       search: null,
       books: [],
       searched: [],
-      paged: []
+      paged: [],
+      bookTagStrings: miscUtility.courseNameStrings
     };
   },
   created() {
@@ -96,14 +107,23 @@ export default {
       );
     },
     searchOnTable() {
-      this.searched = this.books.filter(
-        item =>
-          toLower(item.code).includes(toLower(this.search)) ||
-          toLower(item.name).includes(toLower(this.search)) ||
-          toLower(item.set).includes(toLower(this.search)) ||
-          toLower(item.isbn).includes(toLower(this.search))
-      );
+      this.searched = this.books.filter(this.checkIfMatchSearch);
       this.rePagination();
+    },
+    checkIfMatchSearch(book) {
+      let matchSearchInput =
+        toLower(book.code).includes(toLower(this.search)) ||
+        toLower(book.name).includes(toLower(this.search)) ||
+        toLower(book.set).includes(toLower(this.search)) ||
+        toLower(book.isbn).includes(toLower(this.search));
+
+      let matchFilterInput =
+        !this.filters ||
+        this.filters.length === 0 ||
+        this.filters.filter(value => book.tag && -1 !== book.tag.indexOf(value))
+          .length > 0;
+
+      return matchSearchInput && matchFilterInput;
     },
     formatLevel(level) {
       if (level != null) {

@@ -241,7 +241,7 @@ import { Can } from "@casl/vue";
 import { BookSelector } from "pages";
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import levelUtility from "../../utils/levelUtility.js";
+import miscUtility from "../../utils/miscUtility.js";
 
 function containsBookInBookList(value) {
   return (
@@ -272,7 +272,7 @@ export default {
       isbn: null
     },
     bookList: { books: [] },
-    levelStrings: levelUtility.levelStrings
+    levelStrings: miscUtility.levelStrings
   }),
   validations: {
     outboundRecord: {
@@ -451,10 +451,23 @@ export default {
       });
     },
     openEBook(bookId) {
+      /*
       var urlArray = window.location.href.split("#")[0].split("/");
       urlArray.pop();
       var url = urlArray.join("/") + "/preview.html?id=" + bookId;
       window.open(url, "_blank");
+      */
+
+      var resource = this.$resource("/api/books/" + bookId);
+      resource.get().then(
+        response => {
+          let url = response.body.ebookUrl;
+          window.open(url, "_blank");
+        },
+        response => {
+          this.notifyFetchingError();
+        }
+      );
     },
     notifyFetchingError() {
       this.$notify({
