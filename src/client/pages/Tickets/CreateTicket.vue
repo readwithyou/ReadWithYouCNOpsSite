@@ -4,10 +4,10 @@
       <div class="md-layout">
         <div class="md-layout-item md-medium-size-100 md-size-100">
           <form novalidate class="md-layout" @submit.prevent="validateEntry">
-              <md-card>
-                  <md-card-header data-background-color="purple">
-                      <h4 class="title">{{ $t("message.ticket_create_title") }}</h4>
-                      <p class="category">{{ $t("message.ticket_create_subtitle") }}</p>
+              <md-card class="md-layout-item md-size-100">
+                  <md-card-header>
+                    <div class="md-title">{{ $t("message.ticket_create_title") }}</div>
+                    <div class="md-subhead">{{ $t("message.ticket_create_subtitle") }}</div>
                   </md-card-header>
 
                   <md-card-content>
@@ -91,7 +91,7 @@
                                 <md-select v-model="userEmailsToAdd" name="userEmails" id="userEmails" multiple>
                                     <md-option v-for="user in users" :key="user.username" :value="user.email">{{user.name}}</md-option>
                                 </md-select>
-                                <md-button class="md-icon-button md-list-action" @click="addUserEmails()" :disabled="sending">
+                                <md-button class="md-icon-button md-primary" @click="addUserEmails()" :disabled="sending">
                                     <md-icon>add</md-icon>
                                 </md-button>
                             </md-field>
@@ -100,7 +100,7 @@
                             <md-field>
                                 <label for="userEmails">{{ $t("message.free_format_emails") }}</label>
                                 <md-input type="email" name="email" id="email" v-model="emailToAdd" />
-                                <md-button class="md-icon-button md-list-action" @click="addEmail()" :disabled="sending">
+                                <md-button class="md-icon-button md-primary" @click="addEmail()" :disabled="sending">
                                     <md-icon>add</md-icon>
                                 </md-button>
                             </md-field>
@@ -110,7 +110,7 @@
 
                   <md-progress-bar md-mode="indeterminate" v-if="sending" />
                   <div class="md-layout-item md-size-100 text-center">
-                      <md-button type="submit" class="md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
+                      <md-button type="submit" class="md-raised md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
                   </div>
               </md-card>
           </form>

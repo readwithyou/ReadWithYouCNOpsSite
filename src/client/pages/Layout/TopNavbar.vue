@@ -3,7 +3,7 @@
     <div class="md-toolbar-row">
       <div class="md-toolbar-section-start">
         <h3 class="md-title">
-          <md-button class="md-icon-button md-dense md-raised md-default" @click="back" v-if="canGoBack()">
+          <md-button class="md-icon-button md-default" @click="back" v-if="canGoBack()">
             <md-icon>arrow_back</md-icon>
           </md-button>&nbsp;
           {{$route.name}}
@@ -17,11 +17,11 @@
         </md-button>
 
         <div class="md-collapse">
-          <div class="md-autocomplete">
+          <!--div class="md-autocomplete">
             <md-autocomplete class="search" v-model="selectedEmployee" :md-options="employees">
               <label>Search...</label>
             </md-autocomplete>
-          </div>
+          </div-->
           <md-list>
             <md-list-item :to="getCurrentUrl()" class="dropdown">
               <drop-down>

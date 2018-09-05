@@ -181,7 +181,7 @@
                 </div>
 
                 <div class="md-layout-item md-size-100 text-center">
-                    <md-button type="submit" class="md-primary" :disabled="!editting">{{ $t("message.save") }}</md-button>
+                    <md-button type="submit" class="md-raised md-primary" v-if="editting">{{ $t("message.save") }}</md-button>
                 </div>
             </div>
         </div>

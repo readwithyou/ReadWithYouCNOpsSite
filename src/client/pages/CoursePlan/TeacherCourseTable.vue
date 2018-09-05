@@ -55,7 +55,7 @@ export default {
     searchOnTable() {
       this.searched = this.coursePlans.filter(
         item =>
-          toLower(item.courseName).includes(toLower(this.search)) ||
+          toLower(this.formatName(item.courseName)).includes(toLower(this.search)) ||
           toLower(item.studentName).includes(toLower(this.search))
       );
     },

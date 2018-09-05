@@ -3,13 +3,13 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <nav-tabs-card>
           <template slot="content">
-            <md-tabs md-sync-route class="md-primary" md-alignment="fixed">
+            <md-tabs md-alignment="right">
 
-              <md-tab id="tab-leave" :md-label="$t('message.leave_management')" md-icon="insert_invitation">
+              <md-tab id="tab-leave" :md-label="$t('message.leave_management')">
                 <leave-form></leave-form>
               </md-tab>
 
-              <md-tab id="tab-timezone" :md-label="$t('message.time_zone')" md-icon="av_timer">
+              <md-tab id="tab-timezone" :md-label="$t('message.time_zone')">
                 <time-zone-panel></time-zone-panel>
               </md-tab>
 

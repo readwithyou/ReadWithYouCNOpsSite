@@ -29,14 +29,14 @@
         </md-field>
       </md-dialog-content>
       <md-dialog-actions>
-          <md-button class="md-primary" @click="updatePassword">{{ $t("message.confirm") }}</md-button>
           <md-button class="md-default" @click="showPwdDialog = false;">{{ $t("message.cancel") }}</md-button>
+          <md-button class="md-primary" @click="updatePassword">{{ $t("message.confirm") }}</md-button>
       </md-dialog-actions>
     </md-dialog>
-    <md-card>
-      <md-card-header data-background-color="purple">
-          <h4 class="title">{{ $t("message.edit_profile_title") }}</h4>
-          <p class="category">{{ $t("message.edit_profile_subtitle") }}</p>
+    <md-card class="md-layout-item md-size-100">
+      <md-card-header>
+          <div class="md-title">{{ $t("message.edit_profile_title") }}</div>
+          <div class="md-subhead">{{ $t("message.edit_profile_subtitle") }}</div>
       </md-card-header>
 
       <md-card-content>
@@ -87,7 +87,7 @@
           <div class="md-layout-item md-size-100 text-center" v-if="editting">
               <can I="edit" a="profile">
                 <md-button @click="showPwdDialog=true" class="md-default" :disabled="!editting">{{ $t("message.change_password") }}</md-button>
-                <md-button type="submit" class="md-primary" :disabled="!editting">{{ $t("message.submit") }}</md-button>
+                <md-button type="submit" class="md-raised md-primary" :disabled="!editting">{{ $t("message.submit") }}</md-button>
               </can>
           </div>
         </form>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-table v-model="paged" @md-selected="onSelect" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
+    <md-table v-model="paged" :md-selected-value.sync="selected" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <h1 class="md-title">{{ $tc('message.select_book_hint_msg', selected.length, { count: selected.length}) }}</h1>

@@ -1,9 +1,9 @@
 <template>
 <form novalidate class="md-layout" @submit.prevent="validateEntry">
-    <md-card>
-        <md-card-header :data-background-color="dataBackgroundColor">
-            <h4 class="title">{{ $t("message.student_create_title") }}</h4>
-            <p class="category">{{ $t("message.student_create_subtitle") }}</p>
+    <md-card class="md-layout-item md-size-100">
+        <md-card-header>
+            <div class="md-title">{{ $t("message.student_create_title") }}</div>
+            <div class="md-subhead">{{ $t("message.student_create_subtitle") }}</div>
         </md-card-header>
 
         <md-card-content>
@@ -123,7 +123,7 @@
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
         <div class="md-layout-item md-size-100 text-center">
-            <md-button type="submit" class="md-primary" :disabled="sending">提交</md-button>
+            <md-button type="submit" class="md-raised md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
         </div>
     </md-card>
 </form>

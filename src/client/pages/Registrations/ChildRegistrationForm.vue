@@ -1,33 +1,34 @@
 <template>
 <form novalidate class="md-layout" @submit.prevent="validateEntry">
-    <md-card>
-        <md-card-header :data-background-color="dataBackgroundColor">
-            <h4 class="title">{{ $t("message.child_registrations_card_title") }}</h4>
-            <p class="category">{{ $t("message.child_registrations_card_subtitle") }}</p>
+    <md-card class="md-layout-item md-size-100">
+        <md-card-header>
+            <div class="md-title">{{ $t("message.child_registrations_card_title") }}</div>
+            <div class="md-subhead">{{ $t("message.child_registrations_card_subtitle") }}</div>
         </md-card-header>
 
         <md-card-content>
-            <h4>基本信息</h4>
+        <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">  
+            <h4>{{ $t("message.basic_info") }}</h4>
             <div class="md-layout">
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
                         <label>{{ $t("message.en_name") }}</label>
                         <md-input v-model="entry.enName" type="text"></md-input>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
                         <label for="cn-name">{{ $t("message.cn_name") }}({{ $t("message.optional") }})</label>
                         <md-input name="cn-name" id="cn-name" v-model="entry.cnName" :disabled="sending" type="text"></md-input>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
                         <label>{{ $t("message.registration_source") }}({{ $t("message.optional") }})</label>
                         <md-input type="text" v-model="entry.tag" :disabled="sending" />
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('gender')">
                         <label for="gender">{{ $t("message.gender") }}</label>
                         <md-select name="gender" id="gender" v-model="entry.gender" md-dense :disabled="sending">
@@ -39,7 +40,7 @@
                         </span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('age')">
                         <label for="age">{{ $t("message.age") }}</label>
                         <md-input type="number" id="age" name="age" autocomplete="age" v-model="entry.age" :disabled="sending" />
@@ -47,14 +48,14 @@
                         <span class="md-error" v-else-if="!$v.entry.age.maxlength">{{ $t("message.age_max_validation_error") }}</span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('phone')">
                         <label for="phone">{{ $t("message.phone") }}</label>
                         <md-input type="text" id="phone" name="phone" autocomplete="phone" v-model="entry.phone" :disabled="sending" />
                         <span class="md-error" v-if="!$v.entry.phone.required">{{ $t("message.phone_required_validation_error") }}</span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('email')">
                         <label for="email">{{ $t("message.email") }}</label>
                         <md-input type="email" name="email" id="email" autocomplete="email" v-model="entry.email" :disabled="sending" />
@@ -62,13 +63,13 @@
                         <span class="md-error" v-else-if="!$v.entry.email.email">{{ $t("message.email_format_validation_error") }}</span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
                         <label>{{ $t("message.wechat") }}({{ $t("message.optional") }})</label>
                         <md-input v-model="entry.wechat" type="text"></md-input>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('parentName')">
                         <label for="p-name">{{ $t("message.parent_name") }}</label>
                         <md-input name="p-name" id="p-name" v-model="entry.parentName" :disabled="sending" type="text"></md-input>
@@ -77,7 +78,7 @@
                         </span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('relationship')">
                         <label for="relationship">{{ $t("message.relation_to_child") }}</label>
                         <md-input name="relationship" id="relationship" v-model="entry.relationship" :disabled="sending" type="text"></md-input>
@@ -90,7 +91,7 @@
 
             <h4>{{ $t("message.questionnaire") }}</h4>
             <div class="md-layout">
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('currentLevel')">
                         <label for="current-level">{{ $t("message.current_level") }}</label>
                         <md-select name="current-level" id="current-level" v-model="entry.currentLevel" md-dense :disabled="sending">
@@ -104,7 +105,7 @@
                         </span>
                     </md-field>
                 </div>
-                <div class="md-layout-item md-small-size-100 md-size-50">
+                <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field :class="getValidationClass('hobby')">
                         <label for="hobby">{{ $t("message.hobby") }}</label>
                         <md-select v-model="entry.hobby" name="hobby" id="hobby" :disabled="sending" multiple>
@@ -123,18 +124,18 @@
                         </span>
                     </md-field>
                 </div>
+                <div class="md-layout-item md-size-33">
+                    <md-field :class="getValidationClass('preTimeSlot')">
+                        <label for="pre-timeslot">{{ $t("message.question_pre_timeslot") }}</label>
+                        <md-input type="text" id="pre-timeslot" name="pre-timeslot" autocomplete="preTimeSlot" v-model="entry.preTimeSlot" :disabled="sending" />                      
+                        <span class="md-error" v-if="!$v.entry.preTimeSlot.required">
+                            {{ $t("message.required_validation_error") }}
+                        </span>
+                    </md-field>
+                </div>
             </div>
 
             <h4>{{ $t("message.remarks") }}</h4>
-            <div class="md-layout-item md-size-100">
-                <md-field :class="getValidationClass('preTimeSlot')">
-                    <label for="pre-timeslot">{{ $t("message.question_pre_timeslot") }}</label>
-                    <md-input type="text" id="pre-timeslot" name="pre-timeslot" autocomplete="preTimeSlot" v-model="entry.preTimeSlot" :disabled="sending" />                      
-                    <span class="md-error" v-if="!$v.entry.preTimeSlot.required">
-                        {{ $t("message.required_validation_error") }}
-                    </span>
-                </md-field>
-            </div>
             <div class="md-layout">
                 <div class="md-layout-item md-size-100">
                     <md-field>
@@ -143,11 +144,12 @@
                     </md-field>
                 </div>
             </div>
+        </div>
         </md-card-content>
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
         <div class="md-layout-item md-size-100 text-center">
-            <md-button type="submit" class="md-primary" :disabled="sending">提交</md-button>
+            <md-button type="submit" class="md-raised md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
         </div>
     </md-card>
 </form>

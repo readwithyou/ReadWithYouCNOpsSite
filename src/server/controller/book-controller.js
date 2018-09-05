@@ -79,11 +79,9 @@ router.post('/generate-code', verifyToken, function (req, res, next) {
         () => res.status(500).end()
     );
 });
-
 /*
 router.post('/import-csv', function (req, res, next) {
-    bookService.importBookFromCSV('/Users/yonglinx/workspace/books.csv');
+    bookService.importBookFromCSV('/Users/yonglinx/workspace/books_2018-08-30.csv');
 });
 */
-
 module.exports = router;

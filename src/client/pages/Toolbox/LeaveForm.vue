@@ -106,7 +106,7 @@
           <md-progress-bar md-mode="indeterminate" v-if="sending" />
 
           <div class="md-layout-item md-size-100 text-center">
-              <md-button @click="sendEmailToTeacher" class="md-default" :disabled="sending">{{ $t('message.email_to_teacher') }}</md-button>
+              <md-button @click="sendEmailToTeacher" class="md-raised md-primary" :disabled="sending">{{ $t('message.email_to_teacher') }}</md-button>
           </div>
       </div>
   </form>

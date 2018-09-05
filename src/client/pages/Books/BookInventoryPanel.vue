@@ -4,7 +4,7 @@
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <md-menu>
-            <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+            <md-button class="md-icon-button md-primary" md-menu-trigger>
               <md-icon>refresh</md-icon>
             </md-button>
             <md-menu-content>

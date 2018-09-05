@@ -118,13 +118,13 @@
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
                         <label>{{ $t("message.wechat") }}({{ $t("message.optional") }})</label>
-                        <md-input v-model="entry.wechat" type="text"></md-input>
+                        <md-input v-model="entry.wechat" type="text" :disabled="!editting"></md-input>
                     </md-field>
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
                         <label>{{ $t("message.wechatOpenId") }}({{ $t("message.optional") }})</label>
-                        <md-input v-model="entry.wechatOpenId" type="text"></md-input>
+                        <md-input v-model="entry.wechatOpenId" type="text" :disabled="!editting"></md-input>
                     </md-field>
                 </div>
             </div>
@@ -148,7 +148,7 @@
 
             <div class="md-layout-item md-size-100 text-center">
                 <can I="edit" a="student">
-                    <md-button type="submit" class="md-primary" :disabled="!editting">{{ $t("message.save") }}</md-button>
+                    <md-button type="submit" class="md-raised md-primary" v-if="editting">{{ $t("message.save") }}</md-button>
                 </can>
             </div>
         </div>

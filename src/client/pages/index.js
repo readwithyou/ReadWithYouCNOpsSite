@@ -42,6 +42,7 @@ import CoursePlanForm from '../pages/CoursePlan/CoursePlanForm.vue'
 import StudentsTable from '../pages/Students/StudentsTable.vue'
 import StudentForm from '../pages/Students/StudentForm.vue'
 import StudentDetailPanel from '../pages/Students/StudentDetailPanel.vue'
+import StudentLevelPanel from '../pages/Students/StudentLevelPanel.vue'
 
 // User
 import UsersTable from '../pages/UserProfile/UsersTable.vue'
@@ -85,6 +86,7 @@ export {
   StudentsTable,
   StudentForm,
   StudentDetailPanel,
+  StudentLevelPanel,
   UsersTable,
   TicketsTable,
   CreateTicket,

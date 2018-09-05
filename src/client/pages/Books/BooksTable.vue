@@ -4,7 +4,7 @@
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <md-menu>
-            <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+            <md-button class="md-icon-button md-primary" md-menu-trigger>
               <md-icon>menu</md-icon>
             </md-button>
             <md-menu-content>
@@ -42,7 +42,7 @@
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell :md-label="$t('message.book_code')" md-sort-by="code">
-          <a @click="viewBook(item.ID)">{{ item.code }}</a>
+          <a @click="viewBook(item.ID)">{{ item.code ? item.code : '---' }}</a>
         </md-table-cell>
         <md-table-cell :md-label="$t('message.book_name')" md-sort-by="name">{{ item.name }}</md-table-cell>
         <md-table-cell :md-label="$t('message.book_set')" md-sort-by="set">{{ item.set }}</md-table-cell>

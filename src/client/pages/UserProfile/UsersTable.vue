@@ -1,6 +1,30 @@
 <template>
 
   <div>
+    <md-dialog-confirm
+      :md-active.sync="dialogStatus.showLockDialog"
+      :md-title="$t('message.confirm_lock_user_title')"
+      :md-content="$t('message.confirm_lock_user_content')"
+      :md-confirm-text="$t('message.confirm')"
+      :md-cancel-text="$t('message.cancel')"
+      @md-confirm="lockUser(activeItem.username)" />
+      
+    <md-dialog-confirm
+      :md-active.sync="dialogStatus.showUnlockDialog"
+      :md-title="$t('message.confirm_unlock_user_title')"
+      :md-content="$t('message.confirm_unlock_user_content')"
+      :md-confirm-text="$t('message.confirm')"
+      :md-cancel-text="$t('message.cancel')"
+      @md-confirm="unlockUser(activeItem.username)" />
+      
+    <md-dialog-confirm
+      :md-active.sync="dialogStatus.showResetDialog"
+      :md-title="$t('message.confirm_reset_user_title')"
+      :md-content="$t('message.confirm_reset_user_content')"
+      :md-confirm-text="$t('message.confirm')"
+      :md-cancel-text="$t('message.cancel')"
+      @md-confirm="reset(activeItem.username)" />
+
     <md-table v-model="paged" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
@@ -25,9 +49,9 @@
           <md-chip :class="getStatusClass(item.locked)">{{ formatStatus(item.locked) }}</md-chip>
         </md-table-cell>
         <md-table-cell :md-label="$t('message.action')" v-if="$can('edit', 'user')">
-          <a @click="lockUser(item.username)" v-if="!item.locked">{{ $t("message.lock") }}</a>&nbsp;&nbsp;
-          <a @click="unlockUser(item.username)" v-if="item.locked">{{ $t("message.unlock") }}</a>&nbsp;&nbsp;
-          <a @click="reset(item.username)">{{ $t("message.reset_password") }}</a>
+          <a @click="activeItem=item;dialogStatus.showLockDialog=true;" v-if="!item.locked">{{ $t("message.lock") }}</a>
+          <a @click="activeItem=item;dialogStatus.showUnlockDialog=true;" v-if="item.locked">{{ $t("message.unlock") }}</a>&nbsp;&nbsp;
+          <a @click="activeItem=item;dialogStatus.showResetDialog=true;">{{ $t("message.reset_password") }}</a>
         </md-table-cell>
       </md-table-row>
 
@@ -58,7 +82,12 @@ export default {
       search: null,
       users: [],
       searched: [],
-      paged: []
+      paged: [],
+      dialogStatus: {
+        showResetDialog: false,
+        showLockDialog: false,
+        showUnlockDialog: false
+      }
     };
   },
   created() {

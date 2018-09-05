@@ -1,20 +1,5 @@
 <template>
         <div class="md-layout">
-            <md-dialog :md-active.sync="showAddDialog">
-                <md-dialog-content>
-                    <book-selector 
-                        :studentId="bookList.studentId" 
-                        :levelBaseline="bookList.readLevel" 
-                        :language="bookList.language" 
-                        :purpose="bookList.purpose" 
-                        v-on:books-selected="onBooksSelected($event)">
-                    </book-selector>    
-                </md-dialog-content>
-                <md-dialog-actions>
-                    <md-button class="md-primary" @click="showAddDialog = false">{{ $t("message.confirm") }}</md-button>
-                </md-dialog-actions>
-            </md-dialog>
-
             <md-dialog :md-active.sync="showOutboundDialog">
                 <md-dialog-title>{{ $t("message.outbound") }}</md-dialog-title>
                 <md-dialog-content>
@@ -37,8 +22,8 @@
                     </md-field>
                 </md-dialog-content>
                 <md-dialog-actions>
-                    <md-button class="md-primary" @click="outboundBook">{{ $t("message.confirm") }}</md-button>
                     <md-button class="md-default" @click="showOutboundDialog = false;">{{ $t("message.complete") }}</md-button>
+                    <md-button class="md-primary" @click="outboundBook">{{ $t("message.confirm") }}</md-button>
                 </md-dialog-actions>
             </md-dialog>
 
@@ -57,12 +42,22 @@
 
             <div class="md-layout-item md-medium-size-100 md-size-66">
                 <md-card>
-                    <md-card-header data-background-color="purple">
-                        <h4 class="title">{{ $t("message.book_list_card_title") }}</h4>
-                        <p class="category">{{ $t("message.book_list_card_subtitle") }}</p>
+                    <md-card-header>
+                      <div class="md-title">{{ $t("message.book_list_card_title") }}</div>
+                      <div class="md-subhead">{{ $t("message.book_list_card_subtitle") }}</div>
                     </md-card-header>
 
-                    <md-card-content>
+                    <md-card-content v-show="showAddPanel">
+                        <book-selector 
+                            :studentId="bookList.studentId" 
+                            :levelBaseline="bookList.readLevel" 
+                            :language="bookList.language" 
+                            :purpose="bookList.purpose" 
+                            v-on:books-selected="onBooksSelected($event)">
+                        </book-selector>
+                        <md-button class="md-primary" @click="showAddPanel = false">{{ $t("message.confirm") }}</md-button>
+                    </md-card-content>
+                    <md-card-content v-show="!showAddPanel">
                         <div class="md-layout">
                             <div class="md-layout-item md-small-size-100 md-size-50">
                                 <h4>{{ $t("message.basic_info") }}</h4>
@@ -130,7 +125,7 @@
                                 <h4>{{ $t("message.selected_books") }}</h4>
                             </div>
                             <div class="md-layout-item md-small-size-100 md-size-50">
-                                <a @click="showAddDialog = true" class="add-link" v-if="editting">{{ $t("message.add") }}</a>
+                                <a @click="showAddPanel = true" class="add-link" v-if="editting">{{ $t("message.add") }}</a>
                                 <can I="outbound" a="book">
                                     <a @click="showOutboundDialog = true" class="add-link" v-if="ableToDeliver()">{{ $t("message.outbound") }}</a>
                                 </can>
@@ -153,45 +148,48 @@
 
                                 <div class="md-list-action" v-if="editting">
                                     <md-menu md-size="small">
-                                        <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
-                                            <md-icon>edit</md-icon>
-                                        </md-button>
-                                        <md-menu-content>
-                                            <md-menu-item @click="setBookType(book, 'TEXTBOOK')">
-                                                <md-icon>bookmark</md-icon>
-                                                <span>{{ $t("message.set_TEXTBOOK_type") }}</span>
-                                            </md-menu-item>
-                                            <md-menu-item @click="setBookType(book, 'EX_READING')">
-                                                <md-icon>bookmark_border</md-icon>
-                                                <span>{{ $t("message.set_EX_READING_type") }}</span>
-                                            </md-menu-item>
-                                            <md-menu-item @click="removeBook(book)">
-                                                <md-icon>delete</md-icon>
-                                                <span>{{ $t("message.delete") }}</span>
-                                            </md-menu-item>
-                                        </md-menu-content>
+                                      <md-button class="md-icon-button md-default" md-menu-trigger>
+                                        <md-icon>bookmark_border</md-icon>
+                                      </md-button>
+                                      <md-menu-content>
+                                        <md-menu-item @click="setBookType(book, 'TEXTBOOK')">
+                                            <span>{{ $t("message.set_TEXTBOOK_type") }}</span>
+                                        </md-menu-item>
+                                        <md-menu-item @click="setBookType(book, 'EX_READING')">
+                                            <span>{{ $t("message.set_EX_READING_type") }}</span>
+                                        </md-menu-item>
+                                      </md-menu-content>
                                     </md-menu>
+                                    <md-button class="md-icon-button md-default" @click="removeBook(book)">
+                                      <md-icon>delete</md-icon>
+                                    </md-button>
                                 </div>
 
                                 <div class="md-list-action" v-if="!editting">
-                                    <md-button class="md-icon-button md-dense md-raised md-default" @click="activeBook = book; showProgressDialog = true">
-                                        <md-icon>data_usage</md-icon>
-                                        <md-tooltip>{{ $t("message.set_progress_info") }}</md-tooltip>
+                                  <md-menu md-size="small">
+                                    <md-button class="md-icon-button md-default" md-menu-trigger>
+                                      <md-icon>menu</md-icon>
                                     </md-button>
-                                    <md-button class="md-icon-button md-dense md-raised md-default" v-if="bookList.status !== 'FINISHED'" @click="openEBook(book.ID);">
-                                        <md-icon>launch</md-icon>
-                                        <md-tooltip>{{ $t("message.open_book") }}</md-tooltip>
-                                    </md-button>
+                                    <md-menu-content>
+                                      <md-menu-item @click="activeBook = book; showProgressDialog = true">
+                                          <md-icon>data_usage</md-icon>
+                                          <span>{{ $t("message.set_progress_info") }}</span>
+                                      </md-menu-item>
+                                      <md-menu-item v-if="bookList.status !== 'FINISHED'" @click="openEBook(book.ID);">
+                                          <md-icon>launch</md-icon>
+                                          <span>{{ $t("message.open_book") }}</span>
+                                      </md-menu-item>
+                                    </md-menu-content>
+                                  </md-menu>
                                 </div>
                             </md-list-item>
 
                         </md-list>
                         </div>
                     </md-card-content>
-
                     <md-progress-bar md-mode="indeterminate" v-if="sending" />
-                    <div class="md-layout-item md-size-100 text-center">
-                        <md-button @click="saveBookList" class="md-primary" :disabled="sending" v-if="editting">{{ $t("message.submit") }}</md-button>
+                    <div class="md-layout-item md-size-100 text-center" v-show="!showAddPanel">
+                        <md-button @click="saveBookList" class="md-raised md-primary" :disabled="sending" v-if="editting">{{ $t("message.submit") }}</md-button>
                     </div>
                 </md-card>
             </div>
@@ -220,7 +218,7 @@
                             </div>
                         </div>
                         <div class="md-layout-item md-size-100 text-center">
-                            <md-button @click="reply" class="md-round md-default" :disabled="sending">{{ $t("message.reply") }}</md-button>
+                            <md-button @click="reply" class="md-round md-primary" :disabled="sending">{{ $t("message.reply") }}</md-button>
                             <can I="review" a="bookList">
                                 <md-button @click="reject" class="md-round md-default" v-if="ableToReject()" :disabled="sending">{{ $t("message.reject") }}</md-button>
                                 <md-button @click="approve" class="md-round md-default" v-if="ableToApprove()" :disabled="sending">{{ $t("message.approve") }}</md-button>
@@ -262,7 +260,7 @@ export default {
   data: () => ({
     editting: false,
     sending: false,
-    showAddDialog: false,
+    showAddPanel: false,
     showOutboundDialog: false,
     showProgressDialog: false,
     readingProgress: null,

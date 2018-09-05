@@ -86,7 +86,7 @@
         </div>
         <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
         <div class="md-layout-item md-size-100 text-center">
-          <md-button type="submit" class="md-primary" :disabled="sending">保存</md-button>
+          <md-button type="submit" class="md-raised md-primary" :disabled="sending">保存</md-button>
           <md-button @click="sendEmailToStudent" class="md-default" :disabled="sending">邮件学员</md-button>
           <md-button @click="sendEmailToTeacher" class="md-default" :disabled="sending">邮件老师</md-button>
         </div>

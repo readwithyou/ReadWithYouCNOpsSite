@@ -1,9 +1,9 @@
 <template>
 <form novalidate class="md-layout" @submit.prevent="validateEntry">
-    <md-card>
-        <md-card-header :data-background-color="dataBackgroundColor">
-            <h4 class="title">老师信息登记表</h4>
-            <p class="category">填写相应信息完成添加老师。</p>
+    <md-card class="md-layout-item md-size-100">
+        <md-card-header>
+            <div class="md-title">老师信息登记表</div>
+            <div class="md-subhead">填写相应信息完成添加老师。</div>
         </md-card-header>
 
         <md-card-content>
@@ -89,7 +89,7 @@
 
         <md-progress-bar md-mode="indeterminate" v-if="sending" />
         <div class="md-layout-item md-size-100 text-center">
-            <md-button type="submit" class="md-primary" :disabled="sending">提交</md-button>
+            <md-button type="submit" class="md-raised md-primary" :disabled="sending">提交</md-button>
         </div>
     </md-card>
 </form>

@@ -101,12 +101,39 @@ var dao = function () {
         });
     };
 
+    var updateLevelAsync = function (id, readLevel) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                ID: id
+            },
+            UpdateExpression: 'SET #readLevel =:readLevel',
+            ExpressionAttributeNames: {
+                '#readLevel': 'readLevel'
+            },
+            ExpressionAttributeValues: {
+                ':readLevel': readLevel
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         getAsync,
         createAsync,
         scanAsync,
         removeAsync,
-        updateAsync
+        updateAsync,
+        updateLevelAsync
     };
 }();
 

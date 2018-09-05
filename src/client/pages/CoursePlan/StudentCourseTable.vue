@@ -5,7 +5,7 @@
         <div class="md-toolbar-section-start">
           <can I="create" a="studentCoursePlan">
             <md-menu>
-              <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+              <md-button class="md-icon-button md-primary" md-menu-trigger>
                 <md-icon>add</md-icon>
               </md-button>
               <md-menu-content>
@@ -69,7 +69,7 @@ export default {
   methods: {
     searchOnTable() {
       this.searched = this.coursePlans.filter(item =>
-        toLower(item.courseName).includes(toLower(this.search))
+        toLower(this.formatName(item.courseName)).includes(toLower(this.search))
       );
     },
     newCoursePlan() {

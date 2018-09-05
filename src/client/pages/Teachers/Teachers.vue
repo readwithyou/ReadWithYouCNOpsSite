@@ -3,9 +3,9 @@
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <md-card>
-          <md-card-header data-background-color="purple">
-            <h4 class="title">{{ $t("message.teachers_card_title") }}</h4>
-            <p class="category">{{ $t("message.teachers_card_subtitle") }}</p>
+          <md-card-header>
+            <div class="md-title">{{ $t("message.teachers_card_title") }}</div>
+            <div class="md-subhead">{{ $t("message.teachers_card_subtitle") }}</div>
           </md-card-header>
           <md-card-content>
             <can I="read" a="teacher">

@@ -7,8 +7,13 @@ import moment from 'moment-timezone'
 import VueFilter from 'vue-filter';
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
+
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import lang from 'element-ui/lib/locale/lang/en'
+import locale from 'element-ui/lib/locale'
+locale.use(lang)
+
 import DataTables from 'vue-data-tables'
 import { abilitiesPlugin } from '@casl/vue'
 import App from './App.vue'

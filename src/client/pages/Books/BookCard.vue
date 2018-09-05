@@ -1,12 +1,17 @@
 <template>
   <md-card class="md-card-profile">
-    <div class="md-card-avatar">
-       <img class="img" :src="cardUserImage">
-    </div>
+    <md-card-header>
+      <md-card-header-text>
+        <div class="md-title">{{ book.name }}</div>
+        <div class="md-subhead">{{ book.set }}</div>
+      </md-card-header-text>
+
+      <md-card-media>
+        <img :src="cardUserImage">
+      </md-card-media>
+    </md-card-header>
 
     <md-card-content>
-      <h6 class="category text-gray">{{ book.set }}</h6>
-      <h4 class="card-title">{{ book.name }}</h4>
       <p class="card-description">{{ book.press }}</p>
       <p class="card-description">
         [ {{ $t("message.book_code")}} ] : {{ book.code }}
@@ -20,8 +25,11 @@
       <p class="card-description">
         [ {{ $t("message.priority")}} ] : {{ $t("message.priority_" + book.priority) }}
       </p>
-      <md-button @click="openBook" class="md-round md-default">Open</md-button>
     </md-card-content>
+
+    <md-card-actions>
+      <md-button @click="openBook" class="md-round md-default">Open</md-button>
+    </md-card-actions>
   </md-card>
 </template>
 <script>

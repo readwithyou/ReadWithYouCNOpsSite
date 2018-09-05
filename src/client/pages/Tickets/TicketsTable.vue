@@ -5,7 +5,7 @@
         <div class="md-toolbar-section-start">
           <can I="create" a="ticket">
             <md-menu>
-              <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
+              <md-button class="md-icon-button md-primary" md-menu-trigger>
                 <md-icon>add</md-icon>
               </md-button>
               <md-menu-content>

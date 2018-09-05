@@ -2,9 +2,9 @@
         <div class="md-layout">
             <div class="md-layout-item md-medium-size-66 md-size-66">
                 <md-card>
-                    <md-card-header data-background-color="purple">
-                        <h4 class="title">{{ $t("message.book_" + this.type + "_title") }}</h4>
-                        <p class="category">{{ $t("message.book_" + this.type + "_subtitle") }}</p>
+                    <md-card-header>
+                        <div class="md-title">{{ $t("message.book_" + this.type + "_title") }}</div>
+                        <div class="md-subhead">{{ $t("message.book_" + this.type + "_subtitle") }}</div>
                     </md-card-header>
 
                     <md-card-content>
@@ -39,7 +39,7 @@
 
                     <md-progress-bar md-mode="indeterminate" v-if="sending" />
                     <div class="md-layout-item md-size-100 text-center">
-                        <md-button type="submit" @click="validateEntry" class="md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
+                        <md-button type="submit" @click="validateEntry" class="md-raised md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
                     </div>
                 </md-card>
             </div>

@@ -8,12 +8,13 @@
       :md-cancel-text="$t('message.cancel')"
       @md-cancel="onCancelDelete"
       @md-confirm="onConfirmDelete" />
+
     <md-table v-model="searched" md-sort="ID" md-sort-order="asc">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <md-menu>
-            <md-button class="md-icon-button md-dense md-raised md-default" md-menu-trigger>
-              <md-icon>add</md-icon>
+            <md-button class="md-icon-button md-primary" md-menu-trigger>
+              <md-icon>menu</md-icon>
             </md-button>
             <md-menu-content>
               <md-menu-item @click="newCourseBookList()" v-if="$can('create', 'courseBookList')">

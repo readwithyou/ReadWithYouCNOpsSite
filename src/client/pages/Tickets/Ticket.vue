@@ -3,9 +3,9 @@
         <can I="read" a="ticket">
             <div class="md-layout-item md-medium-size-100 md-size-66">
                 <md-card>
-                    <md-card-header data-background-color="purple">
-                        <h4 class="title">{{ $t("message.ticket_detail_title") }}</h4>
-                        <p class="category">{{ $t("message.ticket_detail_subtitle") }}</p>
+                    <md-card-header>
+                        <div class="md-title">{{ $t("message.ticket_detail_title") }}</div>
+                        <div class="md-subhead">{{ $t("message.ticket_detail_subtitle") }}</div>
                     </md-card-header>
 
                     <md-card-content>
@@ -154,7 +154,7 @@
 
                     <md-progress-bar md-mode="indeterminate" v-if="sending" />
                     <div class="md-layout-item md-size-100 text-center">
-                        <md-button @click="validateEntry" class="md-primary" :disabled="sending" v-if="editting">{{ $t("message.submit") }}</md-button>
+                        <md-button @click="validateEntry" class="md-raised md-primary" :disabled="sending" v-if="editting">{{ $t("message.submit") }}</md-button>
                     </div>
                 </md-card>
             </div>
@@ -182,7 +182,7 @@
                             </div>
                         </div>
                         <div class="md-layout-item md-size-100 text-center">
-                            <md-button @click="replyTicket" class="md-round md-default" :disabled="sending">{{ $t("message.reply") }}</md-button>
+                            <md-button @click="replyTicket" class="md-primary" :disabled="sending">{{ $t("message.reply") }}</md-button>
                         </div>
                     </md-card-content>
                 </md-card>

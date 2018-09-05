@@ -75,14 +75,15 @@ var bookService = function () {
     function convert(csvrow) {
         var readLevel = null;
         switch (csvrow[3]) {
-            case "Level K": readLevel = 0; break;
-            case "Level 1": readLevel = 10; break;
-            case "Level 2": readLevel = 20; break;
-            case "Level 3": readLevel = 30; break;
-            case "Level 4": readLevel = 40; break;
-            case "Level 5": readLevel = 50; break;
-            case "Level 6": readLevel = 60; break;
-            case "Level 7 (Adult)": readLevel = 70; break;
+            case "0": readLevel = 0; break;
+            case "1": readLevel = 10; break;
+            case "2": readLevel = 20; break;
+            case "3": readLevel = 30; break;
+            case "4": readLevel = 40; break;
+            case "5": readLevel = 50; break;
+            case "6": readLevel = 60; break;
+            case "7": readLevel = 70; break;
+            case "999": readLevel = 999; break;
             default: readLevel = 999;
         }
 
@@ -93,6 +94,11 @@ var bookService = function () {
             case "3": priority = 'NONRECOMMENDED'; break;
             case "4": priority = 'UNAVAILABLE'; break;
             default: priority = null;
+        }
+
+        var tag = null;
+        if (csvrow[12]) {
+            tag = [csvrow[12]];
         }
 
         var bookEntity = {
@@ -112,32 +118,33 @@ var bookService = function () {
             ebookUrl: csvrow[9],
             retailUrl: null,
             description: csvrow[4],
-            createBy: 'haibo',
+            tag: tag,
+            createBy: 'yonglinx',
             createTime: new Date().getTime(),
-            modifyBy: 'haibo',
+            modifyBy: 'yonglinx',
             modifyTime: new Date().getTime(),
         };
         return bookEntity;
     }
     /*
-        function importBookFromCSV(filepath) {
-            var books = [];
-            fs.createReadStream(filepath)
-                .pipe(parse({ delimiter: ',' }))
-                .on('data', function (csvrow) {
-                    //do something with csvrow
-                    books.push(convert(csvrow));
-                })
-                .on('end', function () {
-                    ////////save books
-                    let bookSavePromise = [];
-                    books.forEach(b => bookSavePromise.push(bookDao.createAsync(b)));
-                    Promise.all(bookSavePromise).then(
-                        () => console.log('save success'),
-                        (err) => console.log('save err' + err),
-                    );
-                });
-        }
+    function importBookFromCSV(filepath) {
+        var books = [];
+        fs.createReadStream(filepath)
+            .pipe(parse({ delimiter: ',' }))
+            .on('data', function (csvrow) {
+                //do something with csvrow
+                books.push(convert(csvrow));
+            })
+            .on('end', function () {
+                ////////save books
+                let bookSavePromise = [];
+                books.forEach(b => bookSavePromise.push(bookDao.createAsync(b)));
+                Promise.all(bookSavePromise).then(
+                    () => console.log('save success'),
+                    (err) => console.log('save err' + err),
+                );
+            });
+    }
     */
     return {
         handleInventoryChangeAsync,

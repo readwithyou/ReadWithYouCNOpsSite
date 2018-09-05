@@ -4,9 +4,9 @@
       <div class="md-layout">
         <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
           <md-card>
-            <md-card-header data-background-color="purple">
-              <h4 class="title">{{ $t("message.my_course_plans_card_title") }}</h4>
-              <p class="category">{{ $t("message.my_course_plans_card_subtitle") }}</p>
+            <md-card-header>
+                <div class="md-title">{{ $t("message.my_course_plans_card_title") }}</div>
+                <div class="md-subhead">{{ $t("message.my_course_plans_card_subtitle") }}</div>
             </md-card-header>
             <md-card-content>
               <div>
@@ -26,16 +26,18 @@
                   </md-table-empty-state>
 
                   <md-table-row slot="md-table-row" slot-scope="{ item }">
-                      <md-table-cell :md-label="$t('message.course_plan_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
                       <md-table-cell :md-label="$t('message.student_name')" md-sort-by="studentName">{{ item.studentName }}</md-table-cell>
                       <md-table-cell :md-label="$t('message.course_name')" md-sort-by="courseName">{{ formatName(item.courseName) }}</md-table-cell>
                       <md-table-cell :md-label="$t('message.course_type')" md-sort-by="courseType">{{ formatType(item.courseType) }}</md-table-cell>
-                      <md-table-cell :md-label="$t('message.create_by')" md-sort-by="createBy">{{ item.createBy }}</md-table-cell>
-                      <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
-                      {{ item.createTime?new Date(item.createTime).toLocaleString():'' }}
-                      </md-table-cell>
                       <md-table-cell :md-label="$t('message.action')">
-                      <a @click="viewStudent(item.studentId)">{{ $t("message.view") }}</a>
+                        <md-button class="md-icon-button md-dense md-default" @click="openZoomLink(item.studentId)">
+                            <md-icon>launch</md-icon>
+                            <md-tooltip>{{ $t("message.open_zoom_link") }}</md-tooltip>
+                        </md-button>
+                        <md-button class="md-icon-button md-dense md-default" @click="openBookList(item.studentId)">
+                            <md-icon>book</md-icon>
+                            <md-tooltip>{{ $t("message.open_book_list") }}</md-tooltip>
+                        </md-button>
                       </md-table-cell>
                   </md-table-row>
                   </md-table>
@@ -75,7 +77,7 @@ export default {
     searchOnTable() {
       this.searched = this.coursePlans.filter(
         item =>
-          toLower(item.courseName).includes(toLower(this.search)) ||
+          toLower(this.formatName(item.courseName)).includes(toLower(this.search)) ||
           toLower(item.studentName).includes(toLower(this.search))
       );
     },
@@ -101,12 +103,33 @@ export default {
     formatType(courseType) {
       return this.$i18n.t(miscUtility.getTypeTranslation(courseType));
     },
-    viewStudent(id) {
+    openZoomLink(id) {
+      var resource = this.$resource("/api/students/" + id);
+      resource.get().then(
+        response => {
+          let url = response.body.zoomId;
+          window.open(url, "_blank");
+        },
+        response => {
+          this.notifyFetchingZoomIdError();
+        }
+      );
+    },
+    openBookList(id) {
       this.$router.push({ path: "/students/" + id });
     },
     notifyFetchingError() {
       this.$notify({
         message: "Failed to fetch course plan lists!",
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
+    },
+    notifyFetchingZoomIdError() {
+      this.$notify({
+        message: "Failed to fetch zoom link. Please try again later!",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",

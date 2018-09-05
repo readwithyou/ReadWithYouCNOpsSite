@@ -27,6 +27,16 @@ router.put('/:id', verifyToken, function (req, res, next) {
     );
 });
 
+router.put('/:id/level', verifyToken, function (req, res, next) {
+    var studentId = req.params.id;
+    var readLevel = req.body.readLevel;
+
+    studentDao.updateLevelAsync(studentId, readLevel).then(
+        (data) => res.json(data.Item),
+        (err) => res.status(500).end()
+    );
+});
+
 router.get('/', verifyToken, function (req, res, next) {
     studentDao.scanAsync().then(
         (data) => res.json(data.Items),

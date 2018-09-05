@@ -50,6 +50,8 @@ export const message = {
     course_book: 'Course',
     short_course_book: 'Short Course',
     gift_book: 'Gift',
+    open_zoom_link: 'Open Zoom Link',
+    open_book_list: 'Open Book List',
 
     time: 'Time',
     quantity: 'Quantity',
@@ -286,6 +288,12 @@ export const message = {
     my_course_plans_card_subtitle: 'This table lists all you couse plans.',
     edit_profile_title: 'My Profile',
     edit_profile_subtitle: 'Page listing my profile details.',
+    confirm_lock_user_title: 'Confirm to lock user account?',
+    confirm_lock_user_content: 'After locking user account, user cannot login system.',
+    confirm_unlock_user_title: 'Confirm to unlock user account?',
+    confirm_unlock_user_content: 'After unlocking user account, user can login system.',
+    confirm_reset_user_title: 'Confirm to reset user password?',
+    confirm_reset_user_content: 'After reseting user password, the password with be identical to username.',
 
     mandatory_field: 'Mandatory Fields',
     new_book: 'New Book',

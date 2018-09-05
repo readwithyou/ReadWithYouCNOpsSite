@@ -1,0 +1,226 @@
+<template>
+  <div>
+    <md-table>
+    <md-table-toolbar>
+      <div class="md-toolbar-section-start">
+        <h1 class="md-title">{{ $tc('message.select_book_hint_msg', selected.length, { count: selected.length}) }}</h1>
+      </div>
+
+      <md-field md-clearable class="md-toolbar-section-start">
+        <label for="tag-filter">{{ $t('message.filter_hint') }}</label>
+        <md-select v-model="filters[0].value" name="tag-filter" id="tag-filter" md-dense>
+          <md-option v-for="tagString in bookTagStrings" :key="tagString.name" :value="tagString.name">
+            {{ $t(tagString.translation) }}
+          </md-option>
+        </md-select>
+      </md-field>
+      &nbsp;
+      <md-field md-clearable class="md-toolbar-section-end">
+        <md-input :placeholder="$t('message.search_hint')" v-model="filters[1].value" />
+      </md-field>
+    </md-table-toolbar>
+    </md-table>
+
+    <data-tables :data="books" :filters="filters" :page-size="10" :pagination-props="{ pageSizes: [5, 10, 25, 50, 100] }" @selection-change="onSelect" :action-col="actionCol">
+      <el-table-column type="selection" width="55">
+      </el-table-column>
+
+      <el-table-column v-for="title in titles" :prop="title.prop" :formatter="title.formatter" :label="title.label" :key="title.prop" sortable="custom">
+      </el-table-column>
+    </data-tables>
+  </div>
+</template>
+
+<script>
+import Vue from "vue";
+import { MdTablePagination } from "components";
+import miscUtility from "../../utils/miscUtility.js";
+
+const toLower = text => {
+  return text ? text.toString().toLowerCase() : "";
+};
+
+export default {
+  name: "TableMultiple",
+  components: {
+    MdTablePagination
+  },
+  props: {
+    studentId: {
+      type: String
+    },
+    levelBaseline: {
+      type: String
+    },
+    language: {
+      type: String
+    },
+    purpose: {
+      type: String
+    }
+  },
+  data: () => ({
+    selected: [],
+    books: [],
+    bookTagStrings: miscUtility.courseNameStrings,
+    titles: [],
+    actionCol: {},
+    filters: [
+      {
+        value: "",
+        filterFn: (row, filter) => {
+          var filterValue = filter.value;
+          return (
+            !filterValue ||
+            filterValue.length === 0 ||
+            (row.tag && row.tag.indexOf(filterValue) !== -1)
+          );
+        }
+      },
+      {
+        prop: ["name", "set", "code", "isbn"],
+        value: ""
+      }
+    ]
+  }),
+  created() {
+    this.fetchBooks();
+    this.constructTable();
+  },
+  watch: {
+    selected: {
+      handler(val) {
+        this.$emit("books-selected", this.selected);
+      }
+    },
+    studentId: function(newVal, oldVal) {
+      this.fetchBooks();
+    },
+    levelBaseline: function(newVal, oldVal) {
+      this.fetchBooks();
+    },
+    language: function(newVal, oldVal) {
+      this.fetchBooks();
+    }
+  },
+  methods: {
+    onSelect(items) {
+      this.selected = items;
+    },
+    searchOnTable() {
+      this.searched = this.books.filter(this.checkIfMatchSearch);
+      this.rePagination();
+    },
+    formatLevel(level) {
+      if (level !== null) {
+        return this.$i18n.t("message.level_" + level);
+      }
+      return "";
+    },
+    formatPriority(priority) {
+      if (priority) {
+        return this.$i18n.t("message.priority_" + priority);
+      }
+      return "";
+    },
+    constructTable() {
+      this.titles = [
+        {
+          prop: "code",
+          label: this.$i18n.t("message.book_code")
+        },
+        {
+          prop: "name",
+          label: this.$i18n.t("message.book_name")
+        },
+        {
+          prop: "set",
+          label: this.$i18n.t("message.book_set")
+        },
+        {
+          prop: "quantity",
+          label: this.$i18n.t("message.inventory_quantity")
+        },
+        {
+          prop: "readLevel",
+          label: this.$i18n.t("message.read_level"),
+          formatter: (row, column, cellValue, index) => {
+            return this.formatLevel(cellValue);
+          }
+        },
+        {
+          prop: "priority",
+          label: this.$i18n.t("message.priority"),
+          formatter: (row, column, cellValue, index) => {
+            return this.formatPriority(cellValue);
+          }
+        }
+      ];
+      this.actionCol = {
+        label: this.$i18n.t("message.action"),
+        props: {
+          align: "center"
+        },
+        buttons: [
+          {
+            props: {
+              type: "default",
+              icon: "el-icon-view"
+            },
+            handler: row => {
+              this.viewInAmazon(row.isbn);
+            }
+          }
+        ]
+      };
+    },
+    fetchBooks() {
+      if (
+        !this.studentId ||
+        !this.levelBaseline ||
+        !this.language ||
+        !this.purpose
+      ) {
+        this.books = [];
+        this.selected = [];
+        return;
+      }
+
+      Vue.http
+        .post("/api/books/query", {
+          studentId: this.studentId,
+          language: this.language,
+          levelBaseline: Number(this.levelBaseline),
+          purpose: this.purpose
+        })
+        .then(response => {
+          this.books = response.body;
+        })
+        .catch(err => {
+          this.notifyFetchingError();
+        });
+    },
+    viewInAmazon(isbn) {
+      let amazonLink =
+        "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=" +
+        isbn;
+      window.open(amazonLink, "_blank");
+    },
+    notifyFetchingError() {
+      this.$notify({
+        message: "Failed to fetch book information from server side!",
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.md-table + .md-table {
+  margin-top: 16px;
+}
+</style>

@@ -14,7 +14,7 @@ export const message = {
 
     course_plan_id: 'ID',
     course_plan: '课程计划',
-    my_course_plans: '我的课程计划',
+    my_course_plans: '我的课程',
     course_name: '课程名称',
     course_type: '课程类型',
     regular_course: '普通课程',
@@ -50,6 +50,8 @@ export const message = {
     course_book: '课程用书',
     short_course_book: '选修课用书',
     gift_book: '赠书',
+    open_zoom_link: '打开Zoom链接',
+    open_book_list: '打开图书清单',
 
     time: '时间',
     quantity: '数量',
@@ -285,6 +287,12 @@ export const message = {
     my_course_plans_card_subtitle: '此表格罗列所有与您相关的课程计划。',
     edit_profile_title: '我的资料',
     edit_profile_subtitle: '我的详细信息页面。',
+    confirm_lock_user_title: '确定锁定账户吗？',
+    confirm_lock_user_content: '锁定账户后，用户将不能登陆系统。',
+    confirm_unlock_user_title: '确定解锁账户吗？',
+    confirm_unlock_user_content: '解锁账户后，用户将能登陆系统。',
+    confirm_reset_user_title: '确定重置用户密码吗？',
+    confirm_reset_user_content: '密码重置后，将与用户名相同。',
 
     mandatory_field: '必填项',
     new_book: '新的图书',

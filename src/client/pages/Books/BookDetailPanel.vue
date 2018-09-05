@@ -140,7 +140,7 @@
 
             <div class="md-layout-item md-size-100 text-center">
                 <md-button @click="viewInAmazon" class="md-default" v-if="entry.isbn">{{ $t("message.view_in_amazon") }}</md-button>
-                <md-button type="submit" class="md-primary" :disabled="!editting">{{ $t("message.save") }}</md-button>
+                <md-button type="submit" class="md-raised md-primary" :disabled="!editting">{{ $t("message.save") }}</md-button>
             </div>
         </div>
     </form>

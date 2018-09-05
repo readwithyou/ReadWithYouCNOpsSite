@@ -61,7 +61,7 @@
         </div>
     </div>
     <div class="md-layout-item md-size-100 text-center">
-        <md-button type="submit" class="md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
+        <md-button type="submit" class="md-raised md-primary" :disabled="sending">{{ $t("message.submit") }}</md-button>
     </div>
   </form>
 </template>

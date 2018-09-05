@@ -4,17 +4,17 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <nav-tabs-card>
           <template slot="content">
-            <md-tabs md-sync-route class="md-primary" md-alignment="fixed">
+            <md-tabs md-alignment="right">
 
-              <md-tab id="tab-ballot" md-label="基本信息" md-icon="ballot">
+              <md-tab id="tab-ballot" md-label="基本信息">
                 <teacher-detail-panel></teacher-detail-panel>
               </md-tab>
 
-              <md-tab id="tab-calendar" md-label="课程安排" md-icon="calendar_today">
+              <md-tab id="tab-calendar" md-label="课程安排">
                 <teacher-course-table></teacher-course-table>
               </md-tab>
 
-              <md-tab id="tab-other" md-label="其他信息" md-icon="archive">
+              <md-tab id="tab-other" md-label="其他信息">
                 under construction... please be patient...:)
               </md-tab>
 

@@ -4,17 +4,17 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <nav-tabs-card>
           <template slot="content">
-            <md-tabs md-sync-route class="md-primary" md-alignment="fixed">
+            <md-tabs md-alignment="right">
 
-              <md-tab id="tab-ballot" md-label="报名信息" md-icon="ballot">
+              <md-tab id="tab-ballot" md-label="报名信息">
                 <registration-detail-panel :initial-registration='registration' v-on:update-registration="registration = $event"></registration-detail-panel>
               </md-tab>
 
-              <md-tab id="tab-calendar" md-label="试课安排" md-icon="calendar_today">
+              <md-tab id="tab-calendar" md-label="试课安排">
                 <course-arrangement-panel :initial-registration='registration' v-on:update-registration="registration = $event"></course-arrangement-panel>
               </md-tab>
 
-              <md-tab id="tab-result" md-label="试课结果" md-icon="check_circle_outline">
+              <md-tab id="tab-result" md-label="试课结果">
                 <course-result-panel :initial-registration='registration' v-on:update-registration="registration = $event"></course-result-panel>
               </md-tab>
 
