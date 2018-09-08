@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import DashboardLayout from 'pages/Layout/DashboardLayout.vue'
 import Login from 'pages/Login/Login.vue'
-import Dashboard from 'pages/Dashboard.vue'
-import ImgDashboard from 'pages/ImgDashboard.vue'
+import Dashboard from 'pages/Layout/Dashboard.vue'
+import About from 'pages/Layout/About.vue'
 import Registrations from 'pages/Registrations/Registrations.vue'
 import CreateRegistration from 'pages/Registrations/CreateRegistration.vue'
 import Registration from 'pages/Registrations/Registration.vue'
@@ -64,7 +64,13 @@ const routes = [
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: ImgDashboard,
+        component: Dashboard,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'about',
+        name: 'About Site',
+        component: About,
         beforeEnter: ifAuthenticated,
       },
       {

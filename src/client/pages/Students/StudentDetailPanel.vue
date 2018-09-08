@@ -1,6 +1,6 @@
 <template>
     <form novalidate class="md-layout" @submit.prevent="validateEntry">
-    <div class="content">
+    <div class="content md-layout-item md-size-100">
         <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
             <div class="md-layout">
                 <div class="md-layout-item md-small-size-100 md-size-50">
@@ -111,7 +111,7 @@
                 </div>
                 <div class="md-layout-item md-small-size-100 md-size-33">
                     <md-field>
-                        <label for="zoom-id">Zoom ID</label>
+                        <label for="zoom-id">Zoom Link</label>
                         <md-input name="zoom-id" id="zoom-id" v-model="entry.zoomId" type="text" :disabled="!editting"></md-input>
                     </md-field>
                 </div>
@@ -125,6 +125,12 @@
                     <md-field>
                         <label>{{ $t("message.wechatOpenId") }}({{ $t("message.optional") }})</label>
                         <md-input v-model="entry.wechatOpenId" type="text" :disabled="!editting"></md-input>
+                    </md-field>
+                </div>
+                <div class="md-layout-item md-small-size-100 md-size-100">
+                    <md-field>
+                        <label>{{ $t("message.address") }}({{ $t("message.optional") }})</label>
+                        <md-input v-model="entry.address" type="text" :disabled="!editting"></md-input>
                     </md-field>
                 </div>
             </div>
@@ -144,7 +150,7 @@
                 </div>
             </div>
 
-            <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
+            <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="sending"></md-progress-spinner>
 
             <div class="md-layout-item md-size-100 text-center">
                 <can I="edit" a="student">

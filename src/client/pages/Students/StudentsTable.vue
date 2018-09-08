@@ -39,12 +39,31 @@
         <md-table-cell :md-label="$t('message.registration_time')" md-sort-by="createTime">
           {{ item.createTime?new Date(item.createTime).toLocaleDateString():'' }}
         </md-table-cell>
+        <md-table-cell :md-label="$t('message.action')">
+          <md-menu>
+            <md-button class="md-icon-button" md-menu-trigger>
+              <md-icon>book</md-icon>
+              <md-tooltip>{{ $t("message.new_book_list") }}</md-tooltip>
+            </md-button>
+            <md-menu-content>
+              <md-menu-item @click="newBookList(item.ID,'COURSE')" v-if="$can('create', 'courseBookList')">
+                <span>{{ $t("message.new_course_book_list") }}</span>
+              </md-menu-item>
+              <md-menu-item @click="newBookList(item.ID,'SHORT_COURSE')" v-if="$can('create', 'shortCourseBookList')">
+                <span>{{ $t("message.new_short_course_book_list") }}</span>
+              </md-menu-item>
+              <md-menu-item @click="newBookList(item.ID,'GIFT')" v-if="$can('create', 'giftBookList')">
+                <span>{{ $t("message.new_gift_book_list") }}</span>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-table-cell>
       </md-table-row>
 
       <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
       </md-table-pagination>
     </md-table>
-    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
+    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
@@ -131,6 +150,11 @@ export default {
           this.notifyFetchingError();
         }
       );
+    },
+    newBookList(id, purpose) {
+      this.$router.push({
+        path: "/students/" + id + "/booklists/new?purpose=" + purpose
+      });
     },
     notifyFetchingError() {
       this.$notify({

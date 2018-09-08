@@ -427,7 +427,10 @@ export default {
       );
     },
     ableToDeliver() {
-      return this.bookList.status === "PENDING_FOR_DELIVERY";
+      return (
+        this.bookList.status === "PENDING_FOR_DELIVERY" ||
+        this.bookList.status === "DELIVERED"
+      );
     },
     ableToFinish() {
       return this.bookList.status === "DELIVERED";

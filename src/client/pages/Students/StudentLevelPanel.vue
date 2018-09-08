@@ -1,6 +1,6 @@
 <template>
     <form novalidate class="md-layout" @submit.prevent="validateEntry">
-    <div class="content">
+    <div class="content md-layout-item md-size-100">
         <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
             <div class="md-layout">
                 <div class="md-layout-item md-small-size-100 md-size-50">
@@ -61,7 +61,7 @@
                 </div>
             </div>
 
-            <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
+            <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="sending"></md-progress-spinner>
 
             <div class="md-layout-item md-size-100 text-center">
                 <can I="edit" a="studentLevelInfo">

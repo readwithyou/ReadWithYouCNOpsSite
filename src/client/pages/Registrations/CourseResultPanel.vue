@@ -29,7 +29,7 @@
             </md-field>
         </div>
 
-        <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
+        <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="sending"></md-progress-spinner>
 
         <div class="md-layout-item md-size-100 text-center">
           <md-button type="submit" class="md-raised md-primary" :disabled="sending">{{ $t("message.save") }}</md-button>

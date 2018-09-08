@@ -5,7 +5,15 @@
     "sales": [
         {
             "action": "read",
+            "subject": "statistics"
+        },
+        {
+            "action": "read",
             "subject": "registration"
+        },
+        {
+            "action": "read",
+            "subject": "pendingRegistrations"
         },
         {
             "action": "read",
@@ -18,12 +26,24 @@
         {
             "action": "edit",
             "subject": "profile"
+        },
+        {
+            "action": "read",
+            "subject": "about"
         }
     ],
     "ops": [
         {
             "action": "read",
+            "subject": "statistics"
+        },
+        {
+            "action": "read",
             "subject": "registration"
+        },
+        {
+            "action": "read",
+            "subject": "pendingRegistrations"
         },
         {
             "action": "read",
@@ -36,12 +56,24 @@
         {
             "action": "edit",
             "subject": "profile"
+        },
+        {
+            "action": "read",
+            "subject": "about"
         }
     ],
     "ops_admin": [
         {
             "action": "read",
+            "subject": "statistics"
+        },
+        {
+            "action": "read",
             "subject": "registration"
+        },
+        {
+            "action": "read",
+            "subject": "pendingRegistrations"
         },
         {
             "action": "create",
@@ -94,6 +126,10 @@
         {
             "action": "read",
             "subject": "bookList"
+        },
+        {
+            "action": "read",
+            "subject": "pendingBookList"
         },
         {
             "action": "create",
@@ -156,12 +192,20 @@
             "subject": "ticket"
         },
         {
+            "action": "read",
+            "subject": "myTickets"
+        },
+        {
             "action": "create",
             "subject": "ticket"
         },
         {
             "action": "edit",
             "subject": "ticket"
+        },
+        {
+            "action": "read",
+            "subject": "about"
         }
     ],
     "teacher": [
@@ -200,9 +244,17 @@
         {
             "action": "edit",
             "subject": "profile"
+        },
+        {
+            "action": "read",
+            "subject": "about"
         }
     ],
     "teacher_admin": [
+        {
+            "action": "read",
+            "subject": "statistics"
+        },
         {
             "action": "read",
             "subject": "myCoursePlan"
@@ -260,6 +312,10 @@
             "subject": "bookList"
         },
         {
+            "action": "read",
+            "subject": "pendingBookList"
+        },
+        {
             "action": "review",
             "subject": "bookList"
         },
@@ -286,6 +342,10 @@
         {
             "action": "edit",
             "subject": "profile"
+        },
+        {
+            "action": "read",
+            "subject": "about"
         }
     ]
 }

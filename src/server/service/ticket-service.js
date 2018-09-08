@@ -122,7 +122,6 @@ var ticketService = function () {
         return ticketsDao.updateAsync(ticket);
     }
 
-
     function buildUserEmailMap() {
         return userDao.scanAsync().then(
             (data) => {

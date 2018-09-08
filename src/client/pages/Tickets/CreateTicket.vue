@@ -199,7 +199,10 @@ export default {
       resource
         .get()
         .then(
-          response => (this.users = response.body),
+          response =>
+            (this.users = response.body.sort(
+              (a, b) => (a.name > b.name ? 1 : -1)
+            )),
           response => this.notifyFetchingError()
         );
     },

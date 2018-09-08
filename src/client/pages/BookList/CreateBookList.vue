@@ -22,13 +22,19 @@
                 </md-field>
             </div>
             <div class="md-layout-item md-small-size-100 md-size-50">
-                <md-field>
-                    <label for="read-level">{{ $t("message.read_level") }}</label>
+                <md-field :class="getValidationClass('readLevel')">
+                    <label for="read-level">{{ $t("message.student_read_level") }}</label>
                     <md-select name="read-level" id="read-level" v-model="bookList.readLevel" disabled md-dense>
                       <md-option v-for="levelString in levelStrings" :key="levelString.level" :value="levelString.level">
                           {{ $t(levelString.translation) }}
                       </md-option>
                     </md-select>
+                    <span class="md-error" v-if="!$v.bookList.readLevel.required">
+                        {{ $t("message.read_level_required_in_book_list_validation_error") }}
+                        <md-button class="md-dense md-raised md-accent" @click="setStudentReadLevel()">
+                          {{ $t("message.set_student_read_level") }}
+                        </md-button>
+                    </span>
                 </md-field>
             </div>
             <div class="md-layout-item md-small-size-100 md-size-50">
@@ -256,12 +262,19 @@ export default {
           //ref to here: https://vuejs.org/v2/guide/reactivity.html directly set the property will not trigger vue to reactive
           this.$set(this.bookList, "studentId", response.body.ID);
           this.$set(this.bookList, "studentName", response.body.enName);
-          this.$set(this.bookList, "readLevel", response.body.readLevel + "");
+          this.$set(
+            this.bookList,
+            "readLevel",
+            response.body.readLevel ? response.body.readLevel + "" : null
+          );
         },
         response => {
           this.notifyFetchingError();
         }
       );
+    },
+    setStudentReadLevel() {
+      this.$router.push({ path: "/students/" + this.$route.params.id });
     },
     onBooksSelected(selectedBooks) {
       this.bookList.books = [];

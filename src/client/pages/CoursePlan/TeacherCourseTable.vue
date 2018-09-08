@@ -16,15 +16,9 @@
       </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell :md-label="$t('message.course_plan_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
         <md-table-cell :md-label="$t('message.course_name')" md-sort-by="courseName">{{ formatName(item.courseName) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.course_type')" md-sort-by="courseType">{{ formatType(item.courseType) }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.student_id')" md-sort-by="studentId">{{ item.studentId }}</md-table-cell>
         <md-table-cell :md-label="$t('message.student_name')" md-sort-by="studentName">{{ item.studentName }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.create_by')" md-sort-by="createBy">{{ item.createBy }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
-          {{ item.createTime?new Date(item.createTime).toLocaleString():'' }}
-        </md-table-cell>
         <md-table-cell :md-label="$t('message.remarks')">{{ item.remarks }}</md-table-cell>
       </md-table-row>
     </md-table>

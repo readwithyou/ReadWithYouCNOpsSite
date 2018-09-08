@@ -12,16 +12,23 @@ var regService = require('../service/reg-service');
 var registrationDao = require('../dao/reg-dao');
 var s3Accessor = require('../dao/s3-accessor');
 
-router.get('/:id', verifyToken, function (req, res, next) {
-    registrationDao.getAsync(req.params.id).then(
-        (data) => res.json(data.Item),
+router.get('/', verifyToken, function (req, res, next) {
+    registrationDao.scanAsync().then(
+        (data) => res.json(data.Items),
         (err) => res.status(500).end()
     );
 });
 
-router.get('/', verifyToken, function (req, res, next) {
-    registrationDao.scanAsync().then(
+router.get('/pending', verifyToken, function (req, res, next) {
+    registrationDao.queryAsync(0).then(
         (data) => res.json(data.Items),
+        () => res.status(500).end()
+    );
+});
+
+router.get('/:id', verifyToken, function (req, res, next) {
+    registrationDao.getAsync(req.params.id).then(
+        (data) => res.json(data.Item),
         (err) => res.status(500).end()
     );
 });

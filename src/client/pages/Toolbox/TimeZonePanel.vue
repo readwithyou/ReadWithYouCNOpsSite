@@ -99,7 +99,9 @@ export default {
       var resource = this.$resource("/api/teachers");
       resource.get().then(
         response => {
-          this.teachers = response.body;
+          this.teachers = response.body.sort(
+            (a, b) => (a.name > b.name ? 1 : -1)
+          );
           this.sending = false;
         },
         response => {

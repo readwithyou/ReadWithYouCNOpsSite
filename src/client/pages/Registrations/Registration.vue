@@ -2,9 +2,7 @@
   <div class="content">
     <can I="read" a="registration">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <nav-tabs-card>
-          <template slot="content">
-            <md-tabs md-alignment="right">
+            <md-tabs md-alignment="fixed">
 
               <md-tab id="tab-ballot" md-label="报名信息">
                 <registration-detail-panel :initial-registration='registration' v-on:update-registration="registration = $event"></registration-detail-panel>
@@ -19,8 +17,6 @@
               </md-tab>
 
             </md-tabs>
-          </template>
-        </nav-tabs-card>
       </div>
     </can>
   </div>

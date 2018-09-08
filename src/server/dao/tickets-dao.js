@@ -66,6 +66,32 @@ var dao = function () {
         });
     };
 
+    var queryAsync = function (assignTo, status) {
+        var params = {
+            TableName: ddbTable,
+            ProjectionExpression: "ID, createTime, priority, #status, title, #type",
+            FilterExpression: 'assignTo = :assignTo AND #status = :status',
+            ExpressionAttributeNames: {
+                "#status": "status",
+                "#type": "type",
+            },
+            ExpressionAttributeValues: {
+                ":assignTo": assignTo,
+                ":status": status
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.scan(params, function (err, data) {
+                if (err) {
+                    console.log('Scan DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     var updateAsync = function (item) {
         //inventory numbers are not allowed to updated directly.
         var params = {
@@ -86,6 +112,7 @@ var dao = function () {
 
     return {
         getAsync,
+        queryAsync,
         createAsync,
         scanAsync,
         updateAsync

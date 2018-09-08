@@ -2,25 +2,17 @@
   <div class="content">
     <can I="read" a="teacher">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <nav-tabs-card>
-          <template slot="content">
-            <md-tabs md-alignment="right">
+        <md-tabs md-alignment="fixed">
 
-              <md-tab id="tab-ballot" md-label="基本信息">
-                <teacher-detail-panel></teacher-detail-panel>
-              </md-tab>
+          <md-tab id="tab-ballot" :md-label="$t('message.basic_info')">
+            <teacher-detail-panel></teacher-detail-panel>
+          </md-tab>
 
-              <md-tab id="tab-calendar" md-label="课程安排">
-                <teacher-course-table></teacher-course-table>
-              </md-tab>
+          <md-tab id="tab-calendar" :md-label="$t('message.course_plan')">
+            <teacher-course-table></teacher-course-table>
+          </md-tab>
 
-              <md-tab id="tab-other" md-label="其他信息">
-                under construction... please be patient...:)
-              </md-tab>
-
-            </md-tabs>
-          </template>
-        </nav-tabs-card>
+        </md-tabs>
       </div>
     </can>
   </div>

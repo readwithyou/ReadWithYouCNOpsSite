@@ -7,10 +7,19 @@
         </div>
 
         <md-field md-clearable class="md-toolbar-section-start">
-          <label for="filters">{{ $t('message.filter_hint') }}</label>
-          <md-select v-model="filters" name="filters" id="filters" md-dense multiple @input="searchOnTable">
+          <label for="tag-filter">{{ $t('message.tag_filter_hint') }}</label>
+          <md-select v-model="filters.tagFilter" name="tag-filter" id="tag-filter" md-dense @input="searchOnTable">
             <md-option v-for="tagString in bookTagStrings" :key="tagString.name" :value="tagString.name">
               {{ $t(tagString.translation) }}
+            </md-option>
+          </md-select>
+        </md-field>
+        &nbsp;
+        <md-field md-clearable class="md-toolbar-section-start">
+          <label for="level-filter">{{ $t('message.level_filter_hint') }}</label>
+          <md-select v-model="filters.levelFilter" name="level-filter" id="level-filter" md-dense @input="searchOnTable">
+            <md-option v-for="levelString in levelStrings" :key="levelString.level" :value="levelString.level">
+                {{ $t(levelString.translation) }}
             </md-option>
           </md-select>
         </md-field>
@@ -78,6 +87,7 @@ export default {
     selected: [],
     books: [],
     paged: [],
+    levelStrings: miscUtility.levelStrings,
     bookTagStrings: miscUtility.courseNameStrings
   }),
   created() {
@@ -129,13 +139,19 @@ export default {
         toLower(book.set).includes(toLower(this.search)) ||
         toLower(book.isbn).includes(toLower(this.search));
 
-      let matchFilterInput =
-        !this.filters ||
-        this.filters.length === 0 ||
-        this.filters.filter(value => book.tag && -1 !== book.tag.indexOf(value))
-          .length > 0;
+      let tagFilter = this.filters.tagFilter;
+      let matchTagFilterInput =
+        !tagFilter ||
+        tagFilter.length === 0 ||
+        (book.tag && book.tag.indexOf(tagFilter) !== -1);
 
-      return matchSearchInput && matchFilterInput;
+      let levelFilter = this.filters.levelFilter;
+      let matchLevelFilterInput =
+        levelFilter === null ||
+        levelFilter.length === 0 ||
+        book.readLevel === levelFilter;
+
+      return matchSearchInput && matchTagFilterInput && matchLevelFilterInput;
     },
     shouldBeDisabled(item) {
       return item.language !== this.language;

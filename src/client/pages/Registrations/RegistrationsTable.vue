@@ -58,14 +58,16 @@
         </md-table-cell>
         <md-table-cell :md-label="$t('message.teacher')" md-sort-by="teacher">{{ item.teacher }}</md-table-cell>
         <md-table-cell :md-label="$t('message.action')">
-          <a @click="deleteRegistration(item.ID)" v-if="item.status==0">{{ $t("message.delete") }}</a>
+          <md-button class="md-icon-button" @click="deleteRegistration(item.ID)" v-if="item.status==0">
+            <md-icon>delete</md-icon>
+          </md-button>
         </md-table-cell>
       </md-table-row>
 
       <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
       </md-table-pagination>
     </md-table>
-    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
+    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
@@ -139,7 +141,7 @@ export default {
     getStatusClass(status) {
       switch (status) {
         case 0:
-          return "md-primary";
+          return "md-accent";
         case 1:
           return "md-default";
         case 2:
@@ -159,11 +161,12 @@ export default {
       var resource = this.$resource("/api/registrations");
       resource.get().then(
         response => {
-          this.registrations = response.body.sort(
-            (a, b) =>
-              new Date(b.createTime).getTime() -
-              new Date(a.createTime).getTime()
-          );
+          this.registrations = response.body
+            .sort(
+              (a, b) =>
+                new Date(b.createTime).getTime() -
+                new Date(a.createTime).getTime()
+            );
           for (var i = 0; i < this.registrations.length; i++) {
             for (var j = 0; j < this.teachers.length; j++) {
               if (this.teachers[j].ID === this.registrations[i].teacherId) {

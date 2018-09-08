@@ -1,21 +1,17 @@
 <template>
   <div class="content">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <nav-tabs-card>
-          <template slot="content">
-            <md-tabs md-alignment="right">
+        <md-tabs md-alignment="fixed">
 
-              <md-tab id="tab-leave" :md-label="$t('message.leave_management')">
-                <leave-form></leave-form>
-              </md-tab>
+          <md-tab id="tab-leave" :md-label="$t('message.leave_management')">
+            <leave-form></leave-form>
+          </md-tab>
 
-              <md-tab id="tab-timezone" :md-label="$t('message.time_zone')">
-                <time-zone-panel></time-zone-panel>
-              </md-tab>
+          <md-tab id="tab-timezone" :md-label="$t('message.time_zone')">
+            <time-zone-panel></time-zone-panel>
+          </md-tab>
 
-            </md-tabs>
-          </template>
-        </nav-tabs-card>
+        </md-tabs>
       </div>
   </div>
 </template>

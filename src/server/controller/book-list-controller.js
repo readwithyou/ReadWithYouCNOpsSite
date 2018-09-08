@@ -12,13 +12,7 @@ var bookListService = require('../service/book-list-service');
 
 //create
 router.post('/', verifyToken, function (req, res, next) {
-    var item = req.body;
-    item.ID = generatorId();
-    item.createTime = new Date().getTime();
-    item.createBy = req.username;
-    item.status = 'PENDING_FOR_APPROVAL';
-
-    bookListDao.createAsync(item).then(
+    bookListService.createAsync(req.body, req.username).then(
         () => res.status(200).end(),
         () => res.status(500).end()
     );
@@ -27,6 +21,23 @@ router.post('/', verifyToken, function (req, res, next) {
 router.get('/', verifyToken, function (req, res, next) {
     bookListDao.scanAsync().then(
         (data) => res.json(data.Items),
+        () => res.status(500).end()
+    );
+});
+
+router.get('/pending', verifyToken, function (req, res, next) {
+    var promises = [
+        bookListDao.queryByStatusAsync('PENDING_FOR_APPROVAL'),
+        bookListDao.queryByStatusAsync('PENDING_FOR_DELIVERY'),
+        bookListDao.queryByStatusAsync('REJECTED')
+    ];
+
+    Promise.all(promises).then(
+        (results) => {
+            var items = [];
+            results.forEach(r => items = items.concat(r.Items));
+            res.json(items);
+        },
         () => res.status(500).end()
     );
 });

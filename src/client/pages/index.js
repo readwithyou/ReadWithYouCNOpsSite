@@ -8,6 +8,7 @@ import EditProfileForm from '../pages/UserProfile/EditProfileForm.vue'
 
 // Registrations
 import RegistrationsTable from '../pages/Registrations/RegistrationsTable.vue'
+import PendingRegistrationsTable from '../pages/Registrations/PendingRegistrationsTable.vue'
 import AdultRegistrationForm from '../pages/Registrations/AdultRegistrationForm.vue'
 import ChildRegistrationForm from '../pages/Registrations/ChildRegistrationForm.vue'
 import RegistrationDetailPanel from '../pages/Registrations/RegistrationDetailPanel.vue'
@@ -32,6 +33,7 @@ import BookOutbound from '../pages/Books/BookOutbound.vue'
 // BookList
 import BookSelector from '../pages/BookList/BookSelector.vue'
 import BookListTable from '../pages/BookList/BookListTable.vue'
+import PendingBookListTable from '../pages/BookList/PendingBookListTable.vue'
 
 // Course Plan
 import StudentCourseTable from '../pages/CoursePlan/StudentCourseTable.vue'
@@ -49,17 +51,22 @@ import UsersTable from '../pages/UserProfile/UsersTable.vue'
 
 //Tickets
 import TicketsTable from '../pages/Tickets/TicketsTable.vue'
+import MyTicketsTable from '../pages/Tickets/MyTicketsTable.vue'
 import CreateTicket from '../pages/Tickets/CreateTicket.vue'
 
 //Toolbox
 import LeaveForm from '../pages/Toolbox/LeaveForm.vue'
 import TimeZonePanel from '../pages/Toolbox/TimeZonePanel.vue'
 
+//About
+import About from '../pages/Layout/About.vue'
+
 export {
   SignInPanel,
   SignOnPanel,
   UserCard,
   RegistrationsTable,
+  PendingRegistrationsTable,
   EditProfileForm,
   AdultRegistrationForm,
   ChildRegistrationForm,
@@ -81,6 +88,7 @@ export {
   BookOutbound,
   BookSelector,
   BookListTable,
+  PendingBookListTable,
   CoursePlanTable,
   CoursePlanForm,
   StudentsTable,
@@ -89,7 +97,9 @@ export {
   StudentLevelPanel,
   UsersTable,
   TicketsTable,
+  MyTicketsTable,
   CreateTicket,
   LeaveForm,
-  TimeZonePanel
+  TimeZonePanel,
+  About
 }

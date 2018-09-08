@@ -49,16 +49,25 @@
           <md-chip :class="getStatusClass(item.locked)">{{ formatStatus(item.locked) }}</md-chip>
         </md-table-cell>
         <md-table-cell :md-label="$t('message.action')" v-if="$can('edit', 'user')">
-          <a @click="activeItem=item;dialogStatus.showLockDialog=true;" v-if="!item.locked">{{ $t("message.lock") }}</a>
-          <a @click="activeItem=item;dialogStatus.showUnlockDialog=true;" v-if="item.locked">{{ $t("message.unlock") }}</a>&nbsp;&nbsp;
-          <a @click="activeItem=item;dialogStatus.showResetDialog=true;">{{ $t("message.reset_password") }}</a>
+          <md-button class="md-icon-button" @click="activeItem=item;dialogStatus.showLockDialog=true;" v-if="!item.locked">
+            <md-icon>lock</md-icon>
+            <md-tooltip>{{ $t("message.lock") }}</md-tooltip>
+          </md-button>
+          <md-button class="md-icon-button md-accent" @click="activeItem=item;dialogStatus.showUnlockDialog=true;" v-if="item.locked">
+            <md-icon>lock_open</md-icon>
+            <md-tooltip>{{ $t("message.unlock") }}</md-tooltip>
+          </md-button>
+          <md-button class="md-icon-button" @click="activeItem=item;dialogStatus.showResetDialog=true;">
+            <md-icon>autorenew</md-icon>
+            <md-tooltip>{{ $t("message.reset_password") }}</md-tooltip>
+          </md-button>
         </md-table-cell>
       </md-table-row>
 
       <md-table-pagination :mdPage = "page" :mdPageSize = "size" :md-total="searched.length" v-on:update-pagination="onUpdatePagination">
       </md-table-pagination>
     </md-table>
-    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="preloading"></md-progress-spinner>
+    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 

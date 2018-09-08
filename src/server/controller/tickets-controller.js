@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 
+var ticketsDao = require('../dao/tickets-dao');
 var ticketService = require('../service/ticket-service');
 var verifyToken = require('../service/verify-token');
 
@@ -17,6 +18,13 @@ router.post('/leave-mail', verifyToken, function (req, res, next) {
 
 router.get('/', verifyToken, function (req, res, next) {
     ticketService.getAllTickets().then(
+        (data) => res.json(data.Items),
+        () => res.status(500).end()
+    );
+});
+
+router.get('/mine', verifyToken, function (req, res, next) {
+    ticketsDao.queryAsync(req.username, 'OPEN').then(
         (data) => res.json(data.Items),
         () => res.status(500).end()
     );

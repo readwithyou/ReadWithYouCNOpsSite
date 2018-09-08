@@ -68,7 +68,33 @@ var dao = function () {
                 "#type": "type",
                 "#tag": "tag",
                 "#status": "status",
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.scan(params, function (err, data) {
+                if (err) {
+                    console.log('Scan DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
+    var queryAsync = function (status) {
+        var params = {
+            TableName: ddbTable,
+            ProjectionExpression: "ID, enName, #type, #tag, createTime, #status",
+            FilterExpression: '#status = :status',
+            ExpressionAttributeNames: {
+                "#type": "type",
+                "#tag": "tag",
+                "#status": "status",
             },
+            ExpressionAttributeValues: {
+                ":status": status
+            }
         };
 
         return new Promise(function (resolve, reject) {
@@ -131,6 +157,7 @@ var dao = function () {
         createAsync,
         updateAsync,
         scanAsync,
+        queryAsync,
         removeAsync,
         queryByScheduledTimeAsync
     };

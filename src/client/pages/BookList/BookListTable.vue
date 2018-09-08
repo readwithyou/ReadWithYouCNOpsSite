@@ -55,7 +55,9 @@
            <md-chip :class="getStatusClass(item.status)">{{ formatStatus(item.status) }}</md-chip>
         </md-table-cell>
         <md-table-cell :md-label="$t('message.action')">
-          <a @click="deleteBookList(item.ID)" v-if="item.status==='PENDING_FOR_APPROVAL' || item.status==='REJECTED'">{{ $t("message.delete") }}</a>
+          <md-button class="md-icon-button" @click="deleteBookList(item.ID)" v-if="item.status==='PENDING_FOR_APPROVAL' || item.status==='REJECTED'">
+            <md-icon>delete</md-icon>
+          </md-button>
         </md-table-cell>
       </md-table-row>
     </md-table>
@@ -126,9 +128,9 @@ export default {
           return "md-accent";
         case "DELIVERED":
         case "FINISHED":
-          return "md-primary";
-        default:
           return "md-default";
+        default:
+          return "md-accent";
       }
     },
     newShortCourseBookList() {

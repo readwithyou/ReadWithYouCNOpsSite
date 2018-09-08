@@ -119,13 +119,37 @@ var dao = function () {
         });
     };
 
+    var queryByStatusAsync = function (status) {
+        var params = {
+            TableName: ddbTable,
+            FilterExpression: '#status = :status',
+            ExpressionAttributeNames: {
+                "#status": "status",
+            },
+            ExpressionAttributeValues: {
+                ":status": status
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.scan(params, function (err, data) {
+                if (err) {
+                    console.log('Scan DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         createAsync,
         getAsync,
         updateAsync,
         scanAsync,
         removeAsync,
-        queryByStudentIdAsync
+        queryByStudentIdAsync,
+        queryByStatusAsync
     };
 }();
 

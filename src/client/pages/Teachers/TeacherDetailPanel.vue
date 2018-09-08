@@ -1,6 +1,6 @@
 <template>
     <form novalidate class="md-layout" @submit.prevent="validateEntry">
-    <div class="content">
+    <div class="content md-layout-item md-size-100">
         <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
             <div class="md-layout">
                 <div class="md-layout-item md-small-size-100 md-size-50">

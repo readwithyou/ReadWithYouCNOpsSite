@@ -84,7 +84,7 @@
             <a v-on:click="remove(courseFile)" :value="courseFile" :disabled="sending">删除</a>
           </div>
         </div>
-        <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-accent" v-if="sending"></md-progress-spinner>
+        <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="sending"></md-progress-spinner>
         <div class="md-layout-item md-size-100 text-center">
           <md-button type="submit" class="md-raised md-primary" :disabled="sending">保存</md-button>
           <md-button @click="sendEmailToStudent" class="md-default" :disabled="sending">邮件学员</md-button>
@@ -235,7 +235,9 @@ export default {
       var resource = this.$resource("/api/teachers");
       resource.get().then(
         response => {
-          this.teachers = response.body;
+          this.teachers = response.body.sort(
+            (a, b) => (a.name > b.name ? 1 : -1)
+          );
         },
         response => {
           this.notifyFetchingError();

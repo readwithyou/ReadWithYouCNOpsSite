@@ -1,0 +1,107 @@
+<template>
+  <div class="page-container">
+    <md-app>
+      <md-app-toolbar class="md-primary" md-elevation="0">
+        <md-button class="md-icon-button" @click="toggleMenu" v-if="!menuVisible">
+          <md-icon>menu</md-icon>
+        </md-button>
+        <span class="md-title">My Title</span>
+      </md-app-toolbar>
+
+      <md-app-drawer :md-active.sync="menuVisible" md-persistent="mini">
+        <md-toolbar class="md-transparent" md-elevation="0">
+          <span>Navigation</span>
+
+          <div class="md-toolbar-section-end">
+            <md-button class="md-icon-button md-dense" @click="toggleMenu">
+              <md-icon>keyboard_arrow_left</md-icon>
+            </md-button>
+          </div>
+        </md-toolbar>
+
+        <md-list>
+          <md-list-item>
+            <md-icon>dashboard</md-icon>
+            <span class="md-list-item-text">{{ $t("message.home_page") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'registration')">
+            <md-icon>ballot</md-icon>
+            <span class="md-list-item-text">{{ $t("message.registrations") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'teacher')">
+            <md-icon>supervisor_account</md-icon>
+            <span class="md-list-item-text">{{ $t("message.tearchers") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'studentList')">
+            <md-icon>person_outline</md-icon>
+            <span class="md-list-item-text">{{ $t("message.students") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'myCoursePlan')">
+            <md-icon>calendar_today</md-icon>
+            <span class="md-list-item-text">{{ $t("message.my_course_plans") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'book')">
+            <md-icon>collections_bookmark</md-icon>
+            <span class="md-list-item-text">{{ $t("message.books") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'user')">
+            <md-icon>person</md-icon>
+            <span class="md-list-item-text">{{ $t("message.users") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'ticket')">
+            <md-icon>receipt</md-icon>
+            <span class="md-list-item-text">{{ $t("message.tickets") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('use', 'toolbox')">
+            <md-icon>build</md-icon>
+            <span class="md-list-item-text">{{ $t("message.toolbox") }}</span>
+          </md-list-item>
+
+          <md-list-item v-if="$can('read', 'profile')">
+            <md-icon>assignment_ind</md-icon>
+            <span class="md-list-item-text">{{ $t("message.my_profile") }}</span>
+          </md-list-item>
+        </md-list>
+      </md-app-drawer>
+
+      <md-app-content>
+        <router-view></router-view>
+      </md-app-content>
+    </md-app>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "PersistentMini",
+  data: () => ({
+    menuVisible: false
+  }),
+  methods: {
+    toggleMenu() {
+      this.menuVisible = !this.menuVisible;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.md-app {
+  min-height: 350px;
+  border: 1px solid rgba(#000, 0.12);
+}
+
+// Demo purposes only
+.md-drawer {
+  width: 230px;
+  max-width: calc(100vw - 125px);
+}
+</style>

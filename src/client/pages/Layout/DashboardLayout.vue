@@ -44,6 +44,10 @@
         <md-icon>assignment_ind</md-icon>
         <p>{{ $t("message.my_profile") }}</p>
       </sidebar-link>
+      <sidebar-link to="/about" v-if="$can('read', 'about')">
+        <md-icon>info</md-icon>
+        <p>{{ $t("message.about_site") }}</p>
+      </sidebar-link>
       <!--sidebar-link to="/table">
         <md-icon>content_paste</md-icon>
         <p>Table list</p>

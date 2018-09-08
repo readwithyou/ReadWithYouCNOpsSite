@@ -2,21 +2,17 @@
   <div class="content">
     <can I="read" a="book">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <nav-tabs-card>
-          <template slot="content">
-            <md-tabs md-alignment="right">
+          <md-tabs md-alignment="fixed">
 
-              <md-tab id="tab-ballot" :md-label="$t('message.basic_info')">
-                <book-detail-panel></book-detail-panel>
-              </md-tab>
+            <md-tab id="tab-ballot" :md-label="$t('message.basic_info')">
+              <book-detail-panel></book-detail-panel>
+            </md-tab>
 
-              <md-tab id="tab-calendar" :md-label="$t('message.inventory_info')">
-                <book-inventory-panel></book-inventory-panel>
-              </md-tab>
+            <md-tab id="tab-calendar" :md-label="$t('message.inventory_info')">
+              <book-inventory-panel></book-inventory-panel>
+            </md-tab>
 
-            </md-tabs>
-          </template>
-        </nav-tabs-card>
+          </md-tabs>
       </div>
     </can>
   </div>
