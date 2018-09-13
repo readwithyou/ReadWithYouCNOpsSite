@@ -177,7 +177,7 @@ export default {
         verticalAlign: "top",
         type: "success"
       });
-      this.$router.push({ path: "/students/" + this.$route.params.id });
+      this.$router.push({ path: "/students/" + this.$route.params.id +"/course-plans"});
     },
     notifyFetchingError() {
       this.$notify({

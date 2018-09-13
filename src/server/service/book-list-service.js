@@ -20,17 +20,20 @@ var bookListService = function () {
         )
     }
 
-    var getMailList = function (bookList, username, userEmailMap) {
+    var getMailList = function (bookList, username, userEmailMap, withSupervisor) {
+
         let creatorEmail = userEmailMap.get(bookList.createBy);
         let actorEmail = userEmailMap.get(username);
         let supervisorEmail = userEmailMap.get('Amelia');
+        if (withSupervisor)
+            return Array.from(new Set([creatorEmail, actorEmail, supervisorEmail])).join();
 
-        return Array.from(new Set([creatorEmail, actorEmail, supervisorEmail])).join();
+        return Array.from(new Set([creatorEmail, actorEmail])).join();
     }
 
     var getCreateMailParams = function (bookList, username, userEmailMap) {
         return {
-            email: getMailList(bookList, username, userEmailMap),
+            email: getMailList(bookList, username, userEmailMap, true),
             subject: sprintf(mailTemplates.booklistCreateEmailTitle,
                 bookList.name, bookList.createBy, bookList.studentName),
             content: sprintf(mailTemplates.booklistCreateEmailContent,
@@ -41,7 +44,7 @@ var bookListService = function () {
 
     var getApprovalMailParams = function (bookList, username, comments, userEmailMap) {
         return {
-            email: getMailList(bookList, username, userEmailMap),
+            email: getMailList(bookList, username, userEmailMap, false),
             subject: sprintf(mailTemplates.booklistApproveEmailTitle,
                 bookList.name, bookList.createBy, bookList.studentName),
             content: sprintf(mailTemplates.booklistApproveEmailContent,
@@ -51,7 +54,7 @@ var bookListService = function () {
 
     var getRejectMailParams = function (bookList, username, comments, userEmailMap) {
         return {
-            email: getMailList(bookList, username, userEmailMap),
+            email: getMailList(bookList, username, userEmailMap, false),
             subject: sprintf(mailTemplates.booklistRejectEmailTitle,
                 bookList.name, bookList.createBy, bookList.studentName),
             content: sprintf(mailTemplates.booklistRejectEmailContent,
@@ -61,7 +64,7 @@ var bookListService = function () {
 
     var getDeliverdMailParams = function (bookList, username, comments, userEmailMap) {
         return {
-            email: getMailList(bookList, username, userEmailMap),
+            email: getMailList(bookList, username, userEmailMap, false),
             subject: sprintf(mailTemplates.booklistDeliveredEmailTitle,
                 bookList.name, bookList.createBy, bookList.studentName),
             content: sprintf(mailTemplates.booklistDeliveredEmailContent,

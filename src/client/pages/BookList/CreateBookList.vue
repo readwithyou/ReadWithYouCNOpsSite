@@ -173,7 +173,8 @@
           </md-list>
         </div>
 
-        <md-button class="md-raised md-primary" @click="thirdStepDoneone('third')">{{ $t("message.submit") }}</md-button>
+        <md-progress-bar md-mode="indeterminate" v-if="sending" />
+        <md-button class="md-raised md-primary" @click="thirdStepDone()" :disabled="sending">{{ $t("message.submit") }}</md-button>
       </md-step>
     </md-steppers>
   </div>
@@ -199,6 +200,7 @@ export default {
       second: false,
       secondStepError: null,
       third: false,
+      sending: false,
       bookList: {
         purpose: this.$route.query.purpose,
         language: "en",
@@ -236,8 +238,9 @@ export default {
       this.second = true;
       this.active = "third";
     },
-    thirdStepDoneone() {
+    thirdStepDone() {
       this.third = true;
+      this.sending = true;
 
       this.$resource("/api/booklists")
         .save(this.bookList)
@@ -332,6 +335,8 @@ export default {
         verticalAlign: "top",
         type: "danger"
       });
+
+      this.sending = false;
     },
     notifySubmitSuccess() {
       this.$notify({
@@ -341,7 +346,9 @@ export default {
         verticalAlign: "top",
         type: "success"
       });
-      this.$router.push({ path: "/students/" + this.$route.params.id });
+      this.$router.push({
+        path: "/students/" + this.$route.params.id + "/book-lists"
+      });
     }
   }
 };

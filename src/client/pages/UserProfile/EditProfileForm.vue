@@ -84,10 +84,10 @@
                   </md-field>
               </div>
           </div>
-          <div class="md-layout-item md-size-100 text-center" v-if="editting">
+          <div class="md-layout-item md-size-100 text-center">
               <can I="edit" a="profile">
-                <md-button @click="showPwdDialog=true" class="md-default" :disabled="!editting">{{ $t("message.change_password") }}</md-button>
-                <md-button type="submit" class="md-raised md-primary" :disabled="!editting">{{ $t("message.submit") }}</md-button>
+                <md-button @click="showPwdDialog=true" class="md-default">{{ $t("message.change_password") }}</md-button>
+                <md-button type="submit" class="md-raised md-primary" :disabled="!editting"  v-if="editting">{{ $t("message.submit") }}</md-button>
               </can>
           </div>
         </form>

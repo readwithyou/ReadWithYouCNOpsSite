@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-table v-model="registrations" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
+    <md-table v-model="registrations" md-sort="createTime" md-sort-order="desc">
       <md-table-empty-state
         :md-label="$t('message.no_registration_found_message')"
         :md-description="$t('message.no_registration_found_message_detal')">
@@ -36,9 +36,6 @@ export default {
   data() {
     return {
       preloading: true,
-      currentSort: "createTime",
-      currentSortOrder: "asc",
-      search: null,
       registrations: []
     };
   },
@@ -82,7 +79,6 @@ export default {
               new Date(b.createTime).getTime() -
               new Date(a.createTime).getTime()
           );
-
           this.preloading = false;
         })
         .catch(err => {

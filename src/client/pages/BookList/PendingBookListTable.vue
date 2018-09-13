@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-table v-model="bookLists" md-sort="ID" md-sort-order="asc">
+    <md-table v-model="bookLists" md-sort="createTime" md-sort-order="desc">
       <md-table-empty-state
         :md-label="$t('message.no_book_list_found_message')"
         :md-description="$t('message.no_book_list_found_message_detail')">
@@ -8,10 +8,12 @@
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
         <md-table-cell :md-label="$t('message.book_list_name')" md-sort-by="name">
-          <a @click="viewBookList(item.ID)">{{ item.name }}</a>
+          <a @click="viewBookList(item.studentName, item.ID)">{{ item.name }}</a>
         </md-table-cell>
         <md-table-cell :md-label="$t('message.language')" md-sort-by="language">{{  $t("message."+item.language+"_lang") }}</md-table-cell>
-        <md-table-cell :md-label="$t('message.student')" md-sort-by="studentName">{{ item.studentName }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.student')" md-sort-by="studentName">
+          <a @click="viewStudent(item.studentId)">{{ item.studentName }}</a>
+        </md-table-cell>
         <md-table-cell :md-label="$t('message.purpose')" md-sort-by="purpose">{{ formatPurpose(item.purpose) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_by')" md-sort-by="createBy">{{ item.createBy }}</md-table-cell>
         <md-table-cell :md-label="$t('message.create_time')" md-sort-by="createTime">
@@ -22,6 +24,7 @@
         </md-table-cell>
       </md-table-row>
     </md-table>
+    <md-progress-spinner :md-diameter="100" :md-stroke="10" md-mode="indeterminate" class="md-primary" v-if="preloading"></md-progress-spinner>
   </div>
 </template>
 
@@ -33,8 +36,15 @@ const toLower = text => {
 };
 
 export default {
+  props: {
+    filter: {
+      type: String,
+      default: ""
+    }
+  },
   data() {
     return {
+      preloading: true,
       bookLists: []
     };
   },
@@ -73,7 +83,10 @@ export default {
     getStatusClass(status) {
       switch (status) {
         case "REJECTED":
+        case "PENDING_FOR_APPROVAL":
           return "md-accent";
+        case "PENDING_FOR_DELIVERY":
+          return "md-primary";
         case "DELIVERED":
         case "FINISHED":
           return "md-default";
@@ -81,16 +94,29 @@ export default {
           return "md-accent";
       }
     },
-    viewBookList(bookListId) {
+    viewBookList(studentId, bookListId) {
       this.$router.push({
-        path: "/students/" + this.$route.params.id + "/booklists/" + bookListId
+        path: "/students/" + studentId + "/booklists/" + bookListId
+      });
+    },
+    viewStudent(studentId) {
+      this.$router.push({
+        path: "/students/" + studentId
       });
     },
     fetchData() {
+      let url = "/api/booklists/pending";
+      if (this.filter === "mine") {
+        url = "/api/booklists/pending/mine";
+      }
+
       Vue.http
-        .get("/api/booklists/pending")
+        .get(url)
         .then(response => {
-          this.bookLists = response.body;
+          this.bookLists = response.body.sort(
+            (a, b) => b.createTime - a.createTime
+          );
+          this.preloading = false;
         })
         .catch(err => {
           this.notifyFetchingError();

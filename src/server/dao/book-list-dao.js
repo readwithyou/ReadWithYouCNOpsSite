@@ -119,17 +119,29 @@ var dao = function () {
         });
     };
 
-    var queryByStatusAsync = function (status) {
+    var queryByStatusAsync = function (status, createBy) {
         var params = {
             TableName: ddbTable,
-            FilterExpression: '#status = :status',
+            ProjectionExpression: "ID, #name, #language, studentId, studentName, purpose, createBy, createTime, #status",
             ExpressionAttributeNames: {
-                "#status": "status",
-            },
-            ExpressionAttributeValues: {
-                ":status": status
+                "#name": "name",
+                "#language": "language",
+                "#status": "status"
             }
         };
+
+        if (createBy) {
+            params.FilterExpression = '#status = :status AND createBy = :createBy';
+            params.ExpressionAttributeValues = {
+                ":status": status,
+                ":createBy": createBy
+            };
+        } else {
+            params.FilterExpression = '#status = :status';
+            params.ExpressionAttributeValues = {
+                ":status": status
+            };
+        }
 
         return new Promise(function (resolve, reject) {
             docClient.scan(params, function (err, data) {

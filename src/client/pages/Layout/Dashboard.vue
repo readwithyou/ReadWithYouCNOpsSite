@@ -73,7 +73,7 @@
             <template slot="footer">
               <div class="stats">
                   <md-icon id="stats-cards-icon">date_range</md-icon>
-                  Until Sep 07 11:17PM
+                   {{ statistics.time?new Date(statistics.time).toLocaleString():'' }}
               </div>
             </template>
           </stats-card>
@@ -89,11 +89,15 @@
                 <pending-registrations-table></pending-registrations-table>
               </md-tab>
 
-              <md-tab id="tab-pages" :md-label="$t('message.pending_book_list')" md-icon="book" v-if="$can('read', 'pendingBookList')">
-                <pending-book-list-table></pending-book-list-table>
+              <md-tab id="tab-pages" :md-label="$t('message.pending_book_list')" md-icon="book" :to="'/dashboard/pending-book-lists'" v-if="$can('read', 'pendingBookList')">
+                <pending-book-list-table filter="all"></pending-book-list-table>
               </md-tab>
 
-              <md-tab id="tab-posts" :md-label="$t('message.my_tickets')" md-icon="receipt" v-if="$can('read', 'myTickets')">
+              <md-tab id="tab-pages" :md-label="$t('message.pending_book_list')" md-icon="book" :to="'/dashboard/my-pending-book-lists'" v-if="$can('read', 'myPendingBookList')">
+                <pending-book-list-table filter="mine"></pending-book-list-table>
+              </md-tab>
+
+              <md-tab id="tab-posts" :md-label="$t('message.my_tickets')" md-icon="receipt" :to="'/dashboard/my-tickets'" v-if="$can('read', 'myTickets')">
                 <my-tickets-table></my-tickets-table>
               </md-tab>
             </md-tabs>
@@ -129,8 +133,8 @@ export default {
         students: 98,
         teachers: 25,
         books: 707,
-        registrations: 47,
-        time: 1536403090000
+        registrations: 50,
+        time: 1536641034000
       }
     };
   }

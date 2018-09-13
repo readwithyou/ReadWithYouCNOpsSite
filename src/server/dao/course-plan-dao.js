@@ -70,10 +70,37 @@ var dao = function () {
         });
     };
 
+    var updateStatusAsync = function (id, status) {
+        var params = {
+            TableName: ddbTable,
+            Key: {
+                ID: id
+            },
+            UpdateExpression: 'SET #status =:status',
+            ExpressionAttributeNames: {
+                '#status': 'status'
+            },
+            ExpressionAttributeValues: {
+                ':status': status
+            }
+        };
+
+        return new Promise(function (resolve, reject) {
+            docClient.update(params, function (err, data) {
+                if (err) {
+                    console.log('Update DDB Error: ' + err);
+                    reject(err);
+                }
+                resolve(data);
+            });
+        });
+    };
+
     return {
         createAsync,
         queryByStudentIdAsync,
-        queryByTeacherIdAsync
+        queryByTeacherIdAsync,
+        updateStatusAsync
     };
 }();
 

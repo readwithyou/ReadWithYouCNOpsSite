@@ -219,6 +219,10 @@
         },
         {
             "action": "read",
+            "subject": "myPendingBookList"
+        },
+        {
+            "action": "read",
             "subject": "bookList"
         },
         {

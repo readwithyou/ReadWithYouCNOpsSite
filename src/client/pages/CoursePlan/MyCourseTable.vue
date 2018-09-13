@@ -77,8 +77,9 @@ export default {
     searchOnTable() {
       this.searched = this.coursePlans.filter(
         item =>
-          toLower(this.formatName(item.courseName)).includes(toLower(this.search)) ||
-          toLower(item.studentName).includes(toLower(this.search))
+          toLower(this.formatName(item.courseName)).includes(
+            toLower(this.search)
+          ) || toLower(item.studentName).includes(toLower(this.search))
       );
     },
     newCoursePlan() {
@@ -116,7 +117,7 @@ export default {
       );
     },
     openBookList(id) {
-      this.$router.push({ path: "/students/" + id });
+      this.$router.push({ path: "/students/" + id + "/book-lists" });
     },
     notifyFetchingError() {
       this.$notify({

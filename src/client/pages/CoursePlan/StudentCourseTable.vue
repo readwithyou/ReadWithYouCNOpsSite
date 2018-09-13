@@ -1,11 +1,11 @@
 <template>
   <div>
-    <md-table v-model="searched" md-sort="ID" md-sort-order="asc">
+    <md-table v-model="searched" md-sort="createTime" md-sort-order="desc">
       <md-table-toolbar>
         <div class="md-toolbar-section-start">
           <can I="create" a="studentCoursePlan">
             <md-menu>
-              <md-button class="md-icon-button md-primary" md-menu-trigger>
+              <md-button class="md-icon-button md-primary md-raised" md-menu-trigger>
                 <md-icon>add</md-icon>
               </md-button>
               <md-menu-content>
@@ -28,7 +28,6 @@
       </md-table-empty-state>
 
       <md-table-row slot="md-table-row" slot-scope="{ item }">
-        <md-table-cell :md-label="$t('message.course_plan_id')" md-sort-by="ID">{{ item.ID }}</md-table-cell>
         <md-table-cell :md-label="$t('message.course_name')" md-sort-by="courseName">{{ formatName(item.courseName) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.course_type')" md-sort-by="courseType">{{ formatType(item.courseType) }}</md-table-cell>
         <md-table-cell :md-label="$t('message.teacher')" md-sort-by="teacherId">{{ formatTeacher(item.teacherId) }}</md-table-cell>
@@ -37,6 +36,19 @@
           {{ item.createTime?new Date(item.createTime).toLocaleString():'' }}
         </md-table-cell>
         <md-table-cell :md-label="$t('message.remarks')">{{ item.remarks }}</md-table-cell>
+        <md-table-cell :md-label="$t('message.status')" md-sort-by="status">
+           <md-chip :class="getStatusClass(item.status)">{{ formatStatus(item.status) }}</md-chip>
+        </md-table-cell>
+        <md-table-cell :md-label="$t('message.action')">
+          <md-button class="md-icon-button" @click="setCoursePlanStatus(item.ID, 1)" v-if="item.status === 0">
+            <md-icon>work</md-icon>
+            <md-tooltip md-direction="top">{{ $t("message.set_as_valid") }}</md-tooltip>
+          </md-button>
+          <md-button class="md-icon-button" @click="setCoursePlanStatus(item.ID, 0)" v-else>
+            <md-icon>work_off</md-icon>
+            <md-tooltip md-direction="top">{{ $t("message.set_as_invalid") }}</md-tooltip>
+          </md-button>
+        </md-table-cell>
       </md-table-row>
     </md-table>
   </div>
@@ -44,7 +56,7 @@
 
 <script>
 import Vue from "vue";
-import { Can } from '@casl/vue'
+import { Can } from "@casl/vue";
 import miscUtility from "../../utils/miscUtility.js";
 
 const toLower = text => {
@@ -83,7 +95,9 @@ export default {
           studentId: this.$route.params.id
         })
         .then(response => {
-          this.coursePlans = response.body;
+          this.coursePlans = response.body.sort(
+            (a, b) => b.createTime - a.createTime
+          );
           this.searched = this.coursePlans;
         })
         .catch(err => {
@@ -102,6 +116,15 @@ export default {
         }
       );
     },
+    setCoursePlanStatus(id, status) {
+      Vue.http
+        .post("/api/course-plans/" + id + "/status", { status: status })
+        .then(response => {
+          this.fetchCoursePlans();
+          this.notifyInvalidCoursePlanSuccess();
+        })
+        .catch(err => this.notifyInvalidCoursePlanError());
+    },
     formatName(courseName) {
       return this.$i18n.t(miscUtility.getNameTranslation(courseName));
     },
@@ -116,9 +139,43 @@ export default {
       }
       return teacherId;
     },
+    formatStatus(status) {
+      switch (status) {
+        case 0:
+          return this.$i18n.t("message.invalid_status");
+        default:
+          return this.$i18n.t("message.valid_status");
+      }
+    },
+    getStatusClass(status) {
+      switch (status) {
+        case 0:
+          return "md-default";
+        default:
+          return "md-primary";
+      }
+    },
     notifyFetchingError() {
       this.$notify({
         message: "Failed to fetch course plan lists!",
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "danger"
+      });
+    },
+    notifyInvalidCoursePlanSuccess() {
+      this.$notify({
+        message: "Change course plan successfully!",
+        icon: "add_alert",
+        horizontalAlign: "center",
+        verticalAlign: "top",
+        type: "success"
+      });
+    },
+    notifyInvalidCoursePlanError() {
+      this.$notify({
+        message: "Failed to change course plan!",
         icon: "add_alert",
         horizontalAlign: "center",
         verticalAlign: "top",

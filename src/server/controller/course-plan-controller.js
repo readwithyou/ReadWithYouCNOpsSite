@@ -51,12 +51,25 @@ router.post('/mine', verifyToken, function (req, res, next) {
             } else {
                 let teacherId = data.Items[0].ID
                 coursePlanDao.queryByTeacherIdAsync(teacherId).then(
-                    (data) => res.json(data.Items),
+                    (data) => {
+                        let coursePlans = data.Items.filter(c => c.status !== 0);
+                        res.json(coursePlans);
+                    },
                     () => res.status(500).end()
                 );
             }
         },
         () => res.status(500).end()
+    );
+});
+
+router.post('/:id/status', verifyToken, function (req, res, next) {
+    let id = req.params.id;
+    let status = req.body.status;
+
+    coursePlanDao.updateStatusAsync(id, status).then(
+        (data) => res.status(200).end(),
+        (err) => res.status(500).end()
     );
 });
 

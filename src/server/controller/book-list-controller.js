@@ -42,6 +42,23 @@ router.get('/pending', verifyToken, function (req, res, next) {
     );
 });
 
+router.get('/pending/mine', verifyToken, function (req, res, next) {
+    var promises = [
+        bookListDao.queryByStatusAsync('PENDING_FOR_APPROVAL', req.username),
+        bookListDao.queryByStatusAsync('PENDING_FOR_DELIVERY', req.username),
+        bookListDao.queryByStatusAsync('REJECTED', req.username)
+    ];
+
+    Promise.all(promises).then(
+        (results) => {
+            var items = [];
+            results.forEach(r => items = items.concat(r.Items));
+            res.json(items);
+        },
+        () => res.status(500).end()
+    );
+});
+
 router.post('/query', verifyToken, function (req, res, next) {
     let item = req.body;
     let studentId = item.studentId;

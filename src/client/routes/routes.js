@@ -68,6 +68,24 @@ const routes = [
         beforeEnter: ifAuthenticated,
       },
       {
+        path: 'dashboard/pending-book-lists',
+        name: 'Dashboard',
+        component: Dashboard,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'dashboard/my-pending-book-lists',
+        name: 'Dashboard',
+        component: Dashboard,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'dashboard/my-tickets',
+        name: 'Dashboard',
+        component: Dashboard,
+        beforeEnter: ifAuthenticated,
+      },
+      {
         path: 'about',
         name: 'About Site',
         component: About,
@@ -123,6 +141,18 @@ const routes = [
       },
       {
         path: 'students/:id',
+        name: 'Students Detail',
+        component: Student,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'students/:id/course-plans',
+        name: 'Students Detail',
+        component: Student,
+        beforeEnter: ifAuthenticated,
+      },
+      {
+        path: 'students/:id/book-lists',
         name: 'Students Detail',
         component: Student,
         beforeEnter: ifAuthenticated,

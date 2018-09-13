@@ -1,6 +1,6 @@
 <template>
   <div>
-    <md-table v-model="tickets" :md-sort.sync="currentSort" :md-sort-order.sync="currentSortOrder" :md-sort-fn="customSort">
+    <md-table v-model="tickets" md-sort="createTime" md-sort-order="desc">
 
       <md-table-empty-state
         :md-label="$t('message.no_ticket_found_message')"
@@ -34,8 +34,6 @@ export default {
   data() {
     return {
       preloading: true,
-      currentSort: "modifyTime",
-      currentSortOrder: "asc",
       tickets: []
     };
   },
@@ -75,7 +73,7 @@ export default {
       resource.get().then(
         response => {
           this.tickets = response.body.sort(
-            (a, b) => b.modifyTime - a.modifyTime
+            (a, b) => b.createTime - a.createTime
           );
           this.preloading = false;
         },
